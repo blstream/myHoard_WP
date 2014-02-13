@@ -52,7 +52,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\x86\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE; USE_WP8_NATIVE_SQLITE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -95,6 +95,8 @@
     </Compile>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="LocalizedStrings.cs" />
+    <Compile Include="SQLite.cs" />
+    <Compile Include="SQLiteAsync.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -164,6 +166,12 @@
     <Reference Include="System.Windows.Interactivity, Version=3.9.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\wp8\System.Windows.Interactivity.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\sqlite-net-wp8\Sqlite.vcxproj">
+      <Project>{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}</Project>
+      <Name>Sqlite</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
