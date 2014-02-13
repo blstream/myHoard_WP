@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Caliburn.Micro.BindableAppBar;
+using MyHoard.Services;
 using MyHoard.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace MyHoard
 
             container.RegisterPhoneServices(RootFrame);
             container.PerRequest<MainPageViewModel>();
-                
+            container.Singleton<DatabaseService>();   
 
             AddCustomConventions();
                 

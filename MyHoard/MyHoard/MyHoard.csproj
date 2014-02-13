@@ -95,6 +95,7 @@
     </Compile>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="LocalizedStrings.cs" />
+    <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="SQLite.cs" />
     <Compile Include="SQLiteAsync.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
@@ -172,6 +173,9 @@
       <Project>{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}</Project>
       <Name>Sqlite</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
