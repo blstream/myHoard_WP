@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using MyHoard.Models;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +22,7 @@ namespace MyHoard.Services
 
             if (!FileExists(databaseName).Result)
             {
-                
+                dbConnection.CreateTable<Collection>();
             }
         }
 
