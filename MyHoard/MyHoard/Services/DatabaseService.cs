@@ -21,21 +21,20 @@ namespace MyHoard.Services
 
             if (!FileExists(databaseName).Result)
             {
-                using (dbConnection)
-                {
-                    //db.CreateTable();
-                }
+                
             }
         }
 
-        public void Add<T>(T item)
+        public T Add<T>(T item)
         {
             dbConnection.Insert(item);
+            return item;
         }
 
-        public void Modify<T>(T item)
+        public T Modify<T>(T item)
         {
             dbConnection.Update(item);
+            return item;
         }
 
         public void Delete<T>(T item)
