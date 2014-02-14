@@ -55,20 +55,5 @@ namespace MyHoard.Services
             dbConnection.Close();
         }
 
-        private async Task<bool> FileExists(string fileName)
-        {
-            var result = false;
-            try
-            {
-                var store = await Windows.Storage.ApplicationData.Current.LocalFolder.GetFileAsync(fileName);
-                result = true;
-            }
-            catch
-            {
-            }
-
-            return result;
-
-        }
     }
 }
