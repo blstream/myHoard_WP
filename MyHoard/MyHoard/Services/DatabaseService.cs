@@ -13,13 +13,13 @@ namespace MyHoard.Services
     public class DatabaseService
     {
 
-        
+        private const string DatabaseName="myHoard.sqlite";
         private SQLiteConnection dbConnection;
 
-        public DatabaseService(String databaseName)
+        public DatabaseService()
         {
 
-            dbConnection = new SQLiteConnection(Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseName));
+            dbConnection = new SQLiteConnection(Path.Combine(ApplicationData.Current.LocalFolder.Path, DatabaseName));
             dbConnection.CreateTable<Collection>();
             
         }

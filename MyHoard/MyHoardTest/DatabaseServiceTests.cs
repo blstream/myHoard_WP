@@ -15,7 +15,7 @@ namespace MyHoardTest
         [TestMethod]
         public void AddingItemTest()
         {
-            DatabaseService dbService = new DatabaseService("testdb.sqlite");
+            DatabaseService dbService = new DatabaseService();
 
             Collection expected = dbService.Add<Collection>(new Collection { Name = "Collection1", Description = "Sample Collection" });
 
@@ -31,7 +31,7 @@ namespace MyHoardTest
         [TestMethod]
         public void DeletingItemTest()
         {
-            DatabaseService dbService = new DatabaseService("testdb.sqlite");
+            DatabaseService dbService = new DatabaseService();
 
             Collection item = dbService.Add<Collection>(new Collection { Name = "Collection1", Description = "Sample Collection" });
 
