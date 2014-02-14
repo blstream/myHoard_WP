@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyHoard", "MyHoard\MyHoard.csproj", "{397E98B5-F413-4945-BC74-7C55124946A4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{59B35F6C-E062-4F0E-88D8-13F3F82A24F3} = {59B35F6C-E062-4F0E-88D8-13F3F82A24F3}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sqlite", "..\sqlite-net-wp8\Sqlite.vcxproj", "{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}"
 EndProject
@@ -23,9 +26,9 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{397E98B5-F413-4945-BC74-7C55124946A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{397E98B5-F413-4945-BC74-7C55124946A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{397E98B5-F413-4945-BC74-7C55124946A4}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{397E98B5-F413-4945-BC74-7C55124946A4}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{397E98B5-F413-4945-BC74-7C55124946A4}.Debug|Any CPU.Build.0 = Debug|x86
+		{397E98B5-F413-4945-BC74-7C55124946A4}.Debug|Any CPU.Deploy.0 = Debug|x86
 		{397E98B5-F413-4945-BC74-7C55124946A4}.Debug|ARM.ActiveCfg = Debug|ARM
 		{397E98B5-F413-4945-BC74-7C55124946A4}.Debug|ARM.Build.0 = Debug|ARM
 		{397E98B5-F413-4945-BC74-7C55124946A4}.Debug|ARM.Deploy.0 = Debug|ARM
@@ -54,6 +57,7 @@ Global
 		{397E98B5-F413-4945-BC74-7C55124946A4}.Release|x86.Build.0 = Release|x86
 		{397E98B5-F413-4945-BC74-7C55124946A4}.Release|x86.Deploy.0 = Release|x86
 		{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}.Debug|Any CPU.Build.0 = Debug|Win32
 		{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}.Debug|ARM.ActiveCfg = Debug|ARM
 		{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}.Debug|ARM.Build.0 = Debug|ARM
 		{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
@@ -72,6 +76,8 @@ Global
 		{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}.Release|x86.ActiveCfg = Release|Win32
 		{59B35F6C-E062-4F0E-88D8-13F3F82A24F3}.Release|x86.Build.0 = Release|Win32
 		{5B44DAB5-9E35-4D14-A789-9C71201E6C0A}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{5B44DAB5-9E35-4D14-A789-9C71201E6C0A}.Debug|Any CPU.Build.0 = Debug|x86
+		{5B44DAB5-9E35-4D14-A789-9C71201E6C0A}.Debug|Any CPU.Deploy.0 = Debug|x86
 		{5B44DAB5-9E35-4D14-A789-9C71201E6C0A}.Debug|ARM.ActiveCfg = Debug|ARM
 		{5B44DAB5-9E35-4D14-A789-9C71201E6C0A}.Debug|ARM.Build.0 = Debug|ARM
 		{5B44DAB5-9E35-4D14-A789-9C71201E6C0A}.Debug|ARM.Deploy.0 = Debug|ARM
