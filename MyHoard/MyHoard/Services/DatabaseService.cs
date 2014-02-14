@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace MyHoard.Services
 {
@@ -18,12 +19,9 @@ namespace MyHoard.Services
         public DatabaseService(String databaseName)
         {
 
-            dbConnection = new SQLiteConnection(Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path, databaseName));
-
-            if (!FileExists(databaseName).Result)
-            {
-                dbConnection.CreateTable<Collection>();
-            }
+            dbConnection = new SQLiteConnection(Path.Combine(ApplicationData.Current.LocalFolder.Path, databaseName));
+            dbConnection.CreateTable<Collection>();
+            
         }
 
         public T Add<T>(T item)

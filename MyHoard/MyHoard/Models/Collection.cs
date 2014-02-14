@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace MyHoard.Models
         public string Description { get; set; }
         public string Thumbnail { get; set; }
         public int ItemsNumber { get; set; }
+        
+        [Ignore]
         public List<string> Tags { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
