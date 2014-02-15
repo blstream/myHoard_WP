@@ -74,7 +74,11 @@ namespace MyHoard.ViewModels
         public void Save()
         {
             CollectionService.AddCollection(CurrentCollection);
-            NavigationService.UriFor<AddCollectionViewModel>().Navigate();
+            NavigationService.UriFor<CollectionListViewModel>().Navigate();
+            while (NavigationService.BackStack.Any())
+            {
+                this.NavigationService.RemoveBackEntry();
+            }
         }
     }
 }
