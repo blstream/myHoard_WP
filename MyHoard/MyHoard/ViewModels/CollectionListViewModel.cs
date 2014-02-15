@@ -17,7 +17,7 @@ namespace MyHoard.ViewModels
         public CollectionListViewModel(INavigationService navigationService, CollectionService collectionService)
             : base(navigationService, collectionService)
         {
-            Collections = collectionService.CollectionList();
+            Collections = collectionService.CollectionList().OrderBy(e => e.Name).ToList<Collection>();
         }
 
         public void AddCollection()
