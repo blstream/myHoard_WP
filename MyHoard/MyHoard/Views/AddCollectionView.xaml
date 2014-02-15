@@ -40,11 +40,15 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
-            <TextBox Name="CurrentCollection_Name" cal:Message.Attach="[Event TextChanged] = [Action NameChanged]"  Grid.Row="1" Height="72" TextWrapping="Wrap"/>
-            <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}" />
+            <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" 
+                       Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
+            <TextBox Name="CurrentCollection_Name" cal:Message.Attach="[Event TextChanged] = [Action NameChanged]"  
+                     Grid.Row="1" Height="72" TextWrapping="Wrap"/>
+            <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
+                       Style="{StaticResource PhoneTextNormalStyle}" />
             <TextBox Name="CurrentCollection_Description"  Grid.Row="3" Height="72" TextWrapping="Wrap" />
-            <TextBlock Grid.Row="4" Text="{Binding Path=LocalizedResources.Thumbnail, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}" />
+            <TextBlock Grid.Row="4" Text="{Binding Path=LocalizedResources.Thumbnail, Source={StaticResource LocalizedStrings}}" 
+                       Style="{StaticResource PhoneTextNormalStyle}" />
             <toolkit:ListPicker Grid.Row="5"
                                 FontFamily="Segoe UI Symbol"
                                 ItemsSource="{Binding Thumbnails}"
@@ -65,9 +69,8 @@
         </Grid>
         <bab:BindableAppBar x:Name="AppBar">
             <bab:BindableAppBarButton x:Name="Save"
-                                  Text="{Binding Path=LocalizedResources.Save, Source={StaticResource LocalizedStrings}}"
-                                  IconUri="Images/save.png"
-                                  />
+                                      Text="{Binding Path=LocalizedResources.Save, Source={StaticResource LocalizedStrings}}"
+                                      IconUri="Images/save.png"/>
         </bab:BindableAppBar>
     </Grid>
 

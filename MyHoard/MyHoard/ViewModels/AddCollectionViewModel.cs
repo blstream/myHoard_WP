@@ -15,13 +15,14 @@ namespace MyHoard.ViewModels
     {
         private string pageTitle;
         private Collection currentCollection;
-        private ObservableCollection<string> thumbnails = new ObservableCollection<string> { "\uE114", "\uE104", "\uE107", "\uE10F", "\uE113", "\uE116", "\uE119", "\uE128", "\uE13D", "\uE15D", "\uE15E" };
+        private ObservableCollection<string> thumbnails;
         private bool canSave;
 
 
         public AddCollectionViewModel(INavigationService navigationService, CollectionService collectionService) : base(navigationService, collectionService)
         {
             PageTitle = AppResources.AddCollection;
+            Thumbnails = new BindableCollection<string> { "\uE114", "\uE104", "\uE107", "\uE10F", "\uE113", "\uE116", "\uE119", "\uE128", "\uE13D", "\uE15D", "\uE15E" };
             CurrentCollection = new Collection();
         }
 
@@ -48,6 +49,11 @@ namespace MyHoard.ViewModels
         public ObservableCollection<string> Thumbnails
         {
             get { return thumbnails; }
+            set
+            {
+                thumbnails = value;
+                NotifyOfPropertyChange(() => Thumbnails);
+            }
         }
 
         public bool CanSave
