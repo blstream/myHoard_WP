@@ -97,6 +97,7 @@
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\Collection.cs" />
+    <Compile Include="Services\CollectionService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
