@@ -22,7 +22,7 @@ namespace MyHoard.ViewModels
         public AddCollectionViewModel(INavigationService navigationService, CollectionService collectionService) : base(navigationService, collectionService)
         {
             PageTitle = AppResources.AddCollection;
-            Thumbnails = new BindableCollection<string> { "\uE114", "\uE104", "\uE107", "\uE10F", "\uE113", "\uE116", "\uE119", "\uE128", "\uE13D", "\uE15D", "\uE15E" };
+            Thumbnails = new BindableCollection<string> { "","\uE114", "\uE104", "\uE107", "\uE10F", "\uE113", "\uE116", "\uE119", "\uE128", "\uE13D", "\uE15D", "\uE15E" };
             CurrentCollection = new Collection();
         }
 
