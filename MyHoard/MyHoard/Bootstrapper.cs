@@ -26,6 +26,7 @@ namespace MyHoard
 
             container.RegisterPhoneServices(RootFrame);
             container.PerRequest<MainPageViewModel>();
+            container.PerRequest<AddCollectionViewModel>();
             container.Singleton<DatabaseService>();
             container.Singleton<CollectionService>();   
 
