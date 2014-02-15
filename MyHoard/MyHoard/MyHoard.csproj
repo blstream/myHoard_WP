@@ -100,8 +100,12 @@
     <Compile Include="Services\CollectionService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="ViewModels\AddCollectionViewModel.cs" />
+    <Compile Include="ViewModels\CollectionListViewModel.cs" />
     <Compile Include="Views\AddCollectionView.xaml.cs">
       <DependentUpon>AddCollectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CollectionListView.xaml.cs">
+      <DependentUpon>CollectionListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -121,6 +125,10 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Page Include="Views\AddCollectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CollectionListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
