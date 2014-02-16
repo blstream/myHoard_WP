@@ -90,5 +90,17 @@ namespace MyHoard.ViewModels
         {
             MessageBox.Show(message.Content);
         }
+
+        protected override void OnDeactivate(bool close)
+        {
+            eventAggregator.Unsubscribe(this);
+            base.OnDeactivate(close);
+        }
+
+        protected override void OnActivate()
+        {
+            eventAggregator.Subscribe(this);
+            base.OnActivate();
+        }
     }
 }
