@@ -124,6 +124,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Element with given name already exists in Database.
+        /// </summary>
+        public static string DuplicateNameErrorMessage {
+            get {
+                return ResourceManager.GetString("DuplicateNameErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string Name {

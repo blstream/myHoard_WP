@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using MyHoard.Models;
+using MyHoard.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +20,18 @@ namespace MyHoard.Services
         }
 
         public Collection AddCollection(Collection collection)
-        {
-            return databaseService.Add(collection);
+        {                       
+            if(CollectionList().Count(c=>c.Name==collection.Name)==0)
+            {
+                return databaseService.Add(collection);
+            }
+            else
+            {
+                IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
+                eventAggregator.Publish(new CollectionServiceErrorMessage(AppResources.DuplicateNameErrorMessage));
+                return collection;
+            }
+                
         }
 
         public void DeleteCollection(Collection collection)

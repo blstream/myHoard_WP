@@ -99,6 +99,7 @@
     <Compile Include="Models\Collection.cs" />
     <Compile Include="Services\CollectionService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
+    <Compile Include="Services\CollectionServiceErrorMessage.cs" />
     <Compile Include="ViewModels\AddCollectionViewModel.cs" />
     <Compile Include="ViewModels\CollectionListViewModel.cs" />
     <Compile Include="Views\AddCollectionView.xaml.cs">
