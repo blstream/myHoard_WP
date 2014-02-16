@@ -13,7 +13,8 @@ namespace MyHoard.ViewModels
     {
         
         private List<Collection> collections;
-
+        private Collection selectedCollection;
+                
         public CollectionListViewModel(INavigationService navigationService, CollectionService collectionService)
             : base(navigationService, collectionService)
         {
@@ -34,5 +35,21 @@ namespace MyHoard.ViewModels
                 NotifyOfPropertyChange(() => Collections);
             }
         }
+
+        public Collection SelectedCollection
+        {
+            get { return selectedCollection; }
+            set 
+            { 
+                selectedCollection = value;
+                NotifyOfPropertyChange(() => SelectedCollection);
+            }
+        }
+
+        public void EditCollection()
+        {
+            NavigationService.UriFor<AddCollectionViewModel>().WithParam(x => x.CollectionId, SelectedCollection.Id).Navigate();
+        }
+        
     }
 }

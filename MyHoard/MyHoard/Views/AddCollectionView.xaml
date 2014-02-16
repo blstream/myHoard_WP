@@ -43,17 +43,18 @@
             </Grid.RowDefinitions>
             <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" 
                        Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
-            <TextBox Name="CurrentCollection_Name" cal:Message.Attach="[Event TextChanged] = [Action NameChanged]"  
+            <TextBox Name="CurrentCollection_Name" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  
                      Grid.Row="1" Height="72" TextWrapping="Wrap"/>
             <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" />
-            <TextBox Name="CurrentCollection_Description"  Grid.Row="3" Height="72" TextWrapping="Wrap" />
+            <TextBox Name="CurrentCollection_Description"  Grid.Row="3" Height="72" TextWrapping="Wrap" 
+                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]" />
             <TextBlock Grid.Row="4" Text="{Binding Path=LocalizedResources.Thumbnail, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" />
             <toolkit:ListPicker Grid.Row="5"
                                 FontFamily="Segoe UI Symbol"
                                 ItemsSource="{Binding Thumbnails}"
-                                SelectedItem="{Binding CurrentCollection.Thumbnail, Mode=TwoWay}"
+                                SelectedItem="{Binding Thumbnail, Mode=TwoWay}"
                                 FullModeHeader="{Binding Path=LocalizedResources.Thumbnail, Source={StaticResource LocalizedStrings}}"
                                 Margin="24,12,12,0" FontSize="26"   HorizontalAlignment="Left">
                 <toolkit:ListPicker.FullModeItemTemplate>

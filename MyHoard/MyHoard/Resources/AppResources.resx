@@ -158,4 +158,7 @@
   <data name="DuplicateNameErrorMessage" xml:space="preserve">
     <value>Element with given name already exists in Database</value>
   </data>
+  <data name="EditCollection" xml:space="preserve">
+    <value>Edit Collection</value>
+  </data>
 </root>

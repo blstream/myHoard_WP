@@ -133,6 +133,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Collection.
+        /// </summary>
+        public static string EditCollection {
+            get {
+                return ResourceManager.GetString("EditCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string Name {

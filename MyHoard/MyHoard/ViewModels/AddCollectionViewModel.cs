@@ -15,9 +15,12 @@ namespace MyHoard.ViewModels
     public class AddCollectionViewModel : ViewModelBase, IHandle<CollectionServiceErrorMessage>
     {
         private string pageTitle;
+        private string thumbnail;
         private Collection currentCollection;
+        private Collection editedCollection;
         private ObservableCollection<string> thumbnails;
         private bool canSave;
+        private int collectionId;
         private readonly IEventAggregator eventAggregator;
 
         public AddCollectionViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator)
@@ -25,10 +28,11 @@ namespace MyHoard.ViewModels
         {
             this.eventAggregator = eventAggregator;
             eventAggregator.Subscribe(this);
-            PageTitle = AppResources.AddCollection;
             Thumbnails = new BindableCollection<string> { "","\uE114", "\uE104", "\uE107", "\uE10F", "\uE113", "\uE116", "\uE119", "\uE128", "\uE13D", "\uE15D", "\uE15E" };
-            CurrentCollection = new Collection();
         }
+
+        
+              
 
         public string PageTitle
         {
@@ -50,6 +54,17 @@ namespace MyHoard.ViewModels
             }
         }
 
+        public int CollectionId
+        {
+            get { return collectionId; }
+            set 
+            { 
+                collectionId = value;
+                NotifyOfPropertyChange(() => CollectionId);
+            }
+        }
+
+
         public ObservableCollection<string> Thumbnails
         {
             get { return thumbnails; }
@@ -57,6 +72,18 @@ namespace MyHoard.ViewModels
             {
                 thumbnails = value;
                 NotifyOfPropertyChange(() => Thumbnails);
+            }
+        }
+
+        public string Thumbnail
+        {
+            get { return thumbnail; }
+            set
+            {
+                CurrentCollection.Thumbnail = value;
+                thumbnail = value;
+                NotifyOfPropertyChange(() => Thumbnail);
+                DataChanged();
             }
         }
 
@@ -70,19 +97,35 @@ namespace MyHoard.ViewModels
             }
         }
 
-        public void NameChanged()
+        public void DataChanged()
         {
-            CanSave = !String.IsNullOrEmpty(CurrentCollection.Name); 
+            CanSave = !String.IsNullOrEmpty(CurrentCollection.Name) && (CollectionId==0 || 
+                !StringsEqual(editedCollection.Name, CurrentCollection.Name) || !StringsEqual(editedCollection.Description,CurrentCollection.Description)
+                || !StringsEqual(editedCollection.Thumbnail, CurrentCollection.Thumbnail));
         }
 
         public void Save()
         {
-            if (CollectionService.AddCollection(CurrentCollection).Id > 0)
+            if (CollectionId > 0)
             {
-                NavigationService.UriFor<CollectionListViewModel>().Navigate();
-                while (NavigationService.BackStack.Any())
+                if (CollectionService.ModifyCollection(CurrentCollection).Id == CurrentCollection.Id)
                 {
-                    this.NavigationService.RemoveBackEntry();
+                    NavigationService.UriFor<CollectionListViewModel>().Navigate();
+                    while (NavigationService.BackStack.Any())
+                    {
+                        this.NavigationService.RemoveBackEntry();
+                    }
+                }
+            }
+            else
+            {
+                if (CollectionService.AddCollection(CurrentCollection).Id > 0)
+                {
+                    NavigationService.UriFor<CollectionListViewModel>().Navigate();
+                    while (NavigationService.BackStack.Any())
+                    {
+                        this.NavigationService.RemoveBackEntry();
+                    }
                 }
             }
         }
@@ -101,6 +144,33 @@ namespace MyHoard.ViewModels
         {
             eventAggregator.Subscribe(this);
             base.OnActivate();
+        }
+
+        protected override void OnInitialize()
+        {
+            if (CollectionId > 0)
+            {
+                PageTitle = AppResources.EditCollection;
+                CurrentCollection = CollectionService.GetCollection(CollectionId);
+                editedCollection = new Collection()
+                {
+                    Name = CurrentCollection.Name,
+                    Description = CurrentCollection.Description,
+                    Thumbnail = CurrentCollection.Thumbnail
+                };
+                Thumbnail = CurrentCollection.Thumbnail;
+            }
+            else
+            {
+                PageTitle = AppResources.AddCollection;
+                CurrentCollection = new Collection();
+                Thumbnail = CurrentCollection.Thumbnail;
+            }
+        }
+        private bool StringsEqual(string string1, string string2)
+        {
+            return (string.IsNullOrEmpty(string1) && string.IsNullOrEmpty(string2)) ||
+                string1 == string2;
         }
     }
 }

@@ -41,7 +41,17 @@ namespace MyHoard.Services
 
         public Collection ModifyCollection(Collection collection)
         {
-            return databaseService.Modify(collection);
+            Collection col = CollectionList().FirstOrDefault(c => c.Name == collection.Name);
+            if (col == null || col.Id == collection.Id)
+            {
+                return databaseService.Modify(collection);
+            }
+            else
+            {
+                IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
+                eventAggregator.Publish(new CollectionServiceErrorMessage(AppResources.DuplicateNameErrorMessage));
+                return col;
+            }
         }
 
         public Collection GetCollection(int id)
