@@ -1,4 +1,5 @@
-﻿using MyHoard.Models;
+﻿using Caliburn.Micro;
+using MyHoard.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,7 @@ namespace MyHoard.Services
 
         public CollectionService()
         {
-            databaseService=new DatabaseService();
-
+            databaseService = IoC.Get<DatabaseService>();
         }
 
         public Collection AddCollection(Collection collection)
