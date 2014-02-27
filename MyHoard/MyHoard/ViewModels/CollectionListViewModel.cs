@@ -46,9 +46,9 @@ namespace MyHoard.ViewModels
             }
         }
 
-        public void EditCollection()
+        public void CollectionDetails()
         {
-            NavigationService.UriFor<AddCollectionViewModel>().WithParam(x => x.CollectionId, SelectedCollection.Id).Navigate();
+            NavigationService.UriFor<CollectionDetailsViewModel>().WithParam(x => x.CollectionId, SelectedCollection.Id).Navigate();
         }
         
     }

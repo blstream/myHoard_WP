@@ -161,4 +161,7 @@
   <data name="EditCollection" xml:space="preserve">
     <value>Edit Collection</value>
   </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
 </root>

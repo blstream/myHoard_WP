@@ -110,11 +110,9 @@ namespace MyHoard.ViewModels
             {
                 if (CollectionService.ModifyCollection(CurrentCollection).Id == CurrentCollection.Id)
                 {
-                    NavigationService.UriFor<CollectionListViewModel>().Navigate();
-                    while (NavigationService.BackStack.Any())
-                    {
-                        this.NavigationService.RemoveBackEntry();
-                    }
+                    NavigationService.UriFor<CollectionDetailsViewModel>().WithParam(x => x.CollectionId, CurrentCollection.Id).Navigate();
+                    this.NavigationService.RemoveBackEntry();
+                    this.NavigationService.RemoveBackEntry();
                 }
             }
             else
@@ -122,10 +120,8 @@ namespace MyHoard.ViewModels
                 if (CollectionService.AddCollection(CurrentCollection).Id > 0)
                 {
                     NavigationService.UriFor<CollectionListViewModel>().Navigate();
-                    while (NavigationService.BackStack.Any())
-                    {
-                        this.NavigationService.RemoveBackEntry();
-                    }
+                    this.NavigationService.RemoveBackEntry();
+                    this.NavigationService.RemoveBackEntry();
                 }
             }
         }
