@@ -174,6 +174,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\add.png" />
+    <Content Include="Images\delete.png" />
     <Content Include="Images\edit.png" />
     <Content Include="Images\save.png" />
     <Content Include="README_FIRST.txt" />

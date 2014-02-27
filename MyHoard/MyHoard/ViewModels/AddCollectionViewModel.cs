@@ -20,6 +20,7 @@ namespace MyHoard.ViewModels
         private Collection editedCollection;
         private ObservableCollection<string> thumbnails;
         private bool canSave;
+        private Visibility isDeleteVisible;
         private int collectionId;
         private readonly IEventAggregator eventAggregator;
 
@@ -97,6 +98,16 @@ namespace MyHoard.ViewModels
             }
         }
 
+        public Visibility IsDeleteVisible
+        {
+            get { return isDeleteVisible; }
+            set 
+            { 
+                isDeleteVisible = value;
+                NotifyOfPropertyChange(() => IsDeleteVisible);
+            }
+        }
+
         public void DataChanged()
         {
             CanSave = !String.IsNullOrEmpty(CurrentCollection.Name) && (CollectionId==0 || 
@@ -155,12 +166,14 @@ namespace MyHoard.ViewModels
                     Thumbnail = CurrentCollection.Thumbnail
                 };
                 Thumbnail = CurrentCollection.Thumbnail;
+                IsDeleteVisible = Visibility.Visible;
             }
             else
             {
                 PageTitle = AppResources.AddCollection;
                 CurrentCollection = new Collection();
                 Thumbnail = CurrentCollection.Thumbnail;
+                IsDeleteVisible = Visibility.Collapsed;
             }
         }
         private bool StringsEqual(string string1, string string2)
