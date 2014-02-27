@@ -136,6 +136,21 @@ namespace MyHoard.ViewModels
                 }
             }
         }
+
+        public void Delete()
+        {
+            MessageBoxResult messageResult = MessageBox.Show(AppResources.DeleteDialog+" \"" + CurrentCollection.Name +"\"?",AppResources.Delete,MessageBoxButton.OKCancel);
+            if(messageResult==MessageBoxResult.OK)
+            {
+                CollectionService.DeleteCollection(CurrentCollection);
+                NavigationService.UriFor<CollectionListViewModel>().Navigate();
+                while (NavigationService.BackStack.Any())
+                {
+                        this.NavigationService.RemoveBackEntry();
+                }
+            }
+        }
+
         public void Handle(CollectionServiceErrorMessage message)
         {
             MessageBox.Show(message.Content);
