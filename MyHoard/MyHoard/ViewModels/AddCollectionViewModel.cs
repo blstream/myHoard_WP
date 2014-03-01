@@ -16,14 +16,19 @@ namespace MyHoard.ViewModels
     {
         private string pageTitle;
         private string thumbnail;
+        private string selectedTag;
+        private string newTag;
         private Collection currentCollection;
         private Collection editedCollection;
         private ObservableCollection<string> thumbnails;
         private bool canSave;
+        private bool canAddTag;
         private Visibility isDeleteVisible;
         private int collectionId;
         private readonly IEventAggregator eventAggregator;
+        private ObservableCollection<string> tags;
 
+               
         public AddCollectionViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator)
             : base(navigationService, collectionService)
         {
@@ -32,8 +37,58 @@ namespace MyHoard.ViewModels
             Thumbnails = new BindableCollection<string> { "","\uE114", "\uE104", "\uE107", "\uE10F", "\uE113", "\uE116", "\uE119", "\uE128", "\uE13D", "\uE15D", "\uE15E" };
         }
 
-        
-              
+        public ObservableCollection<string> Tags
+        {
+            get { return tags; }
+            set
+            {
+                tags = value;
+                NotifyOfPropertyChange(() => Tags);
+            }
+        }
+
+        public string SelectedTag
+        {
+            get { return selectedTag; }
+            set
+            {
+                selectedTag = value;
+                NotifyOfPropertyChange(() => SelectedTag);
+            }
+        }
+
+        public string NewTag
+        {
+            get { return newTag; }
+            set
+            {
+                newTag = value;
+                NotifyOfPropertyChange(() => NewTag);
+                if (String.IsNullOrEmpty(value))
+                    CanAddTag = false;
+                else
+                    CanAddTag = true;
+            }
+        }
+
+        public void AddTag()
+        {
+            if (!Tags.Contains(NewTag))
+            {
+                Tags.Add(NewTag);
+                CurrentCollection.SetTagList(Tags);
+                DataChanged();
+            }
+            NewTag = "";
+        }
+
+        public void DeleteTag()
+        {
+            Tags.Remove(SelectedTag);
+            CurrentCollection.SetTagList(Tags);
+            DataChanged();
+        }
+                             
 
         public string PageTitle
         {
@@ -98,6 +153,16 @@ namespace MyHoard.ViewModels
             }
         }
 
+        public bool CanAddTag
+        {
+            get { return canAddTag; }
+            set
+            {
+                canAddTag = value;
+                NotifyOfPropertyChange(() => CanAddTag);
+            }
+        }
+
         public Visibility IsDeleteVisible
         {
             get { return isDeleteVisible; }
@@ -112,7 +177,7 @@ namespace MyHoard.ViewModels
         {
             CanSave = !String.IsNullOrEmpty(CurrentCollection.Name) && (CollectionId==0 || 
                 !StringsEqual(editedCollection.Name, CurrentCollection.Name) || !StringsEqual(editedCollection.Description,CurrentCollection.Description)
-                || !StringsEqual(editedCollection.Thumbnail, CurrentCollection.Thumbnail));
+                || !StringsEqual(editedCollection.Thumbnail, CurrentCollection.Thumbnail) || !StringsEqual(editedCollection.Tags, CurrentCollection.Tags));
         }
 
         public void Save()
@@ -178,9 +243,11 @@ namespace MyHoard.ViewModels
                 {
                     Name = CurrentCollection.Name,
                     Description = CurrentCollection.Description,
-                    Thumbnail = CurrentCollection.Thumbnail
+                    Thumbnail = CurrentCollection.Thumbnail,
+                    Tags = CurrentCollection.Tags
                 };
                 Thumbnail = CurrentCollection.Thumbnail;
+                Tags = new ObservableCollection<string>(CurrentCollection.GetTagList());
                 IsDeleteVisible = Visibility.Visible;
             }
             else
@@ -188,6 +255,7 @@ namespace MyHoard.ViewModels
                 PageTitle = AppResources.AddCollection;
                 CurrentCollection = new Collection();
                 Thumbnail = CurrentCollection.Thumbnail;
+                Tags = new ObservableCollection<string>();
                 IsDeleteVisible = Visibility.Collapsed;
             }
         }

@@ -9,6 +9,9 @@ namespace MyHoard.Models
 {
     public class Collection : BaseEntity
     {
+
+        static private string TagSeparator = "<;>";
+
         private string name;
         private string description;
         private string thumbnail;
@@ -89,6 +92,26 @@ namespace MyHoard.Models
             {
                 modifiedDate = value;
             }
+        }
+
+        public List<string> GetTagList()
+        {
+            List<String> tagList = new List<string>();
+            if (!String.IsNullOrEmpty(Tags))
+                tagList = Tags.Split(new string[] { TagSeparator }, StringSplitOptions.None).ToList<string>();
+
+            return tagList;
+        }
+
+        public void SetTagList(ICollection<string> tagList)
+        {
+            Tags = "";
+            foreach (string tag in tagList)
+            {
+                Tags += tag + TagSeparator;
+            }
+            if (Tags.Length > TagSeparator.Length)
+                Tags = Tags.Remove(Tags.Length - TagSeparator.Length);
         }
     }
 }
