@@ -44,8 +44,8 @@
                      Grid.Row="1" Height="72" TextWrapping="Wrap"/>
             <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" />
-            <TextBox Name="CurrentItem_Description"  Grid.Row="3" Height="216" TextWrapping="Wrap" 
-                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]" />
+            <TextBox Name="CurrentItem_Description"  Grid.Row="3" Height="432" TextWrapping="Wrap" 
+                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  />
 
         </Grid>
         <bab:BindableAppBar x:Name="AppBar">
