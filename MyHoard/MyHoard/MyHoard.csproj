@@ -103,10 +103,14 @@
     <Compile Include="Services\ServiceErrorMessage.cs" />
     <Compile Include="Services\ItemService.cs" />
     <Compile Include="ViewModels\AddCollectionViewModel.cs" />
+    <Compile Include="ViewModels\AddItemViewModel.cs" />
     <Compile Include="ViewModels\CollectionDetailsViewModel.cs" />
     <Compile Include="ViewModels\CollectionListViewModel.cs" />
     <Compile Include="Views\AddCollectionView.xaml.cs">
       <DependentUpon>AddCollectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddItemView.xaml.cs">
+      <DependentUpon>AddItemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CollectionDetailsView.xaml.cs">
       <DependentUpon>CollectionDetailsView.xaml</DependentUpon>
@@ -132,6 +136,10 @@
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
     <Page Include="Views\AddCollectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

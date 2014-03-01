@@ -11,14 +11,44 @@ namespace MyHoard.ViewModels
 {
     public class CollectionDetailsViewModel : ViewModelBase
     {
+        private ItemService itemService;
         private Collection currentCollection;
         private String collectionName;
         private int collectionId;
-                
+        private Item selectedItem;
+        private List<Item> items;
         
-        public CollectionDetailsViewModel(INavigationService navigationService, CollectionService collectionService) : base(navigationService,collectionService)
-        {
 
+                
+        public CollectionDetailsViewModel(INavigationService navigationService, CollectionService collectionService, ItemService itemService) : base(navigationService,collectionService)
+        {
+            this.itemService = itemService;
+        }
+
+        protected override void OnActivate()
+        {
+            base.OnActivate();
+            Items = itemService.ItemList(CollectionId);
+        }
+
+        public List<Item> Items
+        {
+            get { return items; }
+            set 
+            { 
+                items = value;
+                NotifyOfPropertyChange(() => Items);
+            }
+        }
+
+        public Item SelectedItem
+        {
+            get { return selectedItem; }
+            set
+            { 
+                selectedItem = value;
+                NotifyOfPropertyChange(() => SelectedItem);
+            }
         }
 
         public Collection CurrentCollection
@@ -61,6 +91,11 @@ namespace MyHoard.ViewModels
         public void Edit()
         {
             NavigationService.UriFor<AddCollectionViewModel>().WithParam(x => x.CollectionId, CurrentCollection.Id).Navigate();
+        }
+
+        public void AddItem()
+        {
+            NavigationService.UriFor<AddItemViewModel>().WithParam(x => x.CollectionId, CurrentCollection.Id).Navigate();
         }
 
     }

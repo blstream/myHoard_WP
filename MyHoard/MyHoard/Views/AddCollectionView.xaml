@@ -44,7 +44,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            </Grid.RowDefinitions>
             <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" 
                        Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
             <TextBox Name="CurrentCollection_Name" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  

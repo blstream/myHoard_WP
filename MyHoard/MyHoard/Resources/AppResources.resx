@@ -173,4 +173,10 @@
   <data name="Tags" xml:space="preserve">
     <value>Tags</value>
   </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>Add New Item</value>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Edit Item</value>
+  </data>
 </root>

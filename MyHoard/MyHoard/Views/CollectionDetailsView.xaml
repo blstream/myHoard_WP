@@ -31,13 +31,31 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-
+            <ListBox Grid.Row="0" Name="Items">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock  Style="{StaticResource PhoneTextLargeStyle}" 
+                                        Margin="10,0" Grid.Column="0" 
+                                        VerticalAlignment="Center"
+                                        TextWrapping="Wrap" Text="{Binding Name}"/>
+                        
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Grid>
 
         <bab:BindableAppBar x:Name="AppBar">
             <bab:BindableAppBarButton x:Name="Edit"
                                       Text="{Binding Path=LocalizedResources.Edit, Source={StaticResource LocalizedStrings}}"
                                       IconUri="Images/edit.png"/>
+            <bab:BindableAppBarButton x:Name="AddItem"
+                                      Text="{Binding Path=LocalizedResources.AddItem, Source={StaticResource LocalizedStrings}}"
+                                      IconUri="Images/add.png"/>
         </bab:BindableAppBar>
     </Grid>
 
