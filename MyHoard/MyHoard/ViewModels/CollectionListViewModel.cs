@@ -18,7 +18,7 @@ namespace MyHoard.ViewModels
         public CollectionListViewModel(INavigationService navigationService, CollectionService collectionService)
             : base(navigationService, collectionService)
         {
-            Collections = collectionService.CollectionList().OrderBy(e => e.Name).ToList<Collection>();
+            
         }
 
         public void AddCollection()
@@ -49,6 +49,12 @@ namespace MyHoard.ViewModels
         public void CollectionDetails()
         {
             NavigationService.UriFor<CollectionDetailsViewModel>().WithParam(x => x.CollectionId, SelectedCollection.Id).Navigate();
+        }
+
+        protected override void OnActivate()
+        {
+            base.OnActivate();
+            Collections = CollectionService.CollectionList().OrderBy(e => e.Name).ToList<Collection>();
         }
         
     }
