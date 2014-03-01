@@ -36,7 +36,7 @@ namespace MyHoard.ViewModels
 
         public void DataChanged()
         {
-            CanSave = CurrentItem.Name.Length>=2 && (ItemId == 0 ||
+            CanSave = !String.IsNullOrEmpty(CurrentItem.Name) && CurrentItem.Name.Length>=2 && (ItemId == 0 ||
                 !StringsEqual(editedItem.Name, CurrentItem.Name) || !StringsEqual(editedItem.Description, CurrentItem.Description));
         }
 
