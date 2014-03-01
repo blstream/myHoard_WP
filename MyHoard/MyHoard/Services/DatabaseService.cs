@@ -21,6 +21,7 @@ namespace MyHoard.Services
 
             dbConnection = new SQLiteConnection(Path.Combine(ApplicationData.Current.LocalFolder.Path, DatabaseName));
             dbConnection.CreateTable<Collection>();
+            dbConnection.CreateTable<Item>();
             
         }
 
@@ -45,6 +46,12 @@ namespace MyHoard.Services
         {
             return dbConnection.Table<T>().ToList<T>();
         }
+
+        public TableQuery<T> ListAllTable<T> () where T : new()
+        {
+            return dbConnection.Table<T>();
+        }       
+
         public T Get<T>(int id)where T : new()
         {
             return dbConnection.Get<T>(id);

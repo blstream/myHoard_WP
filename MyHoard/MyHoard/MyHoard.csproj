@@ -100,7 +100,8 @@
     <Compile Include="Models\Item.cs" />
     <Compile Include="Services\CollectionService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
-    <Compile Include="Services\CollectionServiceErrorMessage.cs" />
+    <Compile Include="Services\ServiceErrorMessage.cs" />
+    <Compile Include="Services\ItemService.cs" />
     <Compile Include="ViewModels\AddCollectionViewModel.cs" />
     <Compile Include="ViewModels\CollectionDetailsViewModel.cs" />
     <Compile Include="ViewModels\CollectionListViewModel.cs" />

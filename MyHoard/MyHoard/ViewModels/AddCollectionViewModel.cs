@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace MyHoard.ViewModels
 {
-    public class AddCollectionViewModel : ViewModelBase, IHandle<CollectionServiceErrorMessage>
+    public class AddCollectionViewModel : ViewModelBase, IHandle<ServiceErrorMessage>
     {
         private string pageTitle;
         private string thumbnail;
@@ -216,7 +216,7 @@ namespace MyHoard.ViewModels
             }
         }
 
-        public void Handle(CollectionServiceErrorMessage message)
+        public void Handle(ServiceErrorMessage message)
         {
             MessageBox.Show(message.Content);
         }

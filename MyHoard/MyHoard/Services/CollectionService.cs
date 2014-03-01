@@ -12,8 +12,7 @@ namespace MyHoard.Services
     public class CollectionService
     {
         private DatabaseService databaseService;
-
-
+        
         public CollectionService()
         {
             databaseService = IoC.Get<DatabaseService>();
@@ -28,7 +27,7 @@ namespace MyHoard.Services
             else
             {
                 IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
-                eventAggregator.Publish(new CollectionServiceErrorMessage(AppResources.DuplicateNameErrorMessage));
+                eventAggregator.Publish(new ServiceErrorMessage(AppResources.DuplicateNameErrorMessage));
                 return collection;
             }
                 
@@ -49,7 +48,7 @@ namespace MyHoard.Services
             else
             {
                 IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
-                eventAggregator.Publish(new CollectionServiceErrorMessage(AppResources.DuplicateNameErrorMessage));
+                eventAggregator.Publish(new ServiceErrorMessage(AppResources.DuplicateNameErrorMessage));
                 return col;
             }
         }
