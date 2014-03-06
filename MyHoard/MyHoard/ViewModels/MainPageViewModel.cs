@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using MyHoard.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace MyHoard.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
-        public MainPageViewModel(INavigationService navigationService) : base(navigationService)
+        public MainPageViewModel(INavigationService navigationService, CollectionService collectionService) : base(navigationService,collectionService)
         {
 
         }
