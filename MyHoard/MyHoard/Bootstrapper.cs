@@ -32,7 +32,8 @@ namespace MyHoard
             container.PerRequest<AddItemViewModel>();
             container.Singleton<DatabaseService>();
             container.Singleton<CollectionService>();
-            container.Singleton<ItemService>(); 
+            container.Singleton<ItemService>();
+            container.Singleton<MediaService>(); 
 
             AddCustomConventions();
                 

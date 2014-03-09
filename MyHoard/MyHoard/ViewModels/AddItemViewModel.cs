@@ -1,19 +1,23 @@
 ﻿using Caliburn.Micro;
+using Microsoft.Phone.Tasks;
 using MyHoard.Models;
 using MyHoard.Resources;
 using MyHoard.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace MyHoard.ViewModels
 {
-    public class AddItemViewModel : ViewModelBase, IHandle<ServiceErrorMessage>
+    public class AddItemViewModel : ViewModelBase, IHandle<ServiceErrorMessage>, IHandle<TaskCompleted<PhotoResult>>
     {
         private ItemService itemService;
+        private MediaService mediaService;
         private readonly IEventAggregator eventAggregator;
 
         private string pageTitle;
@@ -24,14 +28,37 @@ namespace MyHoard.ViewModels
         private bool canSave;
         private Visibility isDeleteVisible;
 
+        private Dictionary<Media,BitmapImage> pictureDictionary;
+        private ObservableCollection<BitmapImage> pictures;
 
-        public AddItemViewModel(INavigationService navigationService, CollectionService collectionService, ItemService itemService,  IEventAggregator eventAggregator)
+        public ObservableCollection<BitmapImage> Pictures
+        {
+            get { return pictures; }
+            set
+            {
+                pictures = value;
+                NotifyOfPropertyChange(() => Pictures);
+            }
+        }
+
+        public Dictionary<Media, BitmapImage> PictureDictionary
+        {
+            get { return pictureDictionary; }
+            set
+            {
+                pictureDictionary = value;
+                NotifyOfPropertyChange(() => PictureDictionary);
+            }
+        }
+
+
+        public AddItemViewModel(INavigationService navigationService, CollectionService collectionService, ItemService itemService,  IEventAggregator eventAggregator, MediaService mediaService)
             : base(navigationService, collectionService)
 
         {
+            this.mediaService = mediaService;
             this.itemService = itemService;
             this.eventAggregator = eventAggregator;
-            eventAggregator.Subscribe(this);
         }
 
         public void DataChanged()
@@ -40,6 +67,27 @@ namespace MyHoard.ViewModels
                 !StringsEqual(editedItem.Name, CurrentItem.Name) || !StringsEqual(editedItem.Description, CurrentItem.Description));
         }
 
+
+        public void TakePicture()
+        {
+            eventAggregator.RequestTask<CameraCaptureTask>();
+            
+        }
+
+
+        public void Handle(TaskCompleted<PhotoResult> e)
+        {
+            if(e.Result.TaskResult==Microsoft.Phone.Tasks.TaskResult.OK)
+            {
+                BitmapImage image = new BitmapImage();
+                image.SetSource(e.Result.ChosenPhoto);
+                PictureDictionary.Add(new Media() { ItemId = itemId },image);
+                Pictures.Add(image);
+                NotifyOfPropertyChange(() => Pictures);
+            }
+        }
+
+        
         public void Save()
         {
             if (ItemId > 0)
@@ -49,6 +97,7 @@ namespace MyHoard.ViewModels
                     NavigationService.UriFor<CollectionDetailsViewModel>().WithParam(x => x.CollectionId, CollectionId).Navigate();
                     this.NavigationService.RemoveBackEntry();
                     this.NavigationService.RemoveBackEntry();
+                    mediaService.SavePictureDicitonary(PictureDictionary);
                 }
             }
             else
@@ -58,6 +107,7 @@ namespace MyHoard.ViewModels
                     NavigationService.UriFor<CollectionDetailsViewModel>().WithParam(x => x.CollectionId, CollectionId).Navigate();
                     this.NavigationService.RemoveBackEntry();
                     this.NavigationService.RemoveBackEntry();
+                    mediaService.SavePictureDicitonary(PictureDictionary);
                 }
             }
         }
@@ -86,7 +136,8 @@ namespace MyHoard.ViewModels
                     Name = CurrentItem.Name,
                     Description = CurrentItem.Description,
                 };
-                
+                PictureDictionary = mediaService.PictureDictionary(ItemId);
+                Pictures = new ObservableCollection<BitmapImage>(PictureDictionary.Values.ToList());
                 IsDeleteVisible = Visibility.Visible;
             }
             else
@@ -94,6 +145,8 @@ namespace MyHoard.ViewModels
                 PageTitle = AppResources.AddItem;
                 CurrentItem = new Item() { CollectionId = CollectionId };
                 IsDeleteVisible = Visibility.Collapsed;
+                PictureDictionary = new Dictionary<Media, BitmapImage>();
+                Pictures = new ObservableCollection<BitmapImage>();
             }
         }
 
