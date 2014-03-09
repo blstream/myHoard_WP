@@ -94,20 +94,25 @@ namespace MyHoard.ViewModels
             {
                 if (itemService.ModifyItem(CurrentItem).Id == CurrentItem.Id)
                 {
+                    mediaService.SavePictureDicitonary(PictureDictionary);
                     NavigationService.UriFor<CollectionDetailsViewModel>().WithParam(x => x.CollectionId, CollectionId).Navigate();
                     this.NavigationService.RemoveBackEntry();
                     this.NavigationService.RemoveBackEntry();
-                    mediaService.SavePictureDicitonary(PictureDictionary);
+                    
                 }
             }
             else
             {
                 if (itemService.AddItem(CurrentItem).Id > 0)
                 {
+                    foreach(Media m in PictureDictionary.Keys)
+                    {
+                        m.ItemId = CurrentItem.Id;
+                    }
+                    mediaService.SavePictureDicitonary(PictureDictionary);
                     NavigationService.UriFor<CollectionDetailsViewModel>().WithParam(x => x.CollectionId, CollectionId).Navigate();
                     this.NavigationService.RemoveBackEntry();
                     this.NavigationService.RemoveBackEntry();
-                    mediaService.SavePictureDicitonary(PictureDictionary);
                 }
             }
         }
