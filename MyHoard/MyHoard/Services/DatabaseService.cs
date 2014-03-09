@@ -22,6 +22,7 @@ namespace MyHoard.Services
             dbConnection = new SQLiteConnection(Path.Combine(ApplicationData.Current.LocalFolder.Path, DatabaseName));
             dbConnection.CreateTable<Collection>();
             dbConnection.CreateTable<Item>();
+            dbConnection.CreateTable<Media>();
             
         }
 

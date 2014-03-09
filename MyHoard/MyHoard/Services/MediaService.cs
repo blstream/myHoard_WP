@@ -46,21 +46,45 @@ namespace MyHoard.Services
             return databaseService.ListAllTable<Media>().Where(i => i.ItemId == itemId).ToList();
         }
 
-        public void SaveToIsolatedStorage(BitmapImage image, int itemId)
+        public Dictionary<Media,BitmapImage> PictureDictionary(int itemId)
         {
-            Media m = new Media() { FileName = Guid.NewGuid().ToString(), ItemId = itemId };
+            Dictionary<Media, BitmapImage> pictureDictionary = new Dictionary<Media, BitmapImage>();
+
+            foreach(Media m in MediaList(itemId))
+            {
+                pictureDictionary.Add(m, GetImageFromIsolatedStorage(m));
+            }
+
+            return pictureDictionary;
+        }
+
+        public void SavePictureDicitonary(Dictionary<Media,BitmapImage> mediaDictionary)
+        {
+            foreach(Media m in mediaDictionary.Keys)
+            {
+                if(String.IsNullOrEmpty(m.FileName))
+                {
+                    AddMedia(SaveImageToIsolatedStorage(mediaDictionary[m], m));
+                }
+            }
+        }
+
+        public Media SaveImageToIsolatedStorage(BitmapImage image, Media media)
+        {
             
             IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication();
+            media.FileName = Guid.NewGuid().ToString()+".jpg";
 
-            using (IsolatedStorageFileStream isostream = isf.CreateFile(m.FileName))
+            using (IsolatedStorageFileStream isostream = isf.CreateFile(media.FileName))
             {
                 WriteableBitmap wb = new WriteableBitmap(image);
                 Extensions.SaveJpeg(wb, isostream, wb.PixelWidth, wb.PixelHeight, 0, 85);
                 isostream.Close();
             }
+            return media;
         }
 
-        public BitmapImage GetFromIsolatedStorage(Media media)
+        public BitmapImage GetImageFromIsolatedStorage(Media media)
         {
             byte[] data;
 
