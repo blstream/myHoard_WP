@@ -32,9 +32,7 @@ namespace MyHoard.ViewModels
         private ObservableCollection<Media> pictures;
         private List<Media> picturesToDelete;
 
-        
-
-
+    
         public AddItemViewModel(INavigationService navigationService, CollectionService collectionService, ItemService itemService,  IEventAggregator eventAggregator, MediaService mediaService)
             : base(navigationService, collectionService)
 
@@ -52,30 +50,29 @@ namespace MyHoard.ViewModels
                 SelectedPicture.ToDelete = true;
                 picturesToDelete.Add(SelectedPicture);
                 Pictures.Remove(SelectedPicture);
+                DataChanged();
             }
         }
 
-        public Media SelectedPicture
-        {
-            get { return selectedPicture; }
-            set
-            {
-                selectedPicture = value;
-                NotifyOfPropertyChange(() => CanSave);
-                DeleteImage();
-            }
-        }
+        
 
         public void DataChanged()
         {
             bool picturesChanged=false;
-            foreach (Media m in Pictures)
+           
+            if (picturesToDelete.Count>0)
             {
-                if(String.IsNullOrEmpty(m.FileName))
-                {
-                    picturesChanged = true;
-                }
+                picturesChanged = true;
             }
+            else
+                foreach (Media m in Pictures)
+                {
+                    if (String.IsNullOrEmpty(m.FileName))
+                    {
+                        picturesChanged = true;
+                    }
+                }
+
             CanSave = !String.IsNullOrEmpty(CurrentItem.Name) && CurrentItem.Name.Length>=2 && (ItemId == 0 ||
                 !StringsEqual(editedItem.Name, CurrentItem.Name) || !StringsEqual(editedItem.Description, CurrentItem.Description) || picturesChanged);
         }
@@ -162,6 +159,17 @@ namespace MyHoard.ViewModels
         public void Handle(ServiceErrorMessage message)
         {
             MessageBox.Show(message.Content);
+        }
+
+        public Media SelectedPicture
+        {
+            get { return selectedPicture; }
+            set
+            {
+                selectedPicture = value;
+                NotifyOfPropertyChange(() => CanSave);
+                DeleteImage();
+            }
         }
 
         public bool CanSave
