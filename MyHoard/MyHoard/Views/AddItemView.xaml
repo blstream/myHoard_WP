@@ -58,7 +58,7 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate >
-                            <Image Width="100" Height="100"
+                            <Image Width="100" Height="100" cal:Message.Attach="[Event Tap] = [Action DeleteImage]"
                                 Source="{Binding Image}" Margin="20,10" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>

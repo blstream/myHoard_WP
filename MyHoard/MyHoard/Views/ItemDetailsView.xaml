@@ -12,7 +12,9 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     xmlns:bab="clr-namespace:Caliburn.Micro.BindableAppBar;assembly=Caliburn.Micro.BindableAppBar"
     mc:Ignorable="d"
-    shell:SystemTray.IsVisible="True">
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    shell:SystemTray.IsVisible="True"
+    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -45,14 +47,21 @@
                        Style="{StaticResource PhoneTextNormalStyle}" />
                 <TextBlock Name="CurrentItem_Description"  Grid.Row="3" Height="auto"
                            Style="{StaticResource PhoneTextNormalStyle}"/>
-                <phone:LongListSelector ItemsSource="{Binding Pictures}"  Grid.Row="4"
-                                    LayoutMode="Grid" GridCellSize="130, 130">
-                    <phone:LongListSelector.ItemTemplate>
-                        <DataTemplate>
-                            <Image Source="{Binding Image}" Margin="20" />
+                <ListBox Name="Pictures" Grid.Row="4" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <toolkit:WrapPanel  />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate >
+                            <Image Width="100" Height="100"
+                                   cal:Message.Attach="[Event Tap] = [Action ShowPicture]"
+                                Source="{Binding Image}" Margin="20,10" />
                         </DataTemplate>
-                    </phone:LongListSelector.ItemTemplate>
-                </phone:LongListSelector>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Grid>
         </ScrollViewer>
         <bab:BindableAppBar x:Name="AppBar">
@@ -61,7 +70,7 @@
                                       IconUri="Images/edit.png"/>
             <bab:BindableAppBarButton x:Name="Delete"
                                       Text="{Binding Path=LocalizedResources.Delete, Source={StaticResource LocalizedStrings}}"
-                                      IconUri="Images/delete.png" Visibility="{Binding IsDeleteVisible}"/>
+                                      IconUri="Images/delete.png" />
         </bab:BindableAppBar>
     </Grid>
 

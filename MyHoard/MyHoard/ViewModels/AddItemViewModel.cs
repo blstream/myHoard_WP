@@ -167,8 +167,7 @@ namespace MyHoard.ViewModels
             set
             {
                 selectedPicture = value;
-                NotifyOfPropertyChange(() => CanSave);
-                DeleteImage();
+                NotifyOfPropertyChange(() => SelectedPicture);
             }
         }
 
