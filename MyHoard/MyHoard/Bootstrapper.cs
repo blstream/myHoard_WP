@@ -30,6 +30,7 @@ namespace MyHoard
             container.PerRequest<CollectionListViewModel>();
             container.PerRequest<CollectionDetailsViewModel>();
             container.PerRequest<AddItemViewModel>();
+            container.PerRequest<ItemDetailsViewModel>();
             container.Singleton<DatabaseService>();
             container.Singleton<CollectionService>();
             container.Singleton<ItemService>();

@@ -64,11 +64,8 @@
                                       Text="{Binding Path=LocalizedResources.Save, Source={StaticResource LocalizedStrings}}"
                                       IconUri="Images/save.png"/>
             <bab:BindableAppBarButton x:Name="TakePicture"
-                                      Text="{Binding Path=LocalizedResources.Save, Source={StaticResource LocalizedStrings}}"
+                                      Text="{Binding Path=LocalizedResources.Camera, Source={StaticResource LocalizedStrings}}"
                                       IconUri="Images/camera.png"/>
-            <bab:BindableAppBarButton x:Name="Delete"
-                                      Text="{Binding Path=LocalizedResources.Delete, Source={StaticResource LocalizedStrings}}"
-                                      IconUri="Images/delete.png" Visibility="{Binding IsDeleteVisible}"/>
         </bab:BindableAppBar>
     </Grid>
 

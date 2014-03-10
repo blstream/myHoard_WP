@@ -179,4 +179,7 @@
   <data name="EditItem" xml:space="preserve">
     <value>Edit Item</value>
   </data>
+  <data name="Camera" xml:space="preserve">
+    <value>Camera</value>
+  </data>
 </root>

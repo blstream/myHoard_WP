@@ -115,6 +115,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Camera.
+        /// </summary>
+        public static string Camera {
+            get {
+                return ResourceManager.GetString("Camera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Collection.
         /// </summary>
         public static string Collection {

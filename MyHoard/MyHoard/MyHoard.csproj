@@ -108,6 +108,7 @@
     <Compile Include="ViewModels\AddItemViewModel.cs" />
     <Compile Include="ViewModels\CollectionDetailsViewModel.cs" />
     <Compile Include="ViewModels\CollectionListViewModel.cs" />
+    <Compile Include="ViewModels\ItemDetailsViewModel.cs" />
     <Compile Include="Views\AddCollectionView.xaml.cs">
       <DependentUpon>AddCollectionView.xaml</DependentUpon>
     </Compile>

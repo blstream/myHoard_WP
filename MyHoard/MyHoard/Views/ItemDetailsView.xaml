@@ -10,6 +10,7 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
+    xmlns:bab="clr-namespace:Caliburn.Micro.BindableAppBar;assembly=Caliburn.Micro.BindableAppBar"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True">
 
@@ -22,14 +23,46 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="MY APPLICATION" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="page name" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
+                       Style="{StaticResource PhoneTextLargeStyle}" Margin="12,0"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-
-        </Grid>
+        <ScrollViewer Grid.Row="1">
+            <Grid x:Name="ContentPanel" Margin="12,0,12,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" 
+                       Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
+                <TextBlock Name="CurrentItem_Name" Grid.Row="1" Height="auto"
+                           Style="{StaticResource PhoneTextLargeStyle}" />
+                <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
+                       Style="{StaticResource PhoneTextNormalStyle}" />
+                <TextBlock Name="CurrentItem_Description"  Grid.Row="3" Height="auto"
+                           Style="{StaticResource PhoneTextNormalStyle}"/>
+                <phone:LongListSelector ItemsSource="{Binding Pictures}"  Grid.Row="4"
+                                    LayoutMode="Grid" GridCellSize="130, 130">
+                    <phone:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding}" Margin="20" />
+                        </DataTemplate>
+                    </phone:LongListSelector.ItemTemplate>
+                </phone:LongListSelector>
+            </Grid>
+        </ScrollViewer>
+        <bab:BindableAppBar x:Name="AppBar">
+            <bab:BindableAppBarButton x:Name="Edit"
+                                      Text="{Binding Path=LocalizedResources.Edit, Source={StaticResource LocalizedStrings}}"
+                                      IconUri="Images/edit.png"/>
+            <bab:BindableAppBarButton x:Name="Delete"
+                                      Text="{Binding Path=LocalizedResources.Delete, Source={StaticResource LocalizedStrings}}"
+                                      IconUri="Images/delete.png" Visibility="{Binding IsDeleteVisible}"/>
+        </bab:BindableAppBar>
     </Grid>
 
 </phone:PhoneApplicationPage>
