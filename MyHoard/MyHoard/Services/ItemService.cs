@@ -34,6 +34,12 @@ namespace MyHoard.Services
 
         public void DeleteItem(Item item)
         {
+            MediaService ms = IoC.Get<MediaService>();
+            foreach(Media m in ms.MediaList(item.Id, false))
+            {
+                m.ToDelete = true;
+                ms.ModifyMedia(m);
+            }
             databaseService.Delete(item);
         }
 
