@@ -13,7 +13,7 @@ namespace MyHoard.ViewModels
     public class PictureViewModel : ViewModelBase
     {
         private MediaService mediaService;
-        private BitmapImage picture;
+        private WriteableBitmap picture;
         private string pictureName;
 
         public PictureViewModel(INavigationService navigationService, CollectionService collectionService, MediaService mediaService)
@@ -24,10 +24,10 @@ namespace MyHoard.ViewModels
 
         protected override void OnInitialize()
         {
-            Picture = mediaService.GetPictureFromIsolatedStorage(new Media() { FileName = PictureName });
+            Picture = mediaService.GetPictureFromIsolatedStorage(new Media() { FileName = PictureName },false);
         }
 
-        public BitmapImage Picture
+        public WriteableBitmap Picture
         {
             get { return picture; }
             set

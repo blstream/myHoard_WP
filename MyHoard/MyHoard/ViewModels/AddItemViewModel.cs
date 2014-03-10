@@ -93,8 +93,9 @@ namespace MyHoard.ViewModels
         {
             if(e.Result.TaskResult==Microsoft.Phone.Tasks.TaskResult.OK)
             {
-                BitmapImage image = new BitmapImage();
-                image.SetSource(e.Result.ChosenPhoto);
+                BitmapImage bi = new BitmapImage();
+                bi.SetSource(e.Result.ChosenPhoto);
+                WriteableBitmap image = new WriteableBitmap(bi);
                 Pictures.Add(new Media() { ItemId = itemId, Image = image });
                 DataChanged();
             }
@@ -143,7 +144,7 @@ namespace MyHoard.ViewModels
                     Name = CurrentItem.Name,
                     Description = CurrentItem.Description,
                 };
-                Pictures = new ObservableCollection<Media>(mediaService.MediaList(ItemId,true));
+                Pictures = new ObservableCollection<Media>(mediaService.MediaList(ItemId,true, true));
                 IsDeleteVisible = Visibility.Visible;
             }
             else

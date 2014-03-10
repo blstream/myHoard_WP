@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Microsoft.Phone;
 using MyHoard.Models;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,10 @@ namespace MyHoard.Services
 {
     public class MediaService
     {
+        private const int ThumbnailSize = 100;
         private DatabaseService databaseService;
         private IsolatedStorageFile isolatedStorageFile;
-
+        
         public MediaService()
         {
             databaseService = IoC.Get<DatabaseService>();
@@ -38,23 +40,23 @@ namespace MyHoard.Services
             return databaseService.Modify(media);
         }
 
-        public List<Media> MediaList(bool withPictures)
+        public List<Media> MediaList(bool withPictures, bool thumbnail)
         {
             List<Media> mediaList = databaseService.ListAll<Media>();
             if (withPictures)
             {
                 foreach (Media m in mediaList)
                 {
-                    m.Image = GetPictureFromIsolatedStorage(m);
+                    m.Image = GetPictureFromIsolatedStorage(m, thumbnail);
                 }
             }
 
             return mediaList;
-            
-            
+
+
         }
 
-        public List<Media> MediaList(int itemId, bool withPictures)
+        public List<Media> MediaList(int itemId, bool withPictures, bool thumbnail)
         {
             List<Media> mediaList = databaseService.ListAllTable<Media>().Where(i => i.ItemId == itemId).ToList();
 
@@ -63,23 +65,23 @@ namespace MyHoard.Services
                 mediaList = mediaList.Where(i => i.ToDelete == false).ToList();
                 foreach (Media m in mediaList)
                 {
-                    m.Image = GetPictureFromIsolatedStorage(m);
+                    m.Image = GetPictureFromIsolatedStorage(m, thumbnail);
                 }
             }
 
             return mediaList;
         }
 
-        
+
         public void SavePictureList(IList<Media> pictureList)
         {
-            foreach(Media m in pictureList)
+            foreach (Media m in pictureList)
             {
-                if(String.IsNullOrEmpty(m.FileName))
+                if (String.IsNullOrEmpty(m.FileName))
                 {
                     AddMedia(SavePictureToIsolatedStorage(m));
                 }
-                if(m.ToDelete)
+                if (m.ToDelete)
                 {
                     ModifyMedia(m);
                 }
@@ -88,9 +90,9 @@ namespace MyHoard.Services
 
         public void CleanIsolatedStorage()
         {
-            foreach(Media m in MediaList(false))
+            foreach (Media m in MediaList(false, false))
             {
-                if(m.ToDelete)
+                if (m.ToDelete)
                 {
                     DeleteMediaFromIsolatedStorage(m);
                     DeleteMedia(m);
@@ -100,7 +102,7 @@ namespace MyHoard.Services
 
         public Media SavePictureToIsolatedStorage(Media media)
         {
-            media.FileName = Guid.NewGuid().ToString()+".jpg";
+            media.FileName = Guid.NewGuid().ToString() + ".jpg";
 
             using (IsolatedStorageFileStream isostream = isolatedStorageFile.CreateFile(media.FileName))
             {
@@ -119,28 +121,17 @@ namespace MyHoard.Services
             }
         }
 
-        public BitmapImage GetPictureFromIsolatedStorage(Media media)
+        public WriteableBitmap GetPictureFromIsolatedStorage(Media media, bool thumbnail)
         {
-            byte[] data;
-
             try
             {
-                using (IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForApplication())
+                using (IsolatedStorageFileStream isfs = isolatedStorageFile.OpenFile(media.FileName, FileMode.Open, FileAccess.Read))
                 {
-                    using (IsolatedStorageFileStream isfs = isf.OpenFile(media.FileName, FileMode.Open, FileAccess.Read))
-                    {
-                        data = new byte[isfs.Length];
-                        isfs.Read(data, 0, data.Length);
-                        isfs.Close();
-                    }
+                    WriteableBitmap wb;
+                    wb = (thumbnail) ? PictureDecoder.DecodeJpeg(isfs, ThumbnailSize, ThumbnailSize) : PictureDecoder.DecodeJpeg(isfs);
+                    isfs.Close();
+                    return wb;
                 }
-
-                MemoryStream ms = new MemoryStream(data);
-                BitmapImage bi = new BitmapImage();
-                
-                bi.SetSource(ms);
-                return bi;
-                
             }
             catch (Exception e)
             {

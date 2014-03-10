@@ -35,7 +35,7 @@ namespace MyHoard.ViewModels
             if (ItemId > 0)
             {
                 CurrentItem = itemService.GetItem(ItemId);
-                Pictures = mediaService.MediaList(ItemId,true);
+                Pictures = mediaService.MediaList(ItemId,true, true);
             }
         }
 

@@ -14,7 +14,7 @@ namespace MyHoard.Models
         private DateTime createdDate;
         private int itemId;
         private bool toDelete;
-        private BitmapImage image;
+        private WriteableBitmap image;
 
         public Media()
         {
@@ -22,7 +22,7 @@ namespace MyHoard.Models
         }
 
         [Ignore]
-        public BitmapImage Image
+        public WriteableBitmap Image
         {
             get { return image; }
             set
