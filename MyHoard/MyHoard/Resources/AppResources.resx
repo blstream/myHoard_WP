@@ -185,4 +185,7 @@
   <data name="Gallery" xml:space="preserve">
     <value>Gallery</value>
   </data>
+  <data name="ThisImage" xml:space="preserve">
+    <value>this image</value>
+  </data>
 </root>

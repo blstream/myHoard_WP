@@ -250,6 +250,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to this image.
+        /// </summary>
+        public static string ThisImage {
+            get {
+                return ResourceManager.GetString("ThisImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thumbnail.
         /// </summary>
         public static string Thumbnail {

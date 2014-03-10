@@ -60,6 +60,11 @@ namespace MyHoard
         {
             container.BuildUp(instance);
         }
+        protected override void OnLaunch(object sender, Microsoft.Phone.Shell.LaunchingEventArgs e)
+        {
+            base.OnLaunch(sender, e);
+            IoC.Get<MediaService>().CleanIsolatedStorage();
+        }
 
            
     }

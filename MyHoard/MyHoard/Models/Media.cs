@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace MyHoard.Models
 {
@@ -12,10 +13,22 @@ namespace MyHoard.Models
         private string fileName;
         private DateTime createdDate;
         private int itemId;
+        private bool toDelete;
+        private BitmapImage image;
 
         public Media()
         {
             CreatedDate = DateTime.Now;
+        }
+
+        [Ignore]
+        public BitmapImage Image
+        {
+            get { return image; }
+            set
+            {
+                image = value;
+            }
         }
 
         public DateTime CreatedDate
@@ -43,6 +56,15 @@ namespace MyHoard.Models
             set
             {
                 fileName = value;
+            }
+        }
+
+        public bool ToDelete
+        {
+            get { return toDelete; }
+            set
+            {
+                toDelete = value;
             }
         }
     }

@@ -15,7 +15,7 @@
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:bab="clr-namespace:Caliburn.Micro.BindableAppBar;assembly=Caliburn.Micro.BindableAppBar"
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro">
-    
+
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -34,30 +34,36 @@
         <!--ContentPanel - place additional content here-->
         <ScrollViewer Grid.Row="1">
             <Grid x:Name="ContentPanel" Margin="12,0,12,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" 
                        Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
-            <TextBox Name="CurrentItem_Name" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  
+                <TextBox Name="CurrentItem_Name" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  
                      Grid.Row="1" Height="72" TextWrapping="Wrap"/>
-            <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
+                <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" />
-            <TextBox Name="CurrentItem_Description"  Grid.Row="3" Height="324" TextWrapping="Wrap" 
+                <TextBox Name="CurrentItem_Description"  Grid.Row="3" Height="324" TextWrapping="Wrap" 
                      cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  />
-            <phone:LongListSelector ItemsSource="{Binding Pictures}"  Grid.Row="4"
-                                    LayoutMode="Grid" GridCellSize="130, 130">
-                <phone:LongListSelector.ItemTemplate>
-                    <DataTemplate>
-                        <Image Source="{Binding}" Margin="20" />
-                    </DataTemplate>
-                </phone:LongListSelector.ItemTemplate>
-            </phone:LongListSelector>
-        </Grid>
+                <ListBox Name="Pictures" Grid.Row="4" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <toolkit:WrapPanel  />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate >
+                            <Image Width="100" Height="100"
+                                Source="{Binding Image}" Margin="20,10" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
         </ScrollViewer>
         <bab:BindableAppBar x:Name="AppBar">
             <bab:BindableAppBarButton x:Name="Save"

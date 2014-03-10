@@ -49,7 +49,7 @@
                                     LayoutMode="Grid" GridCellSize="130, 130">
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding}" Margin="20" />
+                            <Image Source="{Binding Image}" Margin="20" />
                         </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>
                 </phone:LongListSelector>

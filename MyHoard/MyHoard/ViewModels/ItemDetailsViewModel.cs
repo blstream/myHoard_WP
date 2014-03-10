@@ -19,7 +19,7 @@ namespace MyHoard.ViewModels
         private MediaService mediaService;
         private int itemId;
         private Item currentItem;
-        private ObservableCollection<BitmapImage> pictures;
+        private List<Media> pictures;
 
         public ItemDetailsViewModel(INavigationService navigationService, CollectionService collectionService, ItemService itemService, MediaService mediaService)
             : base(navigationService, collectionService)
@@ -34,7 +34,7 @@ namespace MyHoard.ViewModels
             if (ItemId > 0)
             {
                 CurrentItem = itemService.GetItem(ItemId);
-                Pictures = new ObservableCollection<BitmapImage>(mediaService.PictureDictionary(ItemId).Values.ToList());
+                Pictures = mediaService.MediaList(ItemId,true);
             }
         }
 
@@ -57,7 +57,7 @@ namespace MyHoard.ViewModels
 
 
 
-        public ObservableCollection<BitmapImage> Pictures
+        public List<Media> Pictures
         {
             get { return pictures; }
             set
