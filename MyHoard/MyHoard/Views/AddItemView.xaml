@@ -66,6 +66,9 @@
             <bab:BindableAppBarButton x:Name="TakePicture"
                                       Text="{Binding Path=LocalizedResources.Camera, Source={StaticResource LocalizedStrings}}"
                                       IconUri="Images/camera.png"/>
+            <bab:BindableAppBarButton x:Name="TakePictureFromGallery"
+                                      Text="{Binding Path=LocalizedResources.Gallery, Source={StaticResource LocalizedStrings}}"
+                                      IconUri="Images/folder.png"/>
         </bab:BindableAppBar>
     </Grid>
 

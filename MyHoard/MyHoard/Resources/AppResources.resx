@@ -182,4 +182,7 @@
   <data name="Camera" xml:space="preserve">
     <value>Camera</value>
   </data>
+  <data name="Gallery" xml:space="preserve">
+    <value>Gallery</value>
+  </data>
 </root>

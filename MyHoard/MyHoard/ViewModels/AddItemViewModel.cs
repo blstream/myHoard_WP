@@ -63,6 +63,11 @@ namespace MyHoard.ViewModels
             eventAggregator.RequestTask<CameraCaptureTask>();
         }
 
+        public void TakePictureFromGallery()
+        {
+            eventAggregator.RequestTask<PhotoChooserTask>();
+        }
+
 
         public void Handle(TaskCompleted<PhotoResult> e)
         {
