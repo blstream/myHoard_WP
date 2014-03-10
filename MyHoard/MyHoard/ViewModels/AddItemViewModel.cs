@@ -63,15 +63,22 @@ namespace MyHoard.ViewModels
 
         public void DataChanged()
         {
+            bool picturesChanged=false;
+            foreach (Media m in PictureDictionary.Keys)
+            {
+                if(String.IsNullOrEmpty(m.FileName))
+                {
+                    picturesChanged = true;
+                }
+            }
             CanSave = !String.IsNullOrEmpty(CurrentItem.Name) && CurrentItem.Name.Length>=2 && (ItemId == 0 ||
-                !StringsEqual(editedItem.Name, CurrentItem.Name) || !StringsEqual(editedItem.Description, CurrentItem.Description));
+                !StringsEqual(editedItem.Name, CurrentItem.Name) || !StringsEqual(editedItem.Description, CurrentItem.Description) || picturesChanged);
         }
 
 
         public void TakePicture()
         {
             eventAggregator.RequestTask<CameraCaptureTask>();
-            
         }
 
 
@@ -83,7 +90,7 @@ namespace MyHoard.ViewModels
                 image.SetSource(e.Result.ChosenPhoto);
                 PictureDictionary.Add(new Media() { ItemId = itemId },image);
                 Pictures.Add(image);
-                NotifyOfPropertyChange(() => Pictures);
+                DataChanged();
             }
         }
 
