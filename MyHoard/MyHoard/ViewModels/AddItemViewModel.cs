@@ -47,8 +47,11 @@ namespace MyHoard.ViewModels
             MessageBoxResult messageResult = MessageBox.Show(AppResources.DeleteDialog + " " + AppResources.ThisImage + "?", AppResources.Delete, MessageBoxButton.OKCancel);
             if (messageResult == MessageBoxResult.OK)
             {
-                SelectedPicture.ToDelete = true;
-                picturesToDelete.Add(SelectedPicture);
+                if (!String.IsNullOrEmpty(SelectedPicture.FileName))
+                {
+                    SelectedPicture.ToDelete = true;
+                    picturesToDelete.Add(SelectedPicture);
+                }
                 Pictures.Remove(SelectedPicture);
                 DataChanged();
             }
