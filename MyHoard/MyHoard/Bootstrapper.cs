@@ -35,7 +35,8 @@ namespace MyHoard
             container.Singleton<DatabaseService>();
             container.Singleton<CollectionService>();
             container.Singleton<ItemService>();
-            container.Singleton<MediaService>(); 
+            container.Singleton<MediaService>();
+            container.Singleton<PhotoChooserViewModel>(); 
 
             AddCustomConventions();
                 
