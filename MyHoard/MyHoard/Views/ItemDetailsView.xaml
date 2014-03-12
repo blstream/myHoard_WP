@@ -1,5 +1,5 @@
 ﻿<phone:PhoneApplicationPage
-    x:Class="MyHoard.Views.AddItemView"
+    x:Class="MyHoard.Views.ItemDetailsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
@@ -10,12 +10,11 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
-    mc:Ignorable="d"
-    shell:SystemTray.IsVisible="True"
-    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:bab="clr-namespace:Caliburn.Micro.BindableAppBar;assembly=Caliburn.Micro.BindableAppBar"
+    mc:Ignorable="d"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    shell:SystemTray.IsVisible="True"
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro">
-
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -28,7 +27,6 @@
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextLargeStyle}" Margin="12,0"/>
-            <TextBlock Name="PageTitle"  Style="{StaticResource PhoneTextNormalStyle}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
@@ -43,12 +41,12 @@
                 </Grid.RowDefinitions>
                 <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" 
                        Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
-                <TextBox Name="CurrentItem_Name" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  
-                     Grid.Row="1" Height="72" TextWrapping="Wrap"/>
+                <TextBlock Name="CurrentItem_Name" Grid.Row="1" Height="auto"
+                           Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="Wrap" />
                 <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" />
-                <TextBox Name="CurrentItem_Description"  Grid.Row="3" Height="324" TextWrapping="Wrap" 
-                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]" AcceptsReturn="True"  />
+                <TextBlock Name="CurrentItem_Description"  Grid.Row="3" Height="auto"
+                           Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap" />
                 <ListBox Name="Pictures" Grid.Row="4" ScrollViewer.VerticalScrollBarVisibility="Disabled"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemsPanel>
@@ -58,23 +56,21 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate >
-                            <Image Width="100" Height="100" cal:Message.Attach="[Event Tap] = [Action DeleteImage]"
-                                Source="{Binding Image}" Margin="20,10" Stretch="UniformToFill" />
+                            <Image Width="100" Height="100" Stretch="UniformToFill"
+                                   cal:Message.Attach="[Event Tap] = [Action ShowPicture]"
+                                Source="{Binding Image}" Margin="20,10" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
         </ScrollViewer>
         <bab:BindableAppBar x:Name="AppBar">
-            <bab:BindableAppBarButton x:Name="Save"
-                                      Text="{Binding Path=LocalizedResources.Save, Source={StaticResource LocalizedStrings}}"
-                                      IconUri="Images/save.png"/>
-            <bab:BindableAppBarButton x:Name="TakePicture"
-                                      Text="{Binding Path=LocalizedResources.Camera, Source={StaticResource LocalizedStrings}}"
-                                      IconUri="Images/camera.png"/>
-            <bab:BindableAppBarButton x:Name="TakePictureFromGallery"
-                                      Text="{Binding Path=LocalizedResources.Gallery, Source={StaticResource LocalizedStrings}}"
-                                      IconUri="Images/folder.png"/>
+            <bab:BindableAppBarButton x:Name="Edit"
+                                      Text="{Binding Path=LocalizedResources.Edit, Source={StaticResource LocalizedStrings}}"
+                                      IconUri="Images/edit.png"/>
+            <bab:BindableAppBarButton x:Name="Delete"
+                                      Text="{Binding Path=LocalizedResources.Delete, Source={StaticResource LocalizedStrings}}"
+                                      IconUri="Images/delete.png" />
         </bab:BindableAppBar>
     </Grid>
 

@@ -44,7 +44,7 @@
                                         Margin="10,0" Grid.Column="0" 
                                         VerticalAlignment="Center"
                                         TextWrapping="Wrap" Text="{Binding Name}"
-                                    cal:Message.Attach="[Event Tap] = [Action EditItem]" />
+                                    cal:Message.Attach="[Event Tap] = [Action ItemDetails]" />
                         
                     </DataTemplate>
                 </ListBox.ItemTemplate>

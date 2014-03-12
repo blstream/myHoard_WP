@@ -52,7 +52,7 @@
             <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" />
             <TextBox Name="CurrentCollection_Description"  Grid.Row="3" Height="216" TextWrapping="Wrap" 
-                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]" />
+                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]" AcceptsReturn="True" />
             <TextBlock Grid.Row="4" Text="{Binding Path=LocalizedResources.Thumbnail, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" />
             <toolkit:ListPicker Grid.Row="5"

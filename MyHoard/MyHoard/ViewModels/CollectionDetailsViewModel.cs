@@ -98,9 +98,9 @@ namespace MyHoard.ViewModels
             NavigationService.UriFor<AddItemViewModel>().WithParam(x => x.CollectionId, CurrentCollection.Id).Navigate();
         }
 
-        public void EditItem()
+        public void ItemDetails()
         {
-            NavigationService.UriFor<AddItemViewModel>().WithParam(x => x.ItemId, SelectedItem.Id).Navigate();
+            NavigationService.UriFor<ItemDetailsViewModel>().WithParam(x => x.ItemId, SelectedItem.Id).Navigate();
         }
     }
 }

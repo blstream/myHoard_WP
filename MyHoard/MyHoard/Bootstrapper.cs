@@ -30,10 +30,14 @@ namespace MyHoard
             container.PerRequest<CollectionListViewModel>();
             container.PerRequest<CollectionDetailsViewModel>();
             container.PerRequest<AddItemViewModel>();
+            container.PerRequest<ItemDetailsViewModel>();
+            container.PerRequest<PictureViewModel>();
+            container.PerRequest<PhotoChooserViewModel>(); 
             container.Singleton<DatabaseService>();
             container.Singleton<CollectionService>();
-            container.Singleton<ItemService>(); 
-
+            container.Singleton<ItemService>();
+            container.Singleton<MediaService>();
+            
             AddCustomConventions();
                 
         }
@@ -57,6 +61,11 @@ namespace MyHoard
         protected override void BuildUp(object instance)
         {
             container.BuildUp(instance);
+        }
+        protected override void OnLaunch(object sender, Microsoft.Phone.Shell.LaunchingEventArgs e)
+        {
+            base.OnLaunch(sender, e);
+            IoC.Get<MediaService>().CleanIsolatedStorage();
         }
 
            
