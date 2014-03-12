@@ -280,6 +280,7 @@ namespace MyHoard.ViewModels
             if(!staySubscribed)
                 eventAggregator.Subscribe(this);
             base.OnActivate();
+            staySubscribed = false;
         }
 
         private bool StringsEqual(string string1, string string2)

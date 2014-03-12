@@ -42,11 +42,11 @@
                 <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" 
                        Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
                 <TextBlock Name="CurrentItem_Name" Grid.Row="1" Height="auto"
-                           Style="{StaticResource PhoneTextLargeStyle}" />
+                           Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="Wrap" />
                 <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" />
                 <TextBlock Name="CurrentItem_Description"  Grid.Row="3" Height="auto"
-                           Style="{StaticResource PhoneTextNormalStyle}"/>
+                           Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap" />
                 <ListBox Name="Pictures" Grid.Row="4" ScrollViewer.VerticalScrollBarVisibility="Disabled"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemsPanel>

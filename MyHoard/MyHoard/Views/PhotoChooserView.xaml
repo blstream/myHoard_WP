@@ -24,26 +24,28 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            
+
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <ListBox Name="Pictures" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+            <ScrollViewer>
+                <ListBox Name="Pictures" ScrollViewer.VerticalScrollBarVisibility="Disabled"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <toolkit:WrapPanel  />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate >
-                        <Image Width="100" Height="100"
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <toolkit:WrapPanel  />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate >
+                            <Image Width="100" Height="100"
                                    cal:Message.Attach="[Event Tap] = [Action GetPicture]"
                                 Source="{Binding Image}" Margin="20,10" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
         </Grid>
     </Grid>
 
