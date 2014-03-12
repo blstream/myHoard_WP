@@ -39,7 +39,9 @@ namespace MyHoard.ViewModels
             foreach (var picture in spictures)
             {
                 
-                if (picture.Name.EndsWith(".jpg") || picture.Name.EndsWith(".png") || picture.Name.EndsWith(".jpeg"))
+                if (picture.Name.EndsWith(".jpg", StringComparison.CurrentCultureIgnoreCase) || 
+                    picture.Name.EndsWith(".png", StringComparison.CurrentCultureIgnoreCase) || 
+                    picture.Name.EndsWith(".jpeg", StringComparison.CurrentCultureIgnoreCase))
                 {
                     BitmapImage bi = new BitmapImage();
                     bi.SetSource(picture.GetThumbnail());

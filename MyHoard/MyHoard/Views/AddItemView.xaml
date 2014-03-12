@@ -48,7 +48,7 @@
                 <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" />
                 <TextBox Name="CurrentItem_Description"  Grid.Row="3" Height="324" TextWrapping="Wrap" 
-                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  />
+                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]" AcceptsReturn="True"  />
                 <ListBox Name="Pictures" Grid.Row="4" ScrollViewer.VerticalScrollBarVisibility="Disabled"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemsPanel>
@@ -59,7 +59,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate >
                             <Image Width="100" Height="100" cal:Message.Attach="[Event Tap] = [Action DeleteImage]"
-                                Source="{Binding Image}" Margin="20,10" />
+                                Source="{Binding Image}" Margin="20,10" Stretch="UniformToFill" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

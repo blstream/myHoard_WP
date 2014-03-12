@@ -39,7 +39,7 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate >
-                            <Image Width="100" Height="100"
+                            <Image Width="100" Height="100" Stretch="UniformToFill"
                                    cal:Message.Attach="[Event Tap] = [Action GetPicture]"
                                 Source="{Binding Image}" Margin="20,10" />
                         </DataTemplate>
