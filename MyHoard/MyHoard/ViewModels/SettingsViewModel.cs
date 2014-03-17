@@ -20,5 +20,10 @@ namespace MyHoard.ViewModels
         {
             NavigationService.UriFor<RegisterViewModel>().Navigate();
         }
+
+        public void Login()
+        {
+            NavigationService.UriFor<LoginViewModel>().Navigate();
+        }
     }
 }

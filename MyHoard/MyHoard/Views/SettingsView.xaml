@@ -30,9 +30,10 @@
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Button Grid.Row="0" Name="Register" Content="{Binding Path=LocalizedResources.Register, Source={StaticResource LocalizedStrings}}" />
+            <Button Grid.Row="1" Name="Login" Content="{Binding Path=LocalizedResources.Login, Source={StaticResource LocalizedStrings}}" />
         </Grid>
     </Grid>
 

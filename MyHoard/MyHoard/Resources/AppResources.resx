@@ -227,4 +227,10 @@
   <data name="UserName" xml:space="preserve">
     <value>User Name</value>
   </data>
+  <data name="Login" xml:space="preserve">
+    <value>Log In</value>
+  </data>
+  <data name="LoginSuccess" xml:space="preserve">
+    <value>You have successfully logged in</value>
+  </data>
 </root>
