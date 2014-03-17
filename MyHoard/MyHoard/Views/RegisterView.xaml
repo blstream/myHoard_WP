@@ -14,7 +14,8 @@
     shell:SystemTray.IsVisible="True"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
-    xmlns:bab="clr-namespace:Caliburn.Micro.BindableAppBar;assembly=Caliburn.Micro.BindableAppBar">
+    xmlns:bab="clr-namespace:Caliburn.Micro.BindableAppBar;assembly=Caliburn.Micro.BindableAppBar"
+    cal:Message.Attach="[Event BackKeyPress] = [Action OnGoBack($eventArgs)]">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -31,7 +32,7 @@
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" >
-            <ScrollViewer>
+            <ScrollViewer IsEnabled="{Binding IsFormAccessible}">
                 <Grid Margin="12,0,12,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -71,13 +72,15 @@
                                 SelectedItem="{Binding SelectedBackend, Mode=TwoWay}"
                                 FullModeHeader="{Binding Path=LocalizedResources.Grade, Source={StaticResource LocalizedStrings}}"
                                 Margin="12,12,12,0"/>
-
-
-
                 </Grid>
 
             </ScrollViewer>
-            
+            <Grid Opacity="0.7" Background="Black" Visibility="{Binding IsProgressBarVisible;}" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <ProgressBar IsIndeterminate="True"   />
+            </Grid>
         </Grid>
         <bab:BindableAppBar x:Name="AppBar">
             <bab:BindableAppBarButton x:Name="Register"

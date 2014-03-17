@@ -133,6 +133,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Operation will be canceled. Are you sure?.
+        /// </summary>
+        public static string CancelConfirm {
+            get {
+                return ResourceManager.GetString("CancelConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Collection.
         /// </summary>
         public static string Collection {
@@ -219,6 +228,15 @@ namespace MyHoard.Resources {
         public static string Email {
             get {
                 return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred.
+        /// </summary>
+        public static string ErrorOccurred {
+            get {
+                return ResourceManager.GetString("ErrorOccurred", resourceCulture);
             }
         }
         
@@ -339,6 +357,15 @@ namespace MyHoard.Resources {
         public static string Thumbnail {
             get {
                 return ResourceManager.GetString("Thumbnail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Created.
+        /// </summary>
+        public static string UserCreated {
+            get {
+                return ResourceManager.GetString("UserCreated", resourceCulture);
             }
         }
         
