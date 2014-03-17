@@ -188,4 +188,10 @@
   <data name="ThisImage" xml:space="preserve">
     <value>this image</value>
   </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
 </root>

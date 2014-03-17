@@ -68,6 +68,10 @@
                                   Text="{Binding Path=LocalizedResources.Add, Source={StaticResource LocalizedStrings}}"
                                   IconUri="Images/add.png"                                
                                   />
+            <bab:BindableAppBarButton x:Name="Settings"
+                                  Text="{Binding Path=LocalizedResources.Settings, Source={StaticResource LocalizedStrings}}"
+                                  IconUri="Images/settings.png"                                
+                                  />
         </bab:BindableAppBar>
 
     </Grid>

@@ -21,6 +21,11 @@ namespace MyHoard.ViewModels
             
         }
 
+        public void Settings()
+        {
+            NavigationService.UriFor<SettingsViewModel>().Navigate();
+        }
+
         public void AddCollection()
         {
             NavigationService.UriFor<AddCollectionViewModel>().Navigate();
