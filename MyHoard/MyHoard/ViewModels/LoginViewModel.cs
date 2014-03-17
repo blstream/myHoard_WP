@@ -16,28 +16,28 @@ using System.Windows.Controls;
 
 namespace MyHoard.ViewModels
 {
-    public class RegisterViewModel : ViewModelBase, IHandle<ServerMessage>
+    public class LoginViewModel : ViewModelBase, IHandle<ServerMessage>
     {
 
         private readonly IEventAggregator eventAggregator;
         private Dictionary<string, string> backends;
-        private bool canRegister;
+        private bool canLogin;
         private bool isFormAccessible;
-        private Visibility arePasswordRequirementsVisible;
+        private bool keepLogged;
         private Visibility isProgressBarVisible;
         private string userName;
-        private string email;
         private string selectedBackend;
         private PasswordBox passwordBox;
-        private PasswordBox confirmPasswordBox;
         private RestRequestAsyncHandle asyncHandle;
+        private ConfigurationService configurationService;
 
-        public RegisterViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator)
+        public LoginViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator, ConfigurationService configurationService)
             : base(navigationService, collectionService)
         {
             Backends = ConfigurationService.Backends;
             SelectedBackend = Backends.Keys.First();
             this.eventAggregator = eventAggregator;
+            this.configurationService = configurationService; 
             eventAggregator.Subscribe(this);
             IsFormAccessible = true;
         }
@@ -58,15 +58,21 @@ namespace MyHoard.ViewModels
             }
         }
 
+        
         public void Handle(ServerMessage message)
         {
-            IsFormAccessible = true;
-            CanRegister = true;
+            IsFormAccessible = true; ;
+            CanLogin = true;
+
             MessageBox.Show(message.Message);
-            
+
             if (message.IsSuccessfull)
             {
-                NavigationService.GoBack();
+                NavigationService.UriFor<CollectionListViewModel>().Navigate();
+                while (NavigationService.BackStack.Any())
+                {
+                    this.NavigationService.RemoveBackEntry();
+                }
             }
         }
 
@@ -87,42 +93,26 @@ namespace MyHoard.ViewModels
 
         protected override void OnViewLoaded(object view)
         {
-            passwordBox = ((RegisterView)view).Password;
-            confirmPasswordBox = ((RegisterView)view).ConfirmPassword;
+            passwordBox = ((LoginView)view).Password;
             passwordBox.PasswordChanged += new RoutedEventHandler(PasswordChanged);
-            confirmPasswordBox.PasswordChanged += new RoutedEventHandler(PasswordChanged);
             base.OnViewLoaded(view);
         }
 
         public void PasswordChanged(object sender, RoutedEventArgs e)
         {
-
-            if (!String.IsNullOrEmpty(passwordBox.Password) &&
-                Regex.IsMatch(passwordBox.Password, "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{5,}$", RegexOptions.IgnoreCase))
-            {
-                ArePasswordRequirementsVisible = Visibility.Collapsed;
-            }
-            else
-            {
-                ArePasswordRequirementsVisible = Visibility.Visible;
-            }
             DataChanged();
-
         }
 
         public void DataChanged()
         {
-            CanRegister = (!String.IsNullOrWhiteSpace(UserName) && !String.IsNullOrEmpty(Email) &&
-                Regex.IsMatch(Email, @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,24}))$", RegexOptions.IgnoreCase) &&
-                ArePasswordRequirementsVisible == Visibility.Collapsed && passwordBox.Password == confirmPasswordBox.Password);
+            CanLogin = (!String.IsNullOrWhiteSpace(UserName) && !String.IsNullOrWhiteSpace(passwordBox.Password));
         }
 
-        public void Register()
+        public async void Login()
         {
             IsFormAccessible = false;
             RegistrationService registrationService = new RegistrationService(SelectedBackend);
-            asyncHandle = registrationService.Register(UserName, Email, passwordBox.Password);
+            asyncHandle = registrationService.Login(UserName, passwordBox.Password, KeepLogged);
         }
 
         public string UserName
@@ -135,15 +125,6 @@ namespace MyHoard.ViewModels
             }
         }
 
-        public string Email
-        {
-            get { return email; }
-            set
-            {
-                email = value;
-                NotifyOfPropertyChange(() => Email);
-            }
-        }
 
         public string SelectedBackend
         {
@@ -155,13 +136,23 @@ namespace MyHoard.ViewModels
             }
         }
 
-        public bool CanRegister
+        public bool CanLogin
         {
-            get { return canRegister; }
+            get { return canLogin; }
             set
             {
-                canRegister = value;
-                NotifyOfPropertyChange(() => CanRegister);
+                canLogin = value;
+                NotifyOfPropertyChange(() => CanLogin);
+            }
+        }
+
+        public bool KeepLogged
+        {
+            get { return keepLogged; }
+            set
+            {
+                keepLogged = value;
+                NotifyOfPropertyChange(() => KeepLogged);
             }
         }
 
@@ -173,7 +164,7 @@ namespace MyHoard.ViewModels
                 isFormAccessible = value;
                 NotifyOfPropertyChange(() => IsFormAccessible);
                 if (!value)
-                    CanRegister = false;
+                    CanLogin = false;
                 IsProgressBarVisible = (IsFormAccessible ? Visibility.Collapsed : Visibility.Visible);
             }
         }
@@ -188,15 +179,6 @@ namespace MyHoard.ViewModels
             }
         }
 
-        public Visibility ArePasswordRequirementsVisible
-        {
-            get { return arePasswordRequirementsVisible; }
-            set
-            {
-                arePasswordRequirementsVisible = value;
-                NotifyOfPropertyChange(() => ArePasswordRequirementsVisible);
-            }
-        }
 
         public Dictionary<string, string> Backends
         {

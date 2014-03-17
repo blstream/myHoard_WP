@@ -97,13 +97,16 @@
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\Collection.cs" />
+    <Compile Include="Models\Configuration.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\Media.cs" />
     <Compile Include="Services\CollectionService.cs" />
+    <Compile Include="Services\ConfigurationService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="Services\MediaService.cs" />
     <Compile Include="Services\MyHoardApi.cs" />
     <Compile Include="Services\RegistrationService.cs" />
+    <Compile Include="Services\ServerMessage.cs" />
     <Compile Include="Services\ServiceErrorMessage.cs" />
     <Compile Include="Services\ItemService.cs" />
     <Compile Include="ViewModels\AddCollectionViewModel.cs" />
@@ -111,6 +114,7 @@
     <Compile Include="ViewModels\CollectionDetailsViewModel.cs" />
     <Compile Include="ViewModels\CollectionListViewModel.cs" />
     <Compile Include="ViewModels\ItemDetailsViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\PhotoChooserViewModel.cs" />
     <Compile Include="ViewModels\PictureViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
@@ -129,6 +133,9 @@
     </Compile>
     <Compile Include="Views\ItemDetailsView.xaml.cs">
       <DependentUpon>ItemDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -176,6 +183,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ItemDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -244,6 +255,7 @@
     <Content Include="Images\settings.png" />
     <Content Include="Images\folder.png" />
     <Content Include="Images\save.png" />
+    <Content Include="Images\upload.png" />
     <Content Include="README_FIRST.txt" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
