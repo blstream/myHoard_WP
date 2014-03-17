@@ -197,6 +197,9 @@
   <data name="Email" xml:space="preserve">
     <value>Email</value>
   </data>
+  <data name="InternetConnectionError" xml:space="preserve">
+    <value>Unablke to perfrom operation. Check your internet connection.</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>

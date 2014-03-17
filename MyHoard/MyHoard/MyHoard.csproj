@@ -102,6 +102,8 @@
     <Compile Include="Services\CollectionService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="Services\MediaService.cs" />
+    <Compile Include="Services\MyHoardApi.cs" />
+    <Compile Include="Services\RegistrationService.cs" />
     <Compile Include="Services\ServiceErrorMessage.cs" />
     <Compile Include="Services\ItemService.cs" />
     <Compile Include="ViewModels\AddCollectionViewModel.cs" />

@@ -232,6 +232,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unablke to perfrom operation. Check your internet connection..
+        /// </summary>
+        public static string InternetConnectionError {
+            get {
+                return ResourceManager.GetString("InternetConnectionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string Name {
