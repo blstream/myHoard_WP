@@ -23,6 +23,7 @@ namespace MyHoard.Services
             dbConnection.CreateTable<Collection>();
             dbConnection.CreateTable<Item>();
             dbConnection.CreateTable<Media>();
+            dbConnection.CreateTable<Configuration>();
             
         }
 

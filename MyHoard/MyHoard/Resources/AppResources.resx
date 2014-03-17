@@ -236,4 +236,7 @@
   <data name="KeepLogin" xml:space="preserve">
     <value>Keep me logged in</value>
   </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Log out</value>
+  </data>
 </root>

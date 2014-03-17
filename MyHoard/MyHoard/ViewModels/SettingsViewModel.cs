@@ -5,15 +5,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MyHoard.ViewModels
 {
     public class SettingsViewModel:ViewModelBase
     {
-        public SettingsViewModel(INavigationService navigationService, CollectionService collectionService)
+        private Visibility isRegisterVisible;
+        private Visibility isLogoutVisible;
+        private ConfigurationService configurationService;
+
+        public SettingsViewModel(INavigationService navigationService, CollectionService collectionService, ConfigurationService configurationService)
             : base(navigationService, collectionService)
         {
-            
+            this.configurationService = configurationService;
+        }
+
+        protected override void OnActivate()
+        {
+            base.OnActivate();
+            if(configurationService.Configuration.IsLoggedIn)
+            {
+                IsRegisterVisible=Visibility.Visible;
+            }
+            else
+            {
+                IsLogoutVisible = Visibility.Collapsed;
+            }
         }
 
         public void Register()
@@ -24,6 +42,31 @@ namespace MyHoard.ViewModels
         public void Login()
         {
             NavigationService.UriFor<LoginViewModel>().Navigate();
+        }
+
+        public void Logout()
+        {
+
+        }
+
+        public Visibility IsRegisterVisible
+        {
+            get { return isRegisterVisible; }
+            set
+            {
+                isRegisterVisible = value;
+                NotifyOfPropertyChange(() => IsRegisterVisible);
+            }
+        }
+
+        public Visibility IsLogoutVisible
+        {
+            get { return isLogoutVisible; }
+            set
+            {
+                isLogoutVisible = value;
+                NotifyOfPropertyChange(() => IsLogoutVisible);
+            }
         }
     }
 }

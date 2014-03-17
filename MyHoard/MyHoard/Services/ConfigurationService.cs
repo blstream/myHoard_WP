@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyHoard.Services
 {
-    class ConfigurationService
+    public class ConfigurationService
     {
 
         public static Dictionary<string, string> Backends = new Dictionary<string, string>()

@@ -40,6 +40,7 @@ namespace MyHoard
             container.Singleton<CollectionService>();
             container.Singleton<ItemService>();
             container.Singleton<MediaService>();
+            container.Singleton<ConfigurationService>();
             
             AddCustomConventions();
                 
