@@ -71,6 +71,16 @@ namespace MyHoard
             base.OnLaunch(sender, e);
             IoC.Get<MediaService>().CleanIsolatedStorage();
         }
+        protected override void OnClose(object sender, Microsoft.Phone.Shell.ClosingEventArgs e)
+        {
+            ConfigurationService configurationService = IoC.Get<ConfigurationService>();
+            if(String.IsNullOrWhiteSpace(configurationService.Configuration.Password))
+            {
+                configurationService.Configuration.IsLoggedIn = false;
+                configurationService.SaveConfig();
+            }
+            base.OnClose(sender, e);
+        }
 
            
     }

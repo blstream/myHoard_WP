@@ -66,7 +66,7 @@ namespace MyHoard.Services
             }
         }
 
-        public RestRequestAsyncHandle Login(string userName, string password)
+        public RestRequestAsyncHandle Login(string userName, string password, bool keepLogged)
         {
             IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
             if (NetworkInterface.GetIsNetworkAvailable())
@@ -93,7 +93,7 @@ namespace MyHoard.Services
                                     configurationService.Configuration.AccessToken = parsedResponse["access_token"].ToString();
                                     configurationService.Configuration.RefreshToken = parsedResponse["refresh_token"].ToString();
                                     configurationService.Configuration.UserName = userName;
-                                    configurationService.Configuration.Password = password;
+                                    configurationService.Configuration.Password = keepLogged ? password : "";
                                     configurationService.Configuration.Backend = backend;
                                     configurationService.Configuration.IsLoggedIn = true;
                                     configurationService.SaveConfig();

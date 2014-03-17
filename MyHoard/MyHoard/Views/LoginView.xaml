@@ -41,6 +41,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="{Binding Path=LocalizedResources.UserName, Source={StaticResource LocalizedStrings}}" 
                        Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
@@ -49,11 +50,11 @@
                     <TextBlock Text="{Binding Path=LocalizedResources.Password, Source={StaticResource LocalizedStrings}}" 
                        Grid.Row="2" Style="{StaticResource PhoneTextNormalStyle}" />
                     <PasswordBox Name="Password" Grid.Row="3" Height="72"  />
-                   
+                    <CheckBox Name ="KeepLogged" Grid.Row="4" Content="{Binding Path=LocalizedResources.KeepLogin, Source={StaticResource LocalizedStrings}}" />
                     <TextBlock Text="{Binding Path=LocalizedResources.Backend, Source={StaticResource LocalizedStrings}}" 
-                       Grid.Row="4" Style="{StaticResource PhoneTextNormalStyle}" />
+                       Grid.Row="5" Style="{StaticResource PhoneTextNormalStyle}" />
 
-                    <toolkit:ListPicker Grid.Row="5"
+                    <toolkit:ListPicker Grid.Row="6"
                                 ItemsSource="{Binding Backends.Keys}"
                                 SelectedItem="{Binding SelectedBackend, Mode=TwoWay}"
                                 FullModeHeader="{Binding Path=LocalizedResources.Grade, Source={StaticResource LocalizedStrings}}"

@@ -23,6 +23,7 @@ namespace MyHoard.ViewModels
         private Dictionary<string, string> backends;
         private bool canLogin;
         private bool isFormAccessible;
+        private bool keepLogged;
         private Visibility isProgressBarVisible;
         private string userName;
         private string selectedBackend;
@@ -111,7 +112,7 @@ namespace MyHoard.ViewModels
         {
             IsFormAccessible = false;
             RegistrationService registrationService = new RegistrationService(SelectedBackend);
-            asyncHandle = registrationService.Login(UserName, passwordBox.Password);
+            asyncHandle = registrationService.Login(UserName, passwordBox.Password, KeepLogged);
         }
 
         public string UserName
@@ -142,6 +143,16 @@ namespace MyHoard.ViewModels
             {
                 canLogin = value;
                 NotifyOfPropertyChange(() => CanLogin);
+            }
+        }
+
+        public bool KeepLogged
+        {
+            get { return keepLogged; }
+            set
+            {
+                keepLogged = value;
+                NotifyOfPropertyChange(() => KeepLogged);
             }
         }
 

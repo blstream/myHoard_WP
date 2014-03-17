@@ -26,10 +26,12 @@ namespace MyHoard.ViewModels
             base.OnActivate();
             if(configurationService.Configuration.IsLoggedIn)
             {
-                IsRegisterVisible=Visibility.Visible;
+                IsLogoutVisible = Visibility.Visible;
+                IsRegisterVisible = Visibility.Collapsed;
             }
             else
             {
+                IsRegisterVisible = Visibility.Visible;
                 IsLogoutVisible = Visibility.Collapsed;
             }
         }
@@ -46,7 +48,10 @@ namespace MyHoard.ViewModels
 
         public void Logout()
         {
-
+            configurationService.Configuration.IsLoggedIn = false;
+            configurationService.Configuration.Password = "";
+            configurationService.SaveConfig();
+            NavigationService.GoBack();
         }
 
         public Visibility IsRegisterVisible
