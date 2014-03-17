@@ -18,7 +18,7 @@ namespace MyHoard.ViewModels
 
         public void Register()
         {
-
+            NavigationService.UriFor<RegisterViewModel>().Navigate();
         }
     }
 }
