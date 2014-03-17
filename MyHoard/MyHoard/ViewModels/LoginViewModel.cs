@@ -32,12 +32,7 @@ namespace MyHoard.ViewModels
         public LoginViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator)
             : base(navigationService, collectionService)
         {
-            Backends = new Dictionary<string, string>()
-            {
-                {"Python","http://78.133.154.18:8080"},
-                {"Java1","http://78.133.154.39:1080"},
-                {"Java2","http://78.133.154.39:2080"}
-            };
+            Backends = ConfigurationService.Backends;
             SelectedBackend = Backends.Keys.First();
             this.eventAggregator = eventAggregator;
             eventAggregator.Subscribe(this);
