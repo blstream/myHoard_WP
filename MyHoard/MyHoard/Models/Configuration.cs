@@ -14,6 +14,7 @@ namespace MyHoard.Models
         public string Password { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
+        public string Backend { get; set; }
         public bool IsLoggedIn { get; set; }
 
         [PrimaryKey, AutoIncrement]

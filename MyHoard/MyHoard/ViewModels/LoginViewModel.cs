@@ -16,7 +16,7 @@ using System.Windows.Controls;
 
 namespace MyHoard.ViewModels
 {
-    public class LoginViewModel : ViewModelBase, IHandle<IRestResponse>, IHandle<ServiceErrorMessage>
+    public class LoginViewModel : ViewModelBase, IHandle<ServerMessage>
     {
 
         private readonly IEventAggregator eventAggregator;
@@ -28,13 +28,15 @@ namespace MyHoard.ViewModels
         private string selectedBackend;
         private PasswordBox passwordBox;
         private RestRequestAsyncHandle asyncHandle;
+        private ConfigurationService configurationService;
 
-        public LoginViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator)
+        public LoginViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator, ConfigurationService configurationService)
             : base(navigationService, collectionService)
         {
             Backends = ConfigurationService.Backends;
             SelectedBackend = Backends.Keys.First();
             this.eventAggregator = eventAggregator;
+            this.configurationService = configurationService; 
             eventAggregator.Subscribe(this);
             IsFormAccessible = true;
         }
@@ -55,45 +57,22 @@ namespace MyHoard.ViewModels
             }
         }
 
-        public void Handle(IRestResponse response)
+        
+        public void Handle(ServerMessage message)
         {
-            IsFormAccessible = true;
+            IsFormAccessible = true; ;
             CanLogin = true;
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+
+            MessageBox.Show(message.Message);
+
+            if (message.IsSuccessfull)
             {
-                MessageBox.Show(Resources.AppResources.LoginSuccess);
-                //TODO: Parse tokens
                 NavigationService.UriFor<CollectionListViewModel>().Navigate();
                 while (NavigationService.BackStack.Any())
                 {
                     this.NavigationService.RemoveBackEntry();
                 }
-
             }
-            else
-            {
-                string message = Resources.AppResources.ErrorOccurred;
-                if (!String.IsNullOrEmpty(response.Content))
-                {
-                    try
-                    {
-                        JObject parsedResponse = JObject.Parse(response.Content);
-                        message += ": " + parsedResponse["error_message"];
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine(e.Message);
-                    }
-                }
-                MessageBox.Show(message);
-            }
-        }
-
-        public void Handle(ServiceErrorMessage message)
-        {
-            IsFormAccessible = true; ;
-            CanLogin = true;
-            MessageBox.Show(message.Content);
         }
 
 
@@ -131,7 +110,7 @@ namespace MyHoard.ViewModels
         public async void Login()
         {
             IsFormAccessible = false;
-            RegistrationService registrationService = new RegistrationService(Backends[SelectedBackend]);
+            RegistrationService registrationService = new RegistrationService(SelectedBackend);
             asyncHandle = registrationService.Login(UserName, passwordBox.Password);
         }
 

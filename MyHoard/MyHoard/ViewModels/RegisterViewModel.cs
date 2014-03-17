@@ -16,7 +16,7 @@ using System.Windows.Controls;
 
 namespace MyHoard.ViewModels
 {
-    public class RegisterViewModel : ViewModelBase, IHandle<IRestResponse>, IHandle<ServiceErrorMessage>
+    public class RegisterViewModel : ViewModelBase, IHandle<ServerMessage>
     {
 
         private readonly IEventAggregator eventAggregator;
@@ -58,39 +58,16 @@ namespace MyHoard.ViewModels
             }
         }
 
-        public void Handle(IRestResponse response)
+        public void Handle(ServerMessage message)
         {
             IsFormAccessible = true;
             CanRegister = true;
-            if (response.StatusCode == System.Net.HttpStatusCode.Created)
+            MessageBox.Show(message.Message);
+            
+            if (message.IsSuccessfull)
             {
-                MessageBox.Show(Resources.AppResources.UserCreated);
                 NavigationService.GoBack();
             }
-            else
-            {
-                string message = Resources.AppResources.ErrorOccurred;
-                if (!String.IsNullOrEmpty(response.Content))
-                {
-                    try
-                    {
-                        JObject parsedResponse = JObject.Parse(response.Content);
-                        message += ": " + parsedResponse["error_message"];
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine(e.Message);
-                    }
-                }
-                MessageBox.Show(message);
-            }
-        }
-
-        public void Handle(ServiceErrorMessage message)
-        {
-            IsFormAccessible = true; ;
-            CanRegister = true;
-            MessageBox.Show(message.Content);
         }
 
 
@@ -141,10 +118,10 @@ namespace MyHoard.ViewModels
                 ArePasswordRequirementsVisible == Visibility.Collapsed && passwordBox.Password == confirmPasswordBox.Password);
         }
 
-        public async void Register()
+        public void Register()
         {
             IsFormAccessible = false;
-            RegistrationService registrationService = new RegistrationService(Backends[SelectedBackend]);
+            RegistrationService registrationService = new RegistrationService(SelectedBackend);
             asyncHandle = registrationService.Register(UserName, Email, passwordBox.Password);
         }
 
