@@ -68,7 +68,12 @@ namespace MyHoard.ViewModels
             {
                 MessageBox.Show(Resources.AppResources.LoginSuccess);
                 //TODO: Parse tokens
-                NavigationService.GoBack();
+                NavigationService.UriFor<CollectionListViewModel>().Navigate();
+                while (NavigationService.BackStack.Any())
+                {
+                    this.NavigationService.RemoveBackEntry();
+                }
+
             }
             else
             {
@@ -130,7 +135,9 @@ namespace MyHoard.ViewModels
 
         public async void Login()
         {
-            
+            IsFormAccessible = false;
+            RegistrationService registrationService = new RegistrationService(Backends[SelectedBackend]);
+            asyncHandle = registrationService.Login(UserName, passwordBox.Password);
         }
 
         public string UserName

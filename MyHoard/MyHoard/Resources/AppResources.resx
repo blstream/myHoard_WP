@@ -233,4 +233,7 @@
   <data name="LoginSuccess" xml:space="preserve">
     <value>You have successfully logged in</value>
   </data>
+  <data name="KeepLogin" xml:space="preserve">
+    <value>Keep me logged in</value>
+  </data>
 </root>

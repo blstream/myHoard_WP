@@ -259,6 +259,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep me logged in.
+        /// </summary>
+        public static string KeepLogin {
+            get {
+                return ResourceManager.GetString("KeepLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log In.
         /// </summary>
         public static string Login {

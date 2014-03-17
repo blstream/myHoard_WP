@@ -40,5 +40,28 @@ namespace MyHoard.Services
                 return null;
             }
         }
+
+        public RestRequestAsyncHandle Login(string userName, string password)
+        {
+            IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                var request = new RestRequest("/oauth/token/", Method.POST);
+                request.RequestFormat = DataFormat.Json;
+                request.AddHeader("Accept", "application/json");
+                request.AddHeader("Content-type", "application/json");
+                request.AddBody(new { username = userName, password = password, grant_type = "password" });
+                return myHoardApi.ExecuteAsync(request, (response) =>
+                {
+                    if (response.ResponseStatus != ResponseStatus.Aborted)
+                        eventAggregator.Publish(response);
+                });
+            }
+            else
+            {
+                eventAggregator.Publish(new ServiceErrorMessage(Resources.AppResources.InternetConnectionError));
+                return null;
+            }
+        }
     }
 }
