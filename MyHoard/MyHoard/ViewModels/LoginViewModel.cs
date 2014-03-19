@@ -108,7 +108,7 @@ namespace MyHoard.ViewModels
             CanLogin = (!String.IsNullOrWhiteSpace(UserName) && !String.IsNullOrWhiteSpace(passwordBox.Password));
         }
 
-        public async void Login()
+        public void Login()
         {
             IsFormAccessible = false;
             RegistrationService registrationService = new RegistrationService(SelectedBackend);

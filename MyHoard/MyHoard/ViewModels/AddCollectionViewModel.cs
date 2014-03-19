@@ -76,7 +76,7 @@ namespace MyHoard.ViewModels
             if (!Tags.Contains(NewTag))
             {
                 Tags.Add(NewTag);
-                CurrentCollection.SetTagList(Tags);
+                CurrentCollection.TagList = Tags.ToList();
                 DataChanged();
             }
             NewTag = "";
@@ -85,7 +85,7 @@ namespace MyHoard.ViewModels
         public void DeleteTag()
         {
             Tags.Remove(SelectedTag);
-            CurrentCollection.SetTagList(Tags);
+            CurrentCollection.TagList = Tags.ToList();
             DataChanged();
         }
                              
@@ -247,7 +247,7 @@ namespace MyHoard.ViewModels
                     Tags = CurrentCollection.Tags
                 };
                 Thumbnail = CurrentCollection.Thumbnail;
-                Tags = new ObservableCollection<string>(CurrentCollection.GetTagList());
+                Tags = new ObservableCollection<string>(CurrentCollection.TagList);
                 IsDeleteVisible = Visibility.Visible;
             }
             else
