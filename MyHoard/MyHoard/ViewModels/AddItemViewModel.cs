@@ -51,7 +51,7 @@ namespace MyHoard.ViewModels
             {
                 if (!String.IsNullOrEmpty(SelectedPicture.FileName))
                 {
-                    SelectedPicture.ToDelete = true;
+                    SelectedPicture.ToDeleteFromIS = true;
                     picturesToDelete.Add(SelectedPicture);
                 }
                 Pictures.Remove(SelectedPicture);

@@ -16,6 +16,7 @@ namespace MyHoard.Models
         private bool pythonIsSynced;
         private bool java1IsSynced;
         private bool java2IsSynced;
+        private bool toDelete;
 
         [PrimaryKey, AutoIncrement]
         public int Id
@@ -25,6 +26,12 @@ namespace MyHoard.Models
             {
                 id = value;
             }
+        }
+
+        public bool ToDelete
+        {
+            get { return toDelete; }
+            set { toDelete = value; }
         }
 
         public string PythonId

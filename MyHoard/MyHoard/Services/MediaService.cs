@@ -62,7 +62,7 @@ namespace MyHoard.Services
 
             if (withPictures)
             {
-                mediaList = mediaList.Where(i => i.ToDelete == false).ToList();
+                mediaList = mediaList.Where(i => i.ToDeleteFromIS == false).ToList();
                 foreach (Media m in mediaList)
                 {
                     m.Image = GetPictureFromIsolatedStorage(m, thumbnail);
@@ -81,7 +81,7 @@ namespace MyHoard.Services
                 {
                     AddMedia(SavePictureToIsolatedStorage(m));
                 }
-                if (m.ToDelete)
+                if (m.ToDeleteFromIS)
                 {
                     ModifyMedia(m);
                 }
@@ -92,7 +92,7 @@ namespace MyHoard.Services
         {
             foreach (Media m in MediaList(false, false))
             {
-                if (m.ToDelete)
+                if (m.ToDeleteFromIS)
                 {
                     DeleteMediaFromIsolatedStorage(m);
                     DeleteMedia(m);
