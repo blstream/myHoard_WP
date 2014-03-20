@@ -86,6 +86,7 @@ namespace MyHoard.Services
 
                                 collectionService.ModifyCollection(c);
                                 break;
+                            case System.Net.HttpStatusCode.Unauthorized:
                             case System.Net.HttpStatusCode.Forbidden:
                                 configurationService.Logout();
                                 eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
@@ -113,6 +114,7 @@ namespace MyHoard.Services
                                 c.PythonIsSynced = true;
                                 collectionService.ModifyCollection(c);
                                 break;
+                            case System.Net.HttpStatusCode.Unauthorized:
                             case System.Net.HttpStatusCode.Forbidden:
                                 configurationService.Logout();
                                 eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
