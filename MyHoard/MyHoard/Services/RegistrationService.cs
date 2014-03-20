@@ -65,6 +65,7 @@ namespace MyHoard.Services
 
             MyHoardApi myHoardApi = new MyHoardApi(ConfigurationService.Backends[backend]);
             IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
+            ConfigurationService configurationService = IoC.Get<ConfigurationService>();
             if (NetworkInterface.GetIsNetworkAvailable())
             {
                 var request = new RestRequest("/oauth/token/", Method.POST);
@@ -85,7 +86,7 @@ namespace MyHoard.Services
                                 JObject parsedResponse = JObject.Parse(response.Content);
                                 if (String.IsNullOrWhiteSpace((string)parsedResponse["error_code"]))
                                 {
-                                    ConfigurationService configurationService = IoC.Get<ConfigurationService>();
+                                    
                                     configurationService.Configuration.AccessToken = parsedResponse["access_token"].ToString();
                                     configurationService.Configuration.RefreshToken = parsedResponse["refresh_token"].ToString();
                                     configurationService.Configuration.UserName = userName;
@@ -99,6 +100,7 @@ namespace MyHoard.Services
                                 }
                                 else
                                 {
+                                    configurationService.Logout();
                                     serverMessage.Message += ": " + parsedResponse["error_message"];
                                 }
                             }
@@ -122,7 +124,7 @@ namespace MyHoard.Services
         public async Task<bool> RefreshToken()
         {
             bool success=false;
-            ServerMessage serverMessage = new ServerMessage(false, Resources.AppResources.AuthenticationError);
+            
             IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
             if (NetworkInterface.GetIsNetworkAvailable())
             {
@@ -154,12 +156,13 @@ namespace MyHoard.Services
                             {
                                 configurationService.Configuration.AccessToken = parsedResponse["access_token"].ToString();
                                 configurationService.Configuration.RefreshToken = parsedResponse["refresh_token"].ToString(); configurationService.SaveConfig();
-                                serverMessage.IsSuccessfull = true;
                                 success = true;
                             }
                             else
                             {
-                                serverMessage.Message += ": " + parsedResponse["error_message"];
+                                configurationService.Logout();
+                                ServerMessage serverMessage = new ServerMessage(false, Resources.AppResources.AuthenticationError+ ": " + parsedResponse["error_message"]);
+                                eventAggregator.Publish(serverMessage);
                             }
                         }
 
@@ -167,7 +170,6 @@ namespace MyHoard.Services
                     catch (Exception e)
                     {
                         Debug.WriteLine(e.Message);
-
                     }
                     
                 }
@@ -175,9 +177,10 @@ namespace MyHoard.Services
 
             else
             {
-                serverMessage.Message = Resources.AppResources.InternetConnectionError;
+                ServerMessage serverMessage = new ServerMessage(false, Resources.AppResources.InternetConnectionError);
+                eventAggregator.Publish(serverMessage);
             }
-            eventAggregator.Publish(serverMessage);
+            
             return success;
         }
     }

@@ -10,19 +10,20 @@ using System.Windows;
 
 namespace MyHoard.ViewModels
 {
-    public class CollectionListViewModel : ViewModelBase
+    public class CollectionListViewModel : ViewModelBase, IHandle<ServerMessage>
     {
         
         private List<Collection> collections;
         private Collection selectedCollection;
         private ConfigurationService configurationService;
         private Visibility isSyncVisible;
+        private readonly IEventAggregator eventAggregator;
 
-            
-        public CollectionListViewModel(INavigationService navigationService, CollectionService collectionService, ConfigurationService configurationService)
+        public CollectionListViewModel(INavigationService navigationService, CollectionService collectionService, ConfigurationService configurationService, IEventAggregator eventAggregator)
             : base(navigationService, collectionService)
         {
             this.configurationService=configurationService;
+            this.eventAggregator = eventAggregator;
         }
 
         public void Settings()
@@ -32,7 +33,14 @@ namespace MyHoard.ViewModels
 
         public void Sync()
         {
+            SynchronizationService ss = new SynchronizationService();
+            ss.PushCollections(new System.Threading.CancellationToken());
+        }
 
+        public void Handle(ServerMessage message)
+        {
+            MessageBox.Show(message.Message);
+            OnActivate();
         }
 
         public void AddCollection()
@@ -79,12 +87,21 @@ namespace MyHoard.ViewModels
         protected override void OnActivate()
         {
             base.OnActivate();
+            eventAggregator.Subscribe(this);
             Collections = CollectionService.CollectionList().OrderBy(e => e.Name).ToList<Collection>();
             if (configurationService.Configuration.IsLoggedIn)
                 IsSyncVisible = Visibility.Visible;
             else
                 IsSyncVisible = Visibility.Collapsed;
         }
+
+        protected override void OnDeactivate(bool close)
+        {
+            eventAggregator.Unsubscribe(this);
+            base.OnDeactivate(close);
+        }
+
+
         
     }
 }

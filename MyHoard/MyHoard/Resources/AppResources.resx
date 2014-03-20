@@ -242,4 +242,7 @@
   <data name="Sync" xml:space="preserve">
     <value>Sync</value>
   </data>
+  <data name="GeneralError" xml:space="preserve">
+    <value>An error occurred</value>
+  </data>
 </root>

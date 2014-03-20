@@ -47,5 +47,12 @@ namespace MyHoard.Services
             databaseService.Modify(Configuration);
         }
 
+        public void Logout()
+        {
+            Configuration.IsLoggedIn = false;
+            Configuration.KeepLogged = false;
+            SaveConfig();
+        }
+
     }
 }
