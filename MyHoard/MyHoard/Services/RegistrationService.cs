@@ -40,14 +40,14 @@ namespace MyHoard.Services
                             else
                             {
                                 JObject parsedResponse = JObject.Parse(response.Content);
-                                string message = Resources.AppResources.AuthenticationError + ": " + parsedResponse["error_message"];
+                                string message = Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"];
                                 eventAggregator.Publish(new ServerMessage(false, message));
                             }
                         }
                         catch (Exception e)
                         {
                             Debug.WriteLine(e.Message);
-                            eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                            eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError));
                         }
                     }
                         

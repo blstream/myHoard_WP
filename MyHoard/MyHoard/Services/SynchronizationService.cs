@@ -13,7 +13,7 @@ namespace MyHoard.Services
 {
     public class SynchronizationService
     {
-        public async Task PushCollections(CancellationToken cancellationToken)
+        private async Task pushCollections(CancellationToken cancellationToken)
         {
             CollectionService collectionService = IoC.Get<CollectionService>();
             ConfigurationService configurationService = IoC.Get<ConfigurationService>();
@@ -91,8 +91,9 @@ namespace MyHoard.Services
                                 eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
                                 return;
                             default:
-                                eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"]));
-                                break;
+                                eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"]
+                                    + "\n" + parsedResponse["errors"]));
+                                return;
                         }
                     }
                     else if (!synced)
@@ -117,18 +118,23 @@ namespace MyHoard.Services
                                 eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
                                 return;
                             default:
-                                eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"]));
-                                break;
+                                eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"]
+                                    + "\n" + parsedResponse["errors"]));
+                                return;
                         }
                     }
 
 
                 }
+                
             }
-            
 
+            eventAggregator.Publish(new ServerMessage(true, Resources.AppResources.Synchronized));
+        }
 
-
+        public async Task PushCollections(CancellationToken cancellationToken)
+        {
+            Task.Factory.StartNew(() => pushCollections(cancellationToken));
         }
     }
 }

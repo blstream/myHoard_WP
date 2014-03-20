@@ -245,4 +245,7 @@
   <data name="GeneralError" xml:space="preserve">
     <value>An error occurred</value>
   </data>
+  <data name="Synchronized" xml:space="preserve">
+    <value>Synchronized</value>
+  </data>
 </root>

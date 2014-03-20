@@ -388,6 +388,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronized.
+        /// </summary>
+        public static string Synchronized {
+            get {
+                return ResourceManager.GetString("Synchronized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tags.
         /// </summary>
         public static string Tags {

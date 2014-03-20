@@ -3,8 +3,10 @@ using MyHoard.Models;
 using MyHoard.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -18,6 +20,9 @@ namespace MyHoard.ViewModels
         private ConfigurationService configurationService;
         private Visibility isSyncVisible;
         private readonly IEventAggregator eventAggregator;
+        private bool isFormAccessible;
+        private Visibility isProgressBarVisible;
+        private CancellationTokenSource tokenSource;
 
         public CollectionListViewModel(INavigationService navigationService, CollectionService collectionService, ConfigurationService configurationService, IEventAggregator eventAggregator)
             : base(navigationService, collectionService)
@@ -33,12 +38,16 @@ namespace MyHoard.ViewModels
 
         public void Sync()
         {
+            IsFormAccessible = false;
+            tokenSource = new CancellationTokenSource();
             SynchronizationService ss = new SynchronizationService();
-            ss.PushCollections(new System.Threading.CancellationToken());
+            ss.PushCollections(tokenSource.Token); 
         }
 
         public void Handle(ServerMessage message)
         {
+            IsFormAccessible = true;
+            
             MessageBox.Show(message.Message);
             OnActivate();
         }
@@ -93,6 +102,7 @@ namespace MyHoard.ViewModels
                 IsSyncVisible = Visibility.Visible;
             else
                 IsSyncVisible = Visibility.Collapsed;
+            IsFormAccessible = true;
         }
 
         protected override void OnDeactivate(bool close)
@@ -101,6 +111,39 @@ namespace MyHoard.ViewModels
             base.OnDeactivate(close);
         }
 
+        public void OnGoBack(CancelEventArgs eventArgs)
+        {
+            if (!IsFormAccessible)
+            {
+                MessageBoxResult messageResult = MessageBox.Show(Resources.AppResources.CancelConfirm, "", MessageBoxButton.OKCancel);
+                if (messageResult == MessageBoxResult.OK)
+                {
+                    tokenSource.Cancel();
+                }
+                eventArgs.Cancel = true;
+            }
+        }
+
+        public bool IsFormAccessible
+        {
+            get { return isFormAccessible; }
+            set
+            {
+                isFormAccessible = value;
+                NotifyOfPropertyChange(() => IsFormAccessible);
+                IsProgressBarVisible = (IsFormAccessible ? Visibility.Collapsed : Visibility.Visible);
+            }
+        }
+
+        public Visibility IsProgressBarVisible
+        {
+            get { return isProgressBarVisible; }
+            set
+            {
+                isProgressBarVisible = value;
+                NotifyOfPropertyChange(() => IsProgressBarVisible);
+            }
+        }
 
         
     }

@@ -13,7 +13,8 @@
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True"
     xmlns:bab="clr-namespace:Caliburn.Micro.BindableAppBar;assembly=Caliburn.Micro.BindableAppBar"
-    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro">
+    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+    cal:Message.Attach="[Event BackKeyPress] = [Action OnGoBack($eventArgs)]">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -31,7 +32,7 @@
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <ListBox Grid.Row="0" Name="Collections" ItemsSource="{Binding Collections, Mode=OneWay}" 
-                     SelectedItem="{Binding SelectedCollection, Mode=TwoWay}">
+                     SelectedItem="{Binding SelectedCollection, Mode=TwoWay}" IsEnabled="{Binding IsFormAccessible}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
@@ -61,9 +62,15 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            <Grid Opacity="0.7" Background="Black" Visibility="{Binding IsProgressBarVisible;}" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <ProgressBar IsIndeterminate="True"   />
+            </Grid>
         </Grid>
 
-        <bab:BindableAppBar x:Name="AppBar">
+        <bab:BindableAppBar x:Name="AppBar" IsEnabled="{Binding IsFormAccessible}" >
             <bab:BindableAppBarButton x:Name="AddCollection"
                                   Text="{Binding Path=LocalizedResources.Add, Source={StaticResource LocalizedStrings}}"
                                   IconUri="Images/add.png"                                
