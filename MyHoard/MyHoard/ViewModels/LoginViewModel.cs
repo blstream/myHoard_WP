@@ -111,8 +111,8 @@ namespace MyHoard.ViewModels
         public void Login()
         {
             IsFormAccessible = false;
-            RegistrationService registrationService = new RegistrationService(SelectedBackend);
-            asyncHandle = registrationService.Login(UserName, passwordBox.Password, KeepLogged);
+            RegistrationService registrationService = new RegistrationService();
+            asyncHandle = registrationService.Login(UserName, passwordBox.Password, KeepLogged, SelectedBackend);
         }
 
         public string UserName

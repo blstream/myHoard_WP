@@ -23,5 +23,15 @@ namespace MyHoard.Services
             return client.ExecuteAsync(request, callback);
         }
 
+        public Task<IRestResponse> Execute(RestRequest restRequest)
+        {
+            var tcs = new TaskCompletionSource<IRestResponse>();
+            client.ExecuteAsync(restRequest, (restResponse, asyncHandle) =>
+            {
+                tcs.SetResult(restResponse);
+            });
+            return tcs.Task;
+        }
+
     }
 }
