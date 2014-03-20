@@ -11,13 +11,13 @@ namespace MyHoard.Models
     {
         private string name;
         private string description;
-        private string collectionServerId;
         private int quantity;
         private int collectionId;
         private float locationLat;
         private float locationLng;
         private DateTime createdDate;
         private DateTime modifiedDate;
+
 
         public string Name
         {
@@ -38,16 +38,7 @@ namespace MyHoard.Models
             }
         }
 
-        public string CollectionServerId
-        {
-            get { return collectionServerId; }
-            set
-            {
-                collectionServerId = value;
-                ModifiedDate = DateTime.Now;
-            }
-        }
-
+       
         public int Quantity
         {
             get { return quantity; }
