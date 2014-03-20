@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MyHoard.ViewModels
 {
@@ -14,16 +15,24 @@ namespace MyHoard.ViewModels
         
         private List<Collection> collections;
         private Collection selectedCollection;
-                
-        public CollectionListViewModel(INavigationService navigationService, CollectionService collectionService)
+        private ConfigurationService configurationService;
+        private Visibility isSyncVisible;
+
+            
+        public CollectionListViewModel(INavigationService navigationService, CollectionService collectionService, ConfigurationService configurationService)
             : base(navigationService, collectionService)
         {
-            
+            this.configurationService=configurationService;
         }
 
         public void Settings()
         {
             NavigationService.UriFor<SettingsViewModel>().Navigate();
+        }
+
+        public void Sync()
+        {
+
         }
 
         public void AddCollection()
@@ -40,6 +49,17 @@ namespace MyHoard.ViewModels
                 NotifyOfPropertyChange(() => Collections);
             }
         }
+
+        public Visibility IsSyncVisible
+        {
+            get { return isSyncVisible; }
+            set 
+            { 
+                isSyncVisible = value;
+                NotifyOfPropertyChange(() => IsSyncVisible);
+            }
+        }
+            
 
         public Collection SelectedCollection
         {
@@ -60,6 +80,10 @@ namespace MyHoard.ViewModels
         {
             base.OnActivate();
             Collections = CollectionService.CollectionList().OrderBy(e => e.Name).ToList<Collection>();
+            if (configurationService.Configuration.IsLoggedIn)
+                IsSyncVisible = Visibility.Visible;
+            else
+                IsSyncVisible = Visibility.Collapsed;
         }
         
     }

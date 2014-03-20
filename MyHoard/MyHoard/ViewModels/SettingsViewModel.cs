@@ -49,7 +49,7 @@ namespace MyHoard.ViewModels
         public void Logout()
         {
             configurationService.Configuration.IsLoggedIn = false;
-            configurationService.Configuration.Password = "";
+            configurationService.Configuration.KeepLogged = false;
             configurationService.SaveConfig();
             NavigationService.GoBack();
         }
