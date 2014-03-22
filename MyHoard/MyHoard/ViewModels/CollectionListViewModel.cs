@@ -119,6 +119,7 @@ namespace MyHoard.ViewModels
                 if (messageResult == MessageBoxResult.OK)
                 {
                     tokenSource.Cancel();
+                    IsFormAccessible = true;
                 }
                 eventArgs.Cancel = true;
             }

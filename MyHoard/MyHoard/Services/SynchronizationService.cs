@@ -27,7 +27,7 @@ namespace MyHoard.Services
                 return;
 
 
-            foreach (Collection c in collectionService.CollectionList())
+            foreach (Collection c in collectionService.CollectionList(true))
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
@@ -54,7 +54,7 @@ namespace MyHoard.Services
                             break;
                     }
 
-                    if (String.IsNullOrWhiteSpace(id))
+                    if (String.IsNullOrWhiteSpace(id) && !c.ToDelete)
                     {
                         var request = new RestRequest("/collections/", Method.POST);
                         request.RequestFormat = DataFormat.Json;
@@ -64,7 +64,9 @@ namespace MyHoard.Services
                         request.AddBody(new { name = c.Name, description = c.Description, tags = c.TagList });
 
                         var response = await myHoardApi.Execute(request);
-                        JObject parsedResponse = JObject.Parse(response.Content);
+                        JObject parsedResponse = new JObject();
+                        if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
+                            parsedResponse = JObject.Parse(response.Content);
                         switch (response.StatusCode)
                         {
                             case System.Net.HttpStatusCode.Created:
@@ -97,7 +99,7 @@ namespace MyHoard.Services
                                 return;
                         }
                     }
-                    else if (!synced)
+                    else if (!synced && !c.ToDelete)
                     {
                         var request = new RestRequest("/collections/" + id, Method.PUT);
                         request.RequestFormat = DataFormat.Json;
@@ -107,7 +109,9 @@ namespace MyHoard.Services
                         request.AddBody(new { name = c.Name, description = c.Description, tags = c.TagList });
 
                         var response = await myHoardApi.Execute(request);
-                        JObject parsedResponse = JObject.Parse(response.Content);
+                        JObject parsedResponse = new JObject();
+                        if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
+                            parsedResponse = JObject.Parse(response.Content);
                         switch (response.StatusCode)
                         {
                             case System.Net.HttpStatusCode.OK:
@@ -125,7 +129,36 @@ namespace MyHoard.Services
                                 return;
                         }
                     }
+                    else if(c.ToDelete && !String.IsNullOrEmpty(id))
+                    {
+                        var request = new RestRequest("/collections/" + id, Method.DELETE);
+                        request.RequestFormat = DataFormat.Json;
+                        request.AddHeader("Accept", "application/json");
+                        request.AddHeader("Content-type", "application/json");
+                        request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
 
+                        var response = await myHoardApi.Execute(request);
+                        JObject parsedResponse=new JObject ();
+                        if(response.Content.StartsWith("{") || response.Content.StartsWith("["))
+                            parsedResponse = JObject.Parse(response.Content);
+                        switch (response.StatusCode)
+                        {
+                            case System.Net.HttpStatusCode.NoContent:
+                            case System.Net.HttpStatusCode.NotFound:
+                                
+                                collectionService.DeleteCollection(c,true);
+                                break;
+                            case System.Net.HttpStatusCode.Unauthorized:
+                            case System.Net.HttpStatusCode.Forbidden:
+                                configurationService.Logout();
+                                eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                                return;
+                            default:
+                                eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"]
+                                    + "\n" + parsedResponse["errors"]));
+                                return;
+                        }
+                    }
 
                 }
                 
