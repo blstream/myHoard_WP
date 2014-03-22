@@ -62,7 +62,7 @@ namespace MyHoard.Services
 
             if (withPictures)
             {
-                mediaList = mediaList.Where(i => i.ToDeleteFromIS == false).ToList();
+                mediaList = mediaList.Where(i => i.ToDelete == false).ToList();
                 foreach (Media m in mediaList)
                 {
                     m.Image = GetPictureFromIsolatedStorage(m, thumbnail);
@@ -77,11 +77,11 @@ namespace MyHoard.Services
         {
             foreach (Media m in pictureList)
             {
-                if (String.IsNullOrEmpty(m.FileName))
+                if (String.IsNullOrEmpty(m.FileName) && !m.ToDelete)
                 {
                     AddMedia(SavePictureToIsolatedStorage(m));
                 }
-                if (m.ToDeleteFromIS)
+                else if (!String.IsNullOrEmpty(m.FileName) && m.ToDelete)
                 {
                     ModifyMedia(m);
                 }
@@ -92,10 +92,11 @@ namespace MyHoard.Services
         {
             foreach (Media m in MediaList(false, false))
             {
-                if (m.ToDeleteFromIS)
+                if (m.ToDelete)
                 {
                     DeleteMediaFromIsolatedStorage(m);
-                    DeleteMedia(m);
+                    if(String.IsNullOrEmpty(m.PythonId) && String.IsNullOrEmpty(m.Java1Id) && String.IsNullOrEmpty(m.Java2Id))
+                        DeleteMedia(m);
                 }
             }
         }

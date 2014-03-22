@@ -33,9 +33,26 @@ namespace MyHoard.Services
                 
         }
 
-        public void DeleteCollection(Collection collection)
+        public void DeleteCollection(Collection collection, bool forceDelete=false)
         {
-            databaseService.Delete(collection);
+            if (forceDelete || collection.IsPrivate || (String.IsNullOrEmpty(collection.PythonId)
+                    && String.IsNullOrEmpty(collection.Java1Id) && String.IsNullOrEmpty(collection.Java2Id)))
+            {
+                databaseService.Delete(collection);
+            }
+            else
+            {
+                collection.ToDelete = true;
+                ModifyCollection(collection);
+            }
+
+            ItemService itemService = IoC.Get<ItemService>();
+            foreach (Item i in itemService.ItemList(collection.Id))
+            {
+                itemService.DeleteItem(i, true);
+            }
+
+            
         }
 
         public Collection ModifyCollection(Collection collection)
@@ -59,9 +76,13 @@ namespace MyHoard.Services
         }
 
         
-        public List<Collection> CollectionList()
+        public List<Collection> CollectionList(bool withDeleted=false)
         {
-            return databaseService.ListAll<Collection>();
+            if(withDeleted)
+                return databaseService.ListAll<Collection>();
+            else
+                return databaseService.ListAll<Collection>().Where(x=>x.ToDelete==false).ToList();
+            
         }
 
         public void CloseConnection()
