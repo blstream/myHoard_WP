@@ -188,4 +188,55 @@
   <data name="ThisImage" xml:space="preserve">
     <value>this image</value>
   </data>
+  <data name="Backend" xml:space="preserve">
+    <value>Backend</value>
+  </data>
+  <data name="CancelConfirm" xml:space="preserve">
+    <value>Operation will be canceled. Are you sure?</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm Password</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>An error occurred</value>
+  </data>
+  <data name="InternetConnectionError" xml:space="preserve">
+    <value>Unablke to perfrom operation. Check your internet connection.</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PasswordRequirements" xml:space="preserve">
+    <value>• at least 5 characters
+• include both upper- and lower-case letters
+• at least one digit
+• at least one special character</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="UserCreated" xml:space="preserve">
+    <value>User Created</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Log In</value>
+  </data>
+  <data name="LoginSuccess" xml:space="preserve">
+    <value>You have successfully logged in</value>
+  </data>
+  <data name="KeepLogin" xml:space="preserve">
+    <value>Keep me logged in</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Log out</value>
+  </data>
 </root>
