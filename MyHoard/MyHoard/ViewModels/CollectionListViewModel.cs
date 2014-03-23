@@ -41,7 +41,7 @@ namespace MyHoard.ViewModels
             IsFormAccessible = false;
             tokenSource = new CancellationTokenSource();
             SynchronizationService ss = new SynchronizationService();
-            ss.PushCollections(tokenSource.Token); 
+            ss.SyncCollections(tokenSource.Token); 
         }
 
         public void Handle(ServerMessage message)

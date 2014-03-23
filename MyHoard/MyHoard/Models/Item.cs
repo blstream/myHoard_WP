@@ -26,6 +26,7 @@ namespace MyHoard.Models
             {
                 name = value;
                 ModifiedDate = DateTime.Now;
+                Desync();
             }
         }
         public string Description
@@ -35,6 +36,7 @@ namespace MyHoard.Models
             {
                 description = value;
                 ModifiedDate = DateTime.Now;
+                Desync();
             }
         }
 
@@ -46,6 +48,7 @@ namespace MyHoard.Models
             {
                 quantity = value;
                 ModifiedDate = DateTime.Now;
+                Desync();
             }
         }
 
@@ -67,6 +70,7 @@ namespace MyHoard.Models
             {
                 locationLat = value;
                 ModifiedDate = DateTime.Now;
+                Desync();
             }
         }
 
@@ -77,6 +81,7 @@ namespace MyHoard.Models
             {
                 locationLng = value;
                 ModifiedDate = DateTime.Now;
+                Desync();
             }
         }
 

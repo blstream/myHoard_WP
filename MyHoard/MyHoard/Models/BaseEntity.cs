@@ -28,6 +28,73 @@ namespace MyHoard.Models
             }
         }
 
+        public string GetServerId(string backend)
+        {
+            string serverid = "";
+            switch (backend)
+            {
+                case "Python":
+                    serverid = PythonId;
+                    break;
+                case "Java1":
+                    serverid = Java1Id;
+                    break;
+                case "Java2":
+                    serverid = Java2Id;
+                    break;
+            }
+            return serverid;
+        }
+        public void SetServerId(string id, string backend)
+        {
+            switch (backend)
+            {
+                case "Python":
+                    PythonId = id;
+                    break;
+                case "Java1":
+                    Java1Id = id;
+                    break;
+                case "Java2":
+                    Java2Id = id;
+                    break;
+            }
+        }
+
+        public bool IsSynced(string backend)
+        {
+            bool synced=false;
+            switch (backend)
+            {
+                case "Python":
+                    synced = PythonIsSynced;
+                    break;
+                case "Java1":
+                    synced = Java1IsSynced;
+                    break;
+                case "Java2":
+                    synced = Java2IsSynced;
+                    break;
+            }
+            return synced;
+        }
+
+        public void SetSynced(bool synced, string backend)
+        {
+            switch (backend)
+            {
+                case "Python":
+                    PythonIsSynced = synced;
+                    break;
+                case "Java1":
+                    Java1IsSynced = synced;
+                    break;
+                case "Java2":
+                    Java2IsSynced = synced;
+                    break;
+            }
+        }
+
         public bool ToDelete
         {
             get { return toDelete; }
@@ -93,7 +160,7 @@ namespace MyHoard.Models
             }
         }
 
-        protected void Desync()
+        public void Desync()
         {
             pythonIsSynced = false;
             Java1IsSynced = false;

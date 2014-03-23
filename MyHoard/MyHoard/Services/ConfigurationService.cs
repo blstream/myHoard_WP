@@ -13,7 +13,7 @@ namespace MyHoard.Services
 
         public static Dictionary<string, string> Backends = new Dictionary<string, string>()
         {
-            {"Python","http://78.133.154.18:8081"},
+            {"Python","http://78.133.154.18:8080"},
             {"Java1","http://78.133.154.39:1080"},
             {"Java2","http://78.133.154.39:2080"}
         };

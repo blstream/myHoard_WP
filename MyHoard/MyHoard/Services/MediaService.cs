@@ -9,6 +9,7 @@ using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace MyHoard.Services
@@ -18,7 +19,7 @@ namespace MyHoard.Services
         private const int ThumbnailSize = 100;
         private DatabaseService databaseService;
         private IsolatedStorageFile isolatedStorageFile;
-        
+
         public MediaService()
         {
             databaseService = IoC.Get<DatabaseService>();
@@ -72,19 +73,55 @@ namespace MyHoard.Services
             return mediaList;
         }
 
+        public List<string> MediaStringList(int itemId, string backend)
+        {
+            List<Media> mediaList = databaseService.ListAllTable<Media>().Where(i => i.ItemId == itemId && i.ToDelete == false).ToList();
+            List<string> ids = new List<string>();
+
+            foreach (Media m in mediaList)
+            {
+                switch (backend)
+                {    
+                    case "Python":
+                        ids.Add(m.PythonId);
+                        break;
+                    case "Java1":
+                        ids.Add(m.Java1Id);
+                        break;
+                    case "Java2":
+                        ids.Add(m.Java2Id);
+                        break;
+                }    
+            }
+            return ids;
+        }
+
 
         public void SavePictureList(IList<Media> pictureList)
         {
+            bool datachanged = false;
+            int parentId=0;
             foreach (Media m in pictureList)
             {
                 if (String.IsNullOrEmpty(m.FileName) && !m.ToDelete)
                 {
                     AddMedia(SavePictureToIsolatedStorage(m));
+                    datachanged = true;
+                    parentId=m.ItemId;
                 }
                 else if (!String.IsNullOrEmpty(m.FileName) && m.ToDelete)
                 {
                     ModifyMedia(m);
+                    datachanged = true;
+                    parentId=m.ItemId;
                 }
+            }
+            if(datachanged)
+            {
+                ItemService itemService = IoC.Get<ItemService>();
+                Item i = itemService.GetItem(parentId);
+                i.Desync();
+                itemService.ModifyItem(i);
             }
         }
 
@@ -95,7 +132,7 @@ namespace MyHoard.Services
                 if (m.ToDelete)
                 {
                     DeleteMediaFromIsolatedStorage(m);
-                    if(String.IsNullOrEmpty(m.PythonId) && String.IsNullOrEmpty(m.Java1Id) && String.IsNullOrEmpty(m.Java2Id))
+                    if (String.IsNullOrEmpty(m.PythonId) && String.IsNullOrEmpty(m.Java1Id) && String.IsNullOrEmpty(m.Java2Id))
                         DeleteMedia(m);
                 }
             }
@@ -122,7 +159,45 @@ namespace MyHoard.Services
             }
         }
 
-        public WriteableBitmap GetPictureFromIsolatedStorage(Media media, bool thumbnail)
+        public byte[] GetPictureAsByteArray(Media media)
+        {
+            try
+            {
+                using (IsolatedStorageFileStream isfs = isolatedStorageFile.OpenFile(media.FileName, FileMode.Open, FileAccess.Read))
+                {
+                    byte[] bytes = new byte[isfs.Length];
+                    isfs.Read(bytes, 0, bytes.Length);
+                    return bytes;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
+
+        }
+
+        public string GetAbsolutePath(string filename)
+        {
+            IsolatedStorageFile isoStore = IsolatedStorageFile.GetUserStoreForApplication();
+
+            string absoulutePath = null;
+
+            if (isoStore.FileExists(filename))
+            {
+                IsolatedStorageFileStream output = new IsolatedStorageFileStream(filename, FileMode.Open, isoStore);
+                absoulutePath = output.Name;
+
+                output.Close();
+                output = null;
+            }
+
+            return absoulutePath;
+        }
+
+
+        public WriteableBitmap GetPictureFromIsolatedStorage(Media media, bool thumbnail = false)
         {
             try
             {
@@ -138,7 +213,7 @@ namespace MyHoard.Services
             {
                 Debug.WriteLine(e.Message);
                 return null;
-            } 
+            }
         }
 
     }
