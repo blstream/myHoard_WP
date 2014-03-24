@@ -64,5 +64,10 @@ namespace MyHoard.Services
             dbConnection.Close();
         }
 
+        public int DeleteAll<T>()
+        {
+            return dbConnection.DeleteAll<T>();
+        }
+
     }
 }

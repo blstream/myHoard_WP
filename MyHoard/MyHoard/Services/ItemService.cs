@@ -55,6 +55,11 @@ namespace MyHoard.Services
             
         }
 
+        public int DeleteAll()
+        {
+            return databaseService.DeleteAll<Item>();
+        }
+
         public Item ModifyItem(Item item)
         {
             Item it = ItemList(item.CollectionId).FirstOrDefault(i => i.Name == item.Name);

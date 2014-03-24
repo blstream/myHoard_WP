@@ -41,7 +41,7 @@ namespace MyHoard.Services
             return databaseService.Modify(media);
         }
 
-        public List<Media> MediaList(bool withPictures, bool thumbnail)
+        public List<Media> MediaList(bool withPictures, bool thumbnail=false)
         {
             List<Media> mediaList = databaseService.ListAll<Media>();
             if (withPictures)
@@ -57,7 +57,7 @@ namespace MyHoard.Services
 
         }
 
-        public List<Media> MediaList(int itemId, bool withPictures, bool thumbnail)
+        public List<Media> MediaList(int itemId, bool withPictures, bool thumbnail=false)
         {
             List<Media> mediaList = databaseService.ListAllTable<Media>().Where(i => i.ItemId == itemId).ToList();
 
@@ -213,6 +213,18 @@ namespace MyHoard.Services
             {
                 Debug.WriteLine(e.Message);
                 return null;
+            }
+        }
+
+        public void DeleteAll()
+        {
+            foreach(Media m in MediaList(false))
+            {
+                m.ToDelete = true;
+                m.PythonId = null;
+                m.Java1Id = null;
+                m.Java2Id = null;
+                ModifyMedia(m);
             }
         }
 

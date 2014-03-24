@@ -24,22 +24,27 @@ namespace MyHoard.ViewModels
         private bool canLogin;
         private bool isFormAccessible;
         private bool keepLogged;
+        private bool dropTables;
         private Visibility isProgressBarVisible;
         private string userName;
         private string selectedBackend;
         private PasswordBox passwordBox;
         private RestRequestAsyncHandle asyncHandle;
         private ConfigurationService configurationService;
+        private ItemService itemService;
+        private MediaService mediaService;
 
-        public LoginViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator, ConfigurationService configurationService)
+        public LoginViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator, ConfigurationService configurationService, ItemService itemService, MediaService mediaService)
             : base(navigationService, collectionService)
         {
             Backends = ConfigurationService.Backends;
             SelectedBackend = Backends.Keys.First();
             this.eventAggregator = eventAggregator;
-            this.configurationService = configurationService; 
+            this.configurationService = configurationService;
             eventAggregator.Subscribe(this);
             IsFormAccessible = true;
+            this.mediaService = mediaService;
+            this.itemService = itemService;
         }
 
         public void OnGoBack(CancelEventArgs eventArgs)
@@ -58,7 +63,7 @@ namespace MyHoard.ViewModels
             }
         }
 
-        
+
         public void Handle(ServerMessage message)
         {
             IsFormAccessible = true; ;
@@ -68,6 +73,12 @@ namespace MyHoard.ViewModels
 
             if (message.IsSuccessfull)
             {
+                if(dropTables)
+                {
+                    CollectionService.DeleteAll();
+                    itemService.DeleteAll();
+                    mediaService.DeleteAll();
+                }
                 NavigationService.UriFor<CollectionListViewModel>().Navigate();
                 while (NavigationService.BackStack.Any())
                 {
@@ -108,8 +119,14 @@ namespace MyHoard.ViewModels
             CanLogin = (!String.IsNullOrWhiteSpace(UserName) && !String.IsNullOrWhiteSpace(passwordBox.Password));
         }
 
+
+
         public void Login()
         {
+            if (!string.IsNullOrWhiteSpace(configurationService.Configuration.UserName) && configurationService.Configuration.UserName != UserName)
+                dropTables = true;
+            else
+                dropTables = false;
             IsFormAccessible = false;
             RegistrationService registrationService = new RegistrationService();
             asyncHandle = registrationService.Login(UserName, passwordBox.Password, KeepLogged, SelectedBackend);

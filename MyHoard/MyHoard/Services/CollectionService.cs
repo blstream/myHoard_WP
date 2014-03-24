@@ -89,5 +89,10 @@ namespace MyHoard.Services
         {
             databaseService.CloseConnection();
         }
+
+        public int DeleteAll()
+        {
+            return databaseService.DeleteAll<Collection>();
+        }
     }
 }
