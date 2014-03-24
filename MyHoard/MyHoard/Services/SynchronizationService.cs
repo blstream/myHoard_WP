@@ -205,6 +205,7 @@ namespace MyHoard.Services
             switch (response.StatusCode)
             {
                 case System.Net.HttpStatusCode.OK:
+                    c.ModifiedDate = DateTime.Now;
                     c.SetSynced(true,backend);
                     collectionService.ModifyCollection(c);
                     return true;
@@ -238,6 +239,7 @@ namespace MyHoard.Services
                 case System.Net.HttpStatusCode.Created:
                     c.SetServerId((string)parsedResponse["id"], backend);
                     c.SetSynced(true, backend);
+                    c.ModifiedDate = DateTime.Now;
                     collectionService.ModifyCollection(c);
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
@@ -277,6 +279,7 @@ namespace MyHoard.Services
                 case System.Net.HttpStatusCode.Created:
                     i.SetServerId((string)parsedResponse["id"], backend);
                     i.SetSynced(true, backend);
+                    i.ModifiedDate = DateTime.Now;
                     itemService.ModifyItem(i);
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
@@ -315,6 +318,7 @@ namespace MyHoard.Services
             {
                 case System.Net.HttpStatusCode.OK:
                     i.SetSynced(true, backend);
+                    i.ModifiedDate = DateTime.Now;
                     itemService.ModifyItem(i);
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
