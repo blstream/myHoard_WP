@@ -36,12 +36,12 @@ namespace MyHoard.ViewModels
             NavigationService.UriFor<SettingsViewModel>().Navigate();
         }
 
-        public void Sync()
+        public async void Sync()
         {
             IsFormAccessible = false;
             tokenSource = new CancellationTokenSource();
             SynchronizationService ss = new SynchronizationService();
-            ss.SyncCollections(tokenSource.Token); 
+            await ss.SyncCollections(tokenSource.Token); 
         }
 
         public void Handle(ServerMessage message)

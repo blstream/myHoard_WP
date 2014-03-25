@@ -40,7 +40,7 @@ namespace MyHoard.Services
                             else
                             {
                                 JObject parsedResponse = JObject.Parse(response.Content);
-                                string message = Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"];
+                                string message = Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"] + "\n" + parsedResponse["errors"];
                                 eventAggregator.Publish(new ServerMessage(false, message));
                             }
                         }
@@ -101,7 +101,7 @@ namespace MyHoard.Services
                                 else
                                 {
                                     configurationService.Logout();
-                                    serverMessage.Message += ": " + parsedResponse["error_message"];
+                                    serverMessage.Message += ": " + parsedResponse["error_message"]+ "\n" + parsedResponse["errors"];
                                 }
                             }
 

@@ -59,8 +59,6 @@ namespace MyHoard.Models
             set
             {
                 thumbnail = value;
-                ModifiedDate = DateTime.Now;
-                Desync();
             }
         }
 
