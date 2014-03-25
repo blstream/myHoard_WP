@@ -23,9 +23,9 @@ namespace MyHoard.Services
         private readonly IEventAggregator eventAggregator;
         private readonly CollectionService collectionService;
         private readonly ConfigurationService configurationService;
-        private readonly MyHoardApi myHoardApi;
         private readonly ItemService itemService;
         private readonly MediaService mediaService;
+        private readonly MyHoardApi myHoardApi;
         private string backend;
 
         public SynchronizationService()
@@ -128,11 +128,10 @@ namespace MyHoard.Services
             List<ServerCollection> serverColections = await getCollections();
             foreach(ServerCollection serverCollection in serverColections)
             {
-                
+
                 Collection localCollection = collections.FirstOrDefault(c => c.GetServerId(backend) == serverCollection.id);
                 syncCollectionFromServer(localCollection, serverCollection);
             }
-
             eventAggregator.Publish(new ServerMessage(true, Resources.AppResources.Synchronized));
         }
 
@@ -155,7 +154,7 @@ namespace MyHoard.Services
             }
             else if (DateTime.Compare(serverCollection.ModifiedDate(), localCollection.ModifiedDate) > 0)
             {
-                localCollection.Description = serverCollection.name;
+                localCollection.Description = serverCollection.description;
                 localCollection.ItemsNumber = serverCollection.items_number;
                 localCollection.ModifiedDate = serverCollection.ModifiedDate();
                 localCollection.Name = serverCollection.name;
@@ -412,7 +411,7 @@ namespace MyHoard.Services
 
         private async Task<List<ServerCollection>> getCollections()
         {
-            var request = new RestRequest("/collections/", Method.GET);
+            var request = new RestRequest("/collections/"+"?timestamp"+ DateTime.Now.ToString(), Method.GET);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
 

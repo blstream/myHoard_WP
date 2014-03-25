@@ -24,7 +24,6 @@ namespace MyHoard.Models
         public Collection()
         {
             CreatedDate = DateTime.Now;
-            ModifiedDate = DateTime.Now;
         }
 
 
@@ -35,7 +34,6 @@ namespace MyHoard.Models
             set
             {
                 name = value;
-                ModifiedDate = DateTime.Now;
                 Desync();
             }
         }
@@ -47,7 +45,6 @@ namespace MyHoard.Models
             set
             {
                 description = value;
-                ModifiedDate = DateTime.Now;
                 Desync();
             }
         }
@@ -76,7 +73,6 @@ namespace MyHoard.Models
             set
             {
                 tags = value;
-                ModifiedDate = DateTime.Now;
                 Desync();
             }
         }
@@ -88,7 +84,6 @@ namespace MyHoard.Models
             set
             {
                 itemsNumber = value;
-                ModifiedDate = DateTime.Now;
                 Desync();
             }
         }
