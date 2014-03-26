@@ -44,30 +44,24 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="{Binding Path=LocalizedResources.UserName, Source={StaticResource LocalizedStrings}}" 
-                       Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
-                    <TextBox Name="UserName" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  
-                     Grid.Row="1" Height="72" TextWrapping="Wrap" />
                     <TextBlock Text="{Binding Path=LocalizedResources.Email, Source={StaticResource LocalizedStrings}}" 
-                       Grid.Row="2" Style="{StaticResource PhoneTextNormalStyle}" />
+                       Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
                     <TextBox Name="Email" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  
-                     Grid.Row="3" Height="72" TextWrapping="Wrap" InputScope="EmailUserName" />
+                     Grid.Row="1" Height="72" TextWrapping="Wrap" InputScope="EmailUserName" />
                     <TextBlock Text="{Binding Path=LocalizedResources.Password, Source={StaticResource LocalizedStrings}}" 
-                       Grid.Row="4" Style="{StaticResource PhoneTextNormalStyle}" />
+                       Grid.Row="2" Style="{StaticResource PhoneTextNormalStyle}" />
 
-                    <PasswordBox Name="Password" Grid.Row="5" Height="72"  />
+                    <PasswordBox Name="Password" Grid.Row="3" Height="72"  />
                     <TextBlock Text="{Binding Path=LocalizedResources.PasswordRequirements, Source={StaticResource LocalizedStrings}}" 
-                       Grid.Row="6" Style="{StaticResource PhoneTextSmallStyle}" Visibility="{Binding ArePasswordRequirementsVisible}" FontSize="14"/>
+                       Grid.Row="4" Style="{StaticResource PhoneTextSmallStyle}" Visibility="{Binding ArePasswordRequirementsVisible}" FontSize="14"/>
                     <TextBlock Text="{Binding Path=LocalizedResources.ConfirmPassword, Source={StaticResource LocalizedStrings}}" 
-                       Grid.Row="7" Style="{StaticResource PhoneTextNormalStyle}" />
-                    <PasswordBox  Name="ConfirmPassword" Grid.Row="8" Height="72" />
+                       Grid.Row="5" Style="{StaticResource PhoneTextNormalStyle}" />
+                    <PasswordBox  Name="ConfirmPassword" Grid.Row="6" Height="72" />
                     <TextBlock Text="{Binding Path=LocalizedResources.Backend, Source={StaticResource LocalizedStrings}}" 
-                       Grid.Row="9" Style="{StaticResource PhoneTextNormalStyle}" />
+                       Grid.Row="7" Style="{StaticResource PhoneTextNormalStyle}" />
 
-                    <toolkit:ListPicker Grid.Row="10"
+                    <toolkit:ListPicker Grid.Row="8"
                                 ItemsSource="{Binding Backends.Keys}"
                                 SelectedItem="{Binding SelectedBackend, Mode=TwoWay}"
                                 FullModeHeader="{Binding Path=LocalizedResources.Grade, Source={StaticResource LocalizedStrings}}"

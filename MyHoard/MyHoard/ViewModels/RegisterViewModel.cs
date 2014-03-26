@@ -25,7 +25,6 @@ namespace MyHoard.ViewModels
         private bool isFormAccessible;
         private Visibility arePasswordRequirementsVisible;
         private Visibility isProgressBarVisible;
-        private string userName;
         private string email;
         private string selectedBackend;
         private PasswordBox passwordBox;
@@ -112,7 +111,7 @@ namespace MyHoard.ViewModels
 
         public void DataChanged()
         {
-            CanRegister = (!String.IsNullOrWhiteSpace(UserName) && !String.IsNullOrEmpty(Email) &&
+            CanRegister = (!String.IsNullOrEmpty(Email) &&
                 Regex.IsMatch(Email, @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,24}))$", RegexOptions.IgnoreCase) &&
                 ArePasswordRequirementsVisible == Visibility.Collapsed && passwordBox.Password == confirmPasswordBox.Password);
@@ -122,19 +121,10 @@ namespace MyHoard.ViewModels
         {
             IsFormAccessible = false;
             RegistrationService registrationService = new RegistrationService();
-            asyncHandle = registrationService.Register(UserName, Email, passwordBox.Password, SelectedBackend);
+            asyncHandle = registrationService.Register(Email, passwordBox.Password, SelectedBackend);
         }
 
-        public string UserName
-        {
-            get { return userName; }
-            set
-            {
-                userName = value;
-                NotifyOfPropertyChange(() => UserName);
-            }
-        }
-
+        
         public string Email
         {
             get { return email; }

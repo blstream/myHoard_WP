@@ -14,7 +14,7 @@ namespace MyHoard.Services
     public class RegistrationService
     {
         
-        public RestRequestAsyncHandle Register(string userName, string email, string password, string backend)
+        public RestRequestAsyncHandle Register( string email, string password, string backend)
         {
             MyHoardApi myHoardApi = new MyHoardApi(ConfigurationService.Backends[backend]);
 
@@ -23,12 +23,10 @@ namespace MyHoard.Services
             {
                 var request = new RestRequest("/users/", Method.POST);
                 request.RequestFormat = DataFormat.Json;
-                request.AddHeader("Accept", "application/json");
                 request.AddHeader("Content-type", "application/json");
-                request.AddBody(new { username = userName, email = email, password = password });
+                request.AddBody(new {email = email, password = password });
                 return myHoardApi.ExecuteAsync(request, (response) =>
                 {
-
                     if (response.ResponseStatus != ResponseStatus.Aborted)
                     {
                         try
@@ -60,7 +58,7 @@ namespace MyHoard.Services
             }
         }
 
-        public RestRequestAsyncHandle Login(string userName, string password, bool keepLogged, string backend)
+        public RestRequestAsyncHandle Login(string email, string password, bool keepLogged, string backend)
         {
 
             MyHoardApi myHoardApi = new MyHoardApi(ConfigurationService.Backends[backend]);
@@ -70,9 +68,8 @@ namespace MyHoard.Services
             {
                 var request = new RestRequest("/oauth/token/", Method.POST);
                 request.RequestFormat = DataFormat.Json;
-                request.AddHeader("Accept", "application/json");
                 request.AddHeader("Content-type", "application/json");
-                request.AddBody(new { username = userName, password = password, grant_type = "password" });
+                request.AddBody(new { email = email, password = password, grant_type = "password" });
                 return myHoardApi.ExecuteAsync(request, (response) =>
                 {
                     if (response.ResponseStatus != ResponseStatus.Aborted)
@@ -89,7 +86,6 @@ namespace MyHoard.Services
                                     
                                     configurationService.Configuration.AccessToken = parsedResponse["access_token"].ToString();
                                     configurationService.Configuration.RefreshToken = parsedResponse["refresh_token"].ToString();
-                                    configurationService.Configuration.UserName = userName;
                                     configurationService.Configuration.Password = password;
                                     configurationService.Configuration.KeepLogged = keepLogged;
                                     configurationService.Configuration.Backend = backend;
@@ -130,13 +126,12 @@ namespace MyHoard.Services
             {
                 var request = new RestRequest("/oauth/token/", Method.POST);
                 request.RequestFormat = DataFormat.Json;
-                request.AddHeader("Accept", "application/json");
                 request.AddHeader("Content-type", "application/json");
                 ConfigurationService configurationService = IoC.Get<ConfigurationService>();
                 request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
                 request.AddBody(new
                 {
-                    username = configurationService.Configuration.UserName,
+                    email = configurationService.Configuration.Email,
                     password = configurationService.Configuration.Password,
                     grant_type = "refresh_token",
                     refresh_token = configurationService.Configuration.RefreshToken
@@ -155,7 +150,8 @@ namespace MyHoard.Services
                             if (String.IsNullOrWhiteSpace((string)parsedResponse["error_code"]))
                             {
                                 configurationService.Configuration.AccessToken = parsedResponse["access_token"].ToString();
-                                configurationService.Configuration.RefreshToken = parsedResponse["refresh_token"].ToString(); configurationService.SaveConfig();
+                                configurationService.Configuration.RefreshToken = parsedResponse["refresh_token"].ToString();
+                                configurationService.SaveConfig();
                                 success = true;
                             }
                             else
