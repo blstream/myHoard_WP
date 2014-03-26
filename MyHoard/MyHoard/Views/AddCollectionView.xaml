@@ -34,70 +34,73 @@
         <!--ContentPanel - place additional content here-->
         <ScrollViewer Grid.Row="1">
             <Grid x:Name="ContentPanel" Margin="12,0,12,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" 
                        Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
-            <TextBox Name="CurrentCollection_Name" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  
+                <TextBox Name="CurrentCollection_Name" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  
                      Grid.Row="1" Height="72" TextWrapping="Wrap"/>
-            <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
+                <CheckBox Name="CurrentCollection_IsPrivate"  Grid.Row="2" Content="{Binding Path=LocalizedResources.Offline, 
+                    Source={StaticResource LocalizedStrings}}" IsEnabled="{Binding IsLoggedIn}" />
+                <TextBlock Grid.Row="3" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" />
-            <TextBox Name="CurrentCollection_Description"  Grid.Row="3" Height="216" TextWrapping="Wrap" 
+                <TextBox Name="CurrentCollection_Description"  Grid.Row="4" Height="216" TextWrapping="Wrap" 
                      cal:Message.Attach="[Event TextChanged] = [Action DataChanged]" AcceptsReturn="True" />
-            <TextBlock Grid.Row="4" Text="{Binding Path=LocalizedResources.Thumbnail, Source={StaticResource LocalizedStrings}}" 
+                <TextBlock Grid.Row="5" Text="{Binding Path=LocalizedResources.Thumbnail, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" />
-            <toolkit:ListPicker Grid.Row="5"
+                <toolkit:ListPicker Grid.Row="6"
                                 FontFamily="Segoe UI Symbol"
                                 ItemsSource="{Binding Thumbnails}"
                                 SelectedItem="{Binding Thumbnail, Mode=TwoWay}"
                                 FullModeHeader="{Binding Path=LocalizedResources.Thumbnail, Source={StaticResource LocalizedStrings}}"
                                 Margin="24,12,12,0" FontSize="26"   HorizontalAlignment="Left">
-                <toolkit:ListPicker.FullModeItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="16 21 0 20">
-                            <TextBlock Text="{Binding}"    
+                    <toolkit:ListPicker.FullModeItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="16 21 0 20">
+                                <TextBlock Text="{Binding}"    
                                         Margin="0 0 0 0"    
                                         FontSize="50"     
                                         FontFamily="Segoe UI Symbol"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </toolkit:ListPicker.FullModeItemTemplate>
-            </toolkit:ListPicker>
-            <TextBlock Text="{Binding Path=LocalizedResources.Tags, Source={StaticResource LocalizedStrings}}" 
-                       Grid.Row="6" Style="{StaticResource PhoneTextNormalStyle}" />
-            <Grid Grid.Row="7">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBox Name="NewTag" Grid.Column="0" Height="72" TextWrapping="Wrap"/>
-                <Button Name="AddTag" Grid.Column="1" Width="72" Height="72" BorderThickness="0" Padding="0">
+                            </StackPanel>
+                        </DataTemplate>
+                    </toolkit:ListPicker.FullModeItemTemplate>
+                </toolkit:ListPicker>
+                <TextBlock Text="{Binding Path=LocalizedResources.Tags, Source={StaticResource LocalizedStrings}}" 
+                       Grid.Row="7" Style="{StaticResource PhoneTextNormalStyle}" />
+                <Grid Grid.Row="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Name="NewTag" Grid.Column="0" Height="72" TextWrapping="Wrap"/>
+                    <Button Name="AddTag" Grid.Column="1" Width="72" Height="72" BorderThickness="0" Padding="0">
                         <TextBlock FontSize="38" Text="&#xE109;" FontFamily="Segoe UI Symbol"  />
-                </Button>
-            </Grid>
-            <ListBox Grid.Row="8" Name="Tags">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
+                    </Button>
+                </Grid>
+                <ListBox Grid.Row="9" Name="Tags">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="auto" />
                                 </Grid.ColumnDefinitions>
-                            <TextBlock  Style="{StaticResource PhoneTextLargeStyle}" 
+                                <TextBlock  Style="{StaticResource PhoneTextLargeStyle}" 
                                         Margin="10,0" Grid.Column="0" 
                                         VerticalAlignment="Center"
                                         TextWrapping="Wrap" Text="{Binding}"/>
@@ -105,10 +108,10 @@
                                            cal:Message.Attach="[Event Tap] = [Action DeleteTag]"/>
 
                             </Grid>
-                     </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
         </ScrollViewer>
         <bab:BindableAppBar x:Name="AppBar">
             <bab:BindableAppBarButton x:Name="Save"

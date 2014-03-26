@@ -248,4 +248,7 @@
   <data name="Synchronized" xml:space="preserve">
     <value>Synchronized</value>
   </data>
+  <data name="Offline" xml:space="preserve">
+    <value>offline</value>
+  </data>
 </root>

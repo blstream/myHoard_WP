@@ -23,16 +23,19 @@ namespace MyHoard.ViewModels
         private ObservableCollection<string> thumbnails;
         private bool canSave;
         private bool canAddTag;
+        private bool isLoggedIn;
         private Visibility isDeleteVisible;
         private int collectionId;
         private readonly IEventAggregator eventAggregator;
         private ObservableCollection<string> tags;
+        private ConfigurationService configurationService;
 
                
-        public AddCollectionViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator)
+        public AddCollectionViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator, ConfigurationService configurationService)
             : base(navigationService, collectionService)
         {
             this.eventAggregator = eventAggregator;
+            this.configurationService = configurationService;
             eventAggregator.Subscribe(this);
             Thumbnails = new BindableCollection<string> { "","\uE114", "\uE104", "\uE107", "\uE10F", "\uE113", "\uE116", "\uE119", "\uE128", "\uE13D", "\uE15D", "\uE15E" };
         }
@@ -143,6 +146,16 @@ namespace MyHoard.ViewModels
             }
         }
 
+        public bool IsLoggedIn
+        {
+            get { return isLoggedIn; }
+            set
+            {
+                isLoggedIn = value;
+                NotifyOfPropertyChange(() => IsLoggedIn);
+            }
+        }
+
         public bool CanSave
         {
             get { return canSave; }
@@ -235,6 +248,7 @@ namespace MyHoard.ViewModels
 
         protected override void OnInitialize()
         {
+            IsLoggedIn = configurationService.Configuration.IsLoggedIn;
             if (CollectionId > 0)
             {
                 PageTitle = AppResources.EditCollection;
@@ -244,7 +258,8 @@ namespace MyHoard.ViewModels
                     Name = CurrentCollection.Name,
                     Description = CurrentCollection.Description,
                     Thumbnail = CurrentCollection.Thumbnail,
-                    Tags = CurrentCollection.Tags
+                    Tags = CurrentCollection.Tags,
+                    IsPrivate = CurrentCollection.IsPrivate
                 };
                 Thumbnail = CurrentCollection.Thumbnail;
                 Tags = new ObservableCollection<string>(CurrentCollection.TagList);
@@ -253,11 +268,12 @@ namespace MyHoard.ViewModels
             else
             {
                 PageTitle = AppResources.AddCollection;
-                CurrentCollection = new Collection();
+                CurrentCollection = new Collection() { IsPrivate = true };
                 Thumbnail = CurrentCollection.Thumbnail;
                 Tags = new ObservableCollection<string>();
                 IsDeleteVisible = Visibility.Collapsed;
             }
+            
         }
         private bool StringsEqual(string string1, string string2)
         {
