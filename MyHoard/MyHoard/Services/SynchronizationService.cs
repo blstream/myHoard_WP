@@ -130,12 +130,49 @@ namespace MyHoard.Services
             {
 
                 Collection localCollection = collections.FirstOrDefault(c => c.GetServerId(backend) == serverCollection.id);
-                syncCollectionFromServer(localCollection, serverCollection);
+                localCollection = syncCollectionFromServer(localCollection, serverCollection);
+                List<Item> items = itemService.ItemList(localCollection.Id);
+                
+                List<ServerItem> serverItems = await getItems(serverCollection);
+                foreach(ServerItem serverItem in serverItems)
+                {
+                    Item localItem = items.FirstOrDefault(i => i.GetServerId(backend) == serverItem.id);
+                    synItemFromServer(localItem, serverItem, localCollection.Id);
+                }
             }
             eventAggregator.Publish(new ServerMessage(true, Resources.AppResources.Synchronized));
         }
 
-        private void syncCollectionFromServer(Collection localCollection, ServerCollection serverCollection)
+        private void synItemFromServer(Item localItem, ServerItem serverItem, int collectionId)
+        {
+            if(localItem == null)
+            {
+                localItem = new Item()
+                {
+                    Name = serverItem.name,
+                    Description = serverItem.description,
+                    CollectionId = collectionId,
+                    LocationLat = serverItem.location.lat,
+                    LocationLng = serverItem.location.lng,
+                    ModifiedDate = serverItem.ModifiedDate(),
+                };
+                localItem.SetServerId(serverItem.id, backend);
+                localItem.SetSynced(true, backend);
+                itemService.AddItem(localItem);
+            }
+            else if(DateTime.Compare(serverItem.ModifiedDate(), localItem.ModifiedDate) > 0)
+            {
+                localItem.Name = serverItem.name;
+                localItem.Description = serverItem.description;
+                localItem.LocationLat = serverItem.location.lat;
+                localItem.LocationLng = serverItem.location.lng;
+                localItem.ModifiedDate = serverItem.ModifiedDate();
+                localItem.SetSynced(true, backend);
+                itemService.ModifyItem(localItem);
+            }
+        }
+
+        private Collection syncCollectionFromServer(Collection localCollection, ServerCollection serverCollection)
         {
             if (localCollection == null)
             {
@@ -147,10 +184,9 @@ namespace MyHoard.Services
                     TagList = serverCollection.tags,
                     ModifiedDate = serverCollection.ModifiedDate()
                 };
-                localCollection.SetServerId(serverCollection.id, backend);
                 localCollection.SetSynced(true, backend);
-
-                collectionService.AddCollection(localCollection);
+                localCollection.SetServerId(serverCollection.id, backend);
+                localCollection = collectionService.AddCollection(localCollection);
             }
             else if (DateTime.Compare(serverCollection.ModifiedDate(), localCollection.ModifiedDate) > 0)
             {
@@ -159,10 +195,10 @@ namespace MyHoard.Services
                 localCollection.ModifiedDate = serverCollection.ModifiedDate();
                 localCollection.Name = serverCollection.name;
                 localCollection.TagList = serverCollection.tags;
-                localCollection.SetServerId(serverCollection.id, backend);
                 localCollection.SetSynced(true, backend);
                 collectionService.ModifyCollection(localCollection);
             }
+            return localCollection;
         }
         
         private async Task<bool> addMedia(Media m)
@@ -316,14 +352,14 @@ namespace MyHoard.Services
 
             var response = await myHoardApi.Execute(request);
             JObject parsedResponse = new JObject();
-            if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
-                parsedResponse = JObject.Parse(response.Content);
+            
             switch (response.StatusCode)
             {
                 case System.Net.HttpStatusCode.Created:
-                    i.SetServerId((string)parsedResponse["id"], backend);
+                    ServerItem si = JsonConvert.DeserializeObject<ServerItem>(response.Content);
+                    i.SetServerId(si.id, backend);
                     i.SetSynced(true, backend);
-                    i.ModifiedDate = DateTime.Now;
+                    i.ModifiedDate = si.ModifiedDate();
                     itemService.ModifyItem(i);
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
@@ -332,6 +368,8 @@ namespace MyHoard.Services
                     eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
                     return false;
                 default:
+                    if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
+                        parsedResponse = JObject.Parse(response.Content);
                     eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"]
                         + "\n" + parsedResponse["errors"]));
                     return false;
@@ -356,13 +394,12 @@ namespace MyHoard.Services
 
             var response = await myHoardApi.Execute(request);
             JObject parsedResponse = new JObject();
-            if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
-                parsedResponse = JObject.Parse(response.Content);
             switch (response.StatusCode)
             {
                 case System.Net.HttpStatusCode.OK:
+                    ServerItem si = JsonConvert.DeserializeObject<ServerItem>(response.Content);
                     i.SetSynced(true, backend);
-                    i.ModifiedDate = DateTime.Now;
+                    i.ModifiedDate = si.ModifiedDate();
                     itemService.ModifyItem(i);
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
@@ -371,6 +408,8 @@ namespace MyHoard.Services
                     eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
                     return false;
                 default:
+                    if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
+                        parsedResponse = JObject.Parse(response.Content);
                     eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"]
                         + "\n" + parsedResponse["errors"]));
                     return false;
@@ -406,6 +445,39 @@ namespace MyHoard.Services
                     eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"]
                         + "\n" + parsedResponse["errors"]));
                     return false;
+            }
+        }
+
+        private async Task<List<ServerItem>> getItems(ServerCollection serverCollection)
+        {
+            var request = new RestRequest("/collections/" + serverCollection.id + "/items/"
+                + "?timestamp" + DateTime.Now.ToString(), Method.GET);
+            request.RequestFormat = DataFormat.Json;
+            request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
+
+            var response = await myHoardApi.Execute(request);
+            JObject parsedResponse = new JObject();
+
+            switch (response.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
+                    {
+                        return JsonConvert.DeserializeObject<List<ServerItem>>(response.Content);
+                    }
+                    else
+                        return null;
+                case System.Net.HttpStatusCode.Unauthorized:
+                case System.Net.HttpStatusCode.Forbidden:
+                    configurationService.Logout();
+                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                    return null;
+                default:
+                    if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
+                        parsedResponse = JObject.Parse(response.Content);
+                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"]
+                        + "\n" + parsedResponse["errors"]));
+                    return null;
             }
         }
 
