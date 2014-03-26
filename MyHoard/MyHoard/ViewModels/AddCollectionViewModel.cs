@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace MyHoard.ViewModels
 {
-    public class AddCollectionViewModel : ViewModelBase, IHandle<ServiceErrorMessage>
+    public class AddCollectionViewModel : ViewModelBase, IHandle<ServiceErrorMessage>, IHandle<ServerMessage>
     {
         private string pageTitle;
         private string thumbnail;
@@ -186,19 +186,60 @@ namespace MyHoard.ViewModels
             }
         }
 
+        public void Handle(ServerMessage message)
+        {
+            MessageBox.Show(message.Message);
+        }
+
         public void DataChanged()
         {
             CanSave = !String.IsNullOrEmpty(CurrentCollection.Name) && (CollectionId==0 || 
                 !StringsEqual(editedCollection.Name, CurrentCollection.Name) || !StringsEqual(editedCollection.Description,CurrentCollection.Description)
-                || !StringsEqual(editedCollection.Thumbnail, CurrentCollection.Thumbnail) || !StringsEqual(editedCollection.Tags, CurrentCollection.Tags));
+                || !StringsEqual(editedCollection.Thumbnail, CurrentCollection.Thumbnail) || !StringsEqual(editedCollection.Tags, CurrentCollection.Tags)
+                || editedCollection.IsPrivate != CurrentCollection.IsPrivate);
         }
 
-        public void Save()
+        public async void Save()
         {
             if (CollectionId > 0)
             {
                 if (CollectionService.ModifyCollection(CurrentCollection).Id == CurrentCollection.Id)
                 {
+                    if (CurrentCollection.IsPrivate != editedCollection.IsPrivate)
+                    {
+                        SynchronizationService synchronizationService = new SynchronizationService();
+                        if (CurrentCollection.IsPrivate)
+                        {
+                            MessageBoxResult messageResult = MessageBox.Show(AppResources.DeleteFromServerDialog, AppResources.Delete, MessageBoxButton.OKCancel);
+                            if (messageResult == MessageBoxResult.OK)
+                            {
+                                if (await synchronizationService.DeleteCollection(CurrentCollection, true))
+                                {
+                                    MessageBox.Show(AppResources.DeleteFromServerSuccess);
+                                }
+                                else
+                                {
+                                    CollectionService.ModifyCollection(editedCollection);
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                CollectionService.ModifyCollection(editedCollection);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            if(!await synchronizationService.AddCollection(CurrentCollection))
+                            {
+                                CollectionService.ModifyCollection(editedCollection);
+                                return;
+                            }
+                        }
+                    }
+
+
                     NavigationService.UriFor<CollectionDetailsViewModel>().WithParam(x => x.CollectionId, CurrentCollection.Id).Navigate();
                     this.NavigationService.RemoveBackEntry();
                     this.NavigationService.RemoveBackEntry();
@@ -258,6 +299,16 @@ namespace MyHoard.ViewModels
                     Name = CurrentCollection.Name,
                     Description = CurrentCollection.Description,
                     Thumbnail = CurrentCollection.Thumbnail,
+                    CreatedDate = CurrentCollection.CreatedDate,
+                    Id = CurrentCollection.Id,
+                    ItemsNumber = CurrentCollection.ItemsNumber,
+                    Java1Id = CurrentCollection.Java1Id,
+                    Java1IsSynced = CurrentCollection.Java1IsSynced,
+                    Java2Id = CurrentCollection.Java2Id,
+                    Java2IsSynced = CurrentCollection.Java2IsSynced,
+                    ModifiedDate = CurrentCollection.ModifiedDate,
+                    PythonId = CurrentCollection.PythonId,
+                    PythonIsSynced = CurrentCollection.PythonIsSynced,
                     Tags = CurrentCollection.Tags,
                     IsPrivate = CurrentCollection.IsPrivate
                 };

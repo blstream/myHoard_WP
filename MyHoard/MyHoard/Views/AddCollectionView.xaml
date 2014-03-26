@@ -51,7 +51,7 @@
                 <TextBox Name="CurrentCollection_Name" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  
                      Grid.Row="1" Height="72" TextWrapping="Wrap"/>
                 <CheckBox Name="CurrentCollection_IsPrivate"  Grid.Row="2" Content="{Binding Path=LocalizedResources.Offline, 
-                    Source={StaticResource LocalizedStrings}}" IsEnabled="{Binding IsLoggedIn}" />
+                    Source={StaticResource LocalizedStrings}}" IsEnabled="{Binding IsLoggedIn}" cal:Message.Attach="[Event Tap] = [Action DataChanged]" />
                 <TextBlock Grid.Row="3" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" />
                 <TextBox Name="CurrentCollection_Description"  Grid.Row="4" Height="216" TextWrapping="Wrap" 

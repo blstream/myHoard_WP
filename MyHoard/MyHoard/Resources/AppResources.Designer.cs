@@ -187,6 +187,24 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete data from the server?.
+        /// </summary>
+        public static string DeleteFromServerDialog {
+            get {
+                return ResourceManager.GetString("DeleteFromServerDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection had been deleted from the server.
+        /// </summary>
+        public static string DeleteFromServerSuccess {
+            get {
+                return ResourceManager.GetString("DeleteFromServerSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         public static string Description {

@@ -61,15 +61,14 @@ namespace MyHoard.Services
                 {
                     return;
                 }
-
+                string id = c.GetServerId(backend);
+                bool synced = c.IsSynced(backend);
+                bool success;
                 if (!c.IsPrivate)
                 {
-                    string id = c.GetServerId(backend);
-                    bool synced = c.IsSynced(backend);
-                    bool success;
                     if (String.IsNullOrWhiteSpace(id) && !c.ToDelete)
                     {
-                        success = await addCollection(c);
+                        success = await AddCollection(c);
                         if (!success)
                             return;
                     }
@@ -81,7 +80,7 @@ namespace MyHoard.Services
                     }
                     else if (c.ToDelete && !String.IsNullOrEmpty(id))
                     {
-                        success = await deleteCollection(c);
+                        success = await DeleteCollection(c);
                         if (!success)
                             return;
                     }
@@ -124,9 +123,16 @@ namespace MyHoard.Services
                         }
                     }
                 }
-
-
-
+                else
+                {
+                    if(!string.IsNullOrWhiteSpace(id))
+                    {
+                        success = await DeleteCollection(c, true);
+                        if (!success)
+                            return;
+                    }
+                     
+                }
             }
 
             if (cancellationToken.IsCancellationRequested)
@@ -337,7 +343,7 @@ namespace MyHoard.Services
             }
         }
 
-        private async Task<bool> deleteCollection(Collection c)
+        public async Task<bool> DeleteCollection(Collection c, bool isPrivate=false)
         {
             var request = new RestRequest("/collections/" + c.GetServerId(backend) + "/", Method.DELETE);
             request.RequestFormat = DataFormat.Json;
@@ -355,7 +361,8 @@ namespace MyHoard.Services
                 case System.Net.HttpStatusCode.NotFound:
                     c.SetServerId(null, backend);
                     collectionService.ModifyCollection(c);
-                    collectionService.DeleteCollection(c);
+                    if(!isPrivate)
+                        collectionService.DeleteCollection(c);
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
                 case System.Net.HttpStatusCode.Forbidden:
@@ -403,7 +410,7 @@ namespace MyHoard.Services
             }
         }
 
-        private async Task<bool> addCollection(Collection c)
+        public async Task<bool> AddCollection(Collection c)
         {
             var request = new RestRequest("/collections/", Method.POST);
             request.RequestFormat = DataFormat.Json;

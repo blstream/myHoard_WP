@@ -248,6 +248,12 @@
   <data name="Synchronized" xml:space="preserve">
     <value>Synchronized</value>
   </data>
+  <data name="DeleteFromServerDialog" xml:space="preserve">
+    <value>Are you sure you want to delete data from the server?</value>
+  </data>
+  <data name="DeleteFromServerSuccess" xml:space="preserve">
+    <value>Collection had been deleted from the server</value>
+  </data>
   <data name="Offline" xml:space="preserve">
     <value>offline</value>
   </data>
