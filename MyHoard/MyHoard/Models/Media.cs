@@ -13,7 +13,6 @@ namespace MyHoard.Models
         private string fileName;
         private DateTime createdDate;
         private int itemId;
-        private bool toDelete;
         private WriteableBitmap image;
 
         public Media()
@@ -59,13 +58,5 @@ namespace MyHoard.Models
             }
         }
 
-        public bool ToDelete
-        {
-            get { return toDelete; }
-            set
-            {
-                toDelete = value;
-            }
-        }
     }
 }

@@ -13,17 +13,11 @@ namespace MyHoard.Services
 {
     public class RegistrationService
     {
-        private MyHoardApi myHoardApi;
-        private string backend;
-
-        public RegistrationService(string backend)
+        
+        public RestRequestAsyncHandle Register(string userName, string email, string password, string backend)
         {
-            this.backend = backend;
-            this.myHoardApi = new MyHoardApi(ConfigurationService.Backends[backend]);
-        }
+            MyHoardApi myHoardApi = new MyHoardApi(ConfigurationService.Backends[backend]);
 
-        public RestRequestAsyncHandle Register(string userName, string email, string password)
-        {
             IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
             if (NetworkInterface.GetIsNetworkAvailable())
             {
@@ -46,14 +40,14 @@ namespace MyHoard.Services
                             else
                             {
                                 JObject parsedResponse = JObject.Parse(response.Content);
-                                string message = Resources.AppResources.ErrorOccurred + ": " + parsedResponse["error_message"];
+                                string message = Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"] + "\n" + parsedResponse["errors"];
                                 eventAggregator.Publish(new ServerMessage(false, message));
                             }
                         }
                         catch (Exception e)
                         {
                             Debug.WriteLine(e.Message);
-                            eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.ErrorOccurred));
+                            eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError));
                         }
                     }
                         
@@ -66,9 +60,12 @@ namespace MyHoard.Services
             }
         }
 
-        public RestRequestAsyncHandle Login(string userName, string password, bool keepLogged)
+        public RestRequestAsyncHandle Login(string userName, string password, bool keepLogged, string backend)
         {
+
+            MyHoardApi myHoardApi = new MyHoardApi(ConfigurationService.Backends[backend]);
             IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
+            ConfigurationService configurationService = IoC.Get<ConfigurationService>();
             if (NetworkInterface.GetIsNetworkAvailable())
             {
                 var request = new RestRequest("/oauth/token/", Method.POST);
@@ -80,7 +77,7 @@ namespace MyHoard.Services
                 {
                     if (response.ResponseStatus != ResponseStatus.Aborted)
                     {
-                        ServerMessage serverMessage = new ServerMessage(false, Resources.AppResources.ErrorOccurred);
+                        ServerMessage serverMessage = new ServerMessage(false, Resources.AppResources.AuthenticationError);
                         try
                         {
                             
@@ -89,11 +86,12 @@ namespace MyHoard.Services
                                 JObject parsedResponse = JObject.Parse(response.Content);
                                 if (String.IsNullOrWhiteSpace((string)parsedResponse["error_code"]))
                                 {
-                                    ConfigurationService configurationService = IoC.Get<ConfigurationService>();
+                                    
                                     configurationService.Configuration.AccessToken = parsedResponse["access_token"].ToString();
                                     configurationService.Configuration.RefreshToken = parsedResponse["refresh_token"].ToString();
                                     configurationService.Configuration.UserName = userName;
-                                    configurationService.Configuration.Password = keepLogged ? password : "";
+                                    configurationService.Configuration.Password = password;
+                                    configurationService.Configuration.KeepLogged = keepLogged;
                                     configurationService.Configuration.Backend = backend;
                                     configurationService.Configuration.IsLoggedIn = true;
                                     configurationService.SaveConfig();
@@ -102,7 +100,8 @@ namespace MyHoard.Services
                                 }
                                 else
                                 {
-                                    serverMessage.Message += ": " + parsedResponse["error_message"];
+                                    configurationService.Logout();
+                                    serverMessage.Message += ": " + parsedResponse["error_message"]+ "\n" + parsedResponse["errors"];
                                 }
                             }
 
@@ -120,6 +119,69 @@ namespace MyHoard.Services
                 eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.InternetConnectionError));
                 return null;
             }
+        }
+
+        public async Task<bool> RefreshToken()
+        {
+            bool success=false;
+            
+            IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
+            if (NetworkInterface.GetIsNetworkAvailable())
+            {
+                var request = new RestRequest("/oauth/token/", Method.POST);
+                request.RequestFormat = DataFormat.Json;
+                request.AddHeader("Accept", "application/json");
+                request.AddHeader("Content-type", "application/json");
+                ConfigurationService configurationService = IoC.Get<ConfigurationService>();
+                request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
+                request.AddBody(new
+                {
+                    username = configurationService.Configuration.UserName,
+                    password = configurationService.Configuration.Password,
+                    grant_type = "refresh_token",
+                    refresh_token = configurationService.Configuration.RefreshToken
+                });
+
+                MyHoardApi myHoardApi = new MyHoardApi(ConfigurationService.Backends[configurationService.Configuration.Backend]);
+
+                IRestResponse response = await myHoardApi.Execute(request);
+                if (response.ResponseStatus != ResponseStatus.Aborted)
+                {
+                    try
+                    {
+                        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            JObject parsedResponse = JObject.Parse(response.Content);
+                            if (String.IsNullOrWhiteSpace((string)parsedResponse["error_code"]))
+                            {
+                                configurationService.Configuration.AccessToken = parsedResponse["access_token"].ToString();
+                                configurationService.Configuration.RefreshToken = parsedResponse["refresh_token"].ToString(); configurationService.SaveConfig();
+                                success = true;
+                            }
+                            else
+                            {
+                                configurationService.Logout();
+                                ServerMessage serverMessage = new ServerMessage(false, Resources.AppResources.AuthenticationError+ ": " + parsedResponse["error_message"]);
+                                eventAggregator.Publish(serverMessage);
+                            }
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.Message);
+                    }
+                    
+                }
+            }
+
+            else
+            {
+                ServerMessage serverMessage = new ServerMessage(false, Resources.AppResources.InternetConnectionError);
+                eventAggregator.Publish(serverMessage);
+            }
+            
+            return success;
         }
     }
 }

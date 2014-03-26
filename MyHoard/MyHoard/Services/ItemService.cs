@@ -32,15 +32,32 @@ namespace MyHoard.Services
             }
         }
 
-        public void DeleteItem(Item item)
+        public void DeleteItem(Item item, bool forceDelete = false)
         {
+
+            if(forceDelete || (String.IsNullOrEmpty(item.PythonId)
+                    && String.IsNullOrEmpty(item.Java1Id) && String.IsNullOrEmpty(item.Java2Id)))
+            {
+                databaseService.Delete(item);
+            }
+            else
+            {
+                item.ToDelete = true;
+                ModifyItem(item);
+            }
+
             MediaService ms = IoC.Get<MediaService>();
             foreach(Media m in ms.MediaList(item.Id, false, false))
             {
                 m.ToDelete = true;
                 ms.ModifyMedia(m);
             }
-            databaseService.Delete(item);
+            
+        }
+
+        public int DeleteAll()
+        {
+            return databaseService.DeleteAll<Item>();
         }
 
         public Item ModifyItem(Item item)
@@ -69,9 +86,12 @@ namespace MyHoard.Services
             return databaseService.ListAll<Item>();
         }
 
-        public List<Item> ItemList(int collectionId)
+        public List<Item> ItemList(int collectionId, bool withDeleted=false)
         {
-            return databaseService.ListAllTable<Item>().Where(i => i.CollectionId == collectionId).ToList();
+            if (withDeleted)
+                return databaseService.ListAllTable<Item>().Where(i => i.CollectionId == collectionId).ToList();
+            else
+                return databaseService.ListAllTable<Item>().Where(i => (i.CollectionId == collectionId && i.ToDelete == false)).ToList();
         }
 
     }

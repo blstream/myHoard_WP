@@ -48,9 +48,7 @@ namespace MyHoard.ViewModels
 
         public void Logout()
         {
-            configurationService.Configuration.IsLoggedIn = false;
-            configurationService.Configuration.Password = "";
-            configurationService.SaveConfig();
+            configurationService.Logout();
             NavigationService.GoBack();
         }
 

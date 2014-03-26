@@ -11,13 +11,13 @@ namespace MyHoard.Models
     {
         private string name;
         private string description;
-        private string collectionServerId;
         private int quantity;
         private int collectionId;
         private float locationLat;
         private float locationLng;
         private DateTime createdDate;
         private DateTime modifiedDate;
+
 
         public string Name
         {
@@ -26,6 +26,7 @@ namespace MyHoard.Models
             {
                 name = value;
                 ModifiedDate = DateTime.Now;
+                Desync();
             }
         }
         public string Description
@@ -35,19 +36,11 @@ namespace MyHoard.Models
             {
                 description = value;
                 ModifiedDate = DateTime.Now;
+                Desync();
             }
         }
 
-        public string CollectionServerId
-        {
-            get { return collectionServerId; }
-            set
-            {
-                collectionServerId = value;
-                ModifiedDate = DateTime.Now;
-            }
-        }
-
+       
         public int Quantity
         {
             get { return quantity; }
@@ -55,6 +48,7 @@ namespace MyHoard.Models
             {
                 quantity = value;
                 ModifiedDate = DateTime.Now;
+                Desync();
             }
         }
 
@@ -76,6 +70,7 @@ namespace MyHoard.Models
             {
                 locationLat = value;
                 ModifiedDate = DateTime.Now;
+                Desync();
             }
         }
 
@@ -86,6 +81,7 @@ namespace MyHoard.Models
             {
                 locationLng = value;
                 ModifiedDate = DateTime.Now;
+                Desync();
             }
         }
 

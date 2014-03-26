@@ -200,8 +200,8 @@
   <data name="Email" xml:space="preserve">
     <value>Email</value>
   </data>
-  <data name="ErrorOccurred" xml:space="preserve">
-    <value>An error occurred</value>
+  <data name="AuthenticationError" xml:space="preserve">
+    <value>An authentication error occurred</value>
   </data>
   <data name="InternetConnectionError" xml:space="preserve">
     <value>Unablke to perfrom operation. Check your internet connection.</value>
@@ -238,5 +238,14 @@
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Log out</value>
+  </data>
+  <data name="Sync" xml:space="preserve">
+    <value>Sync</value>
+  </data>
+  <data name="GeneralError" xml:space="preserve">
+    <value>An error occurred</value>
+  </data>
+  <data name="Synchronized" xml:space="preserve">
+    <value>Synchronized</value>
   </data>
 </root>

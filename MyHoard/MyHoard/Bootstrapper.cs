@@ -74,11 +74,18 @@ namespace MyHoard
         protected override void OnClose(object sender, Microsoft.Phone.Shell.ClosingEventArgs e)
         {
             ConfigurationService configurationService = IoC.Get<ConfigurationService>();
-            if(String.IsNullOrWhiteSpace(configurationService.Configuration.Password))
+            if(configurationService.Configuration.KeepLogged)
+            {
+                RegistrationService rs = new RegistrationService();
+                rs.Login(configurationService.Configuration.UserName, configurationService.Configuration.Password, true, configurationService.Configuration.Backend);
+            }
+            else
             {
                 configurationService.Configuration.IsLoggedIn = false;
                 configurationService.SaveConfig();
             }
+
+            
             base.OnClose(sender, e);
         }
 

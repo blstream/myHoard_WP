@@ -115,6 +115,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An authentication error occurred.
+        /// </summary>
+        public static string AuthenticationError {
+            get {
+                return ResourceManager.GetString("AuthenticationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backend.
         /// </summary>
         public static string Backend {
@@ -232,20 +241,20 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occurred.
-        /// </summary>
-        public static string ErrorOccurred {
-            get {
-                return ResourceManager.GetString("ErrorOccurred", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Gallery.
         /// </summary>
         public static string Gallery {
             get {
                 return ResourceManager.GetString("Gallery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred.
+        /// </summary>
+        public static string GeneralError {
+            get {
+                return ResourceManager.GetString("GeneralError", resourceCulture);
             }
         }
         
@@ -366,6 +375,24 @@ namespace MyHoard.Resources {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sync.
+        /// </summary>
+        public static string Sync {
+            get {
+                return ResourceManager.GetString("Sync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronized.
+        /// </summary>
+        public static string Synchronized {
+            get {
+                return ResourceManager.GetString("Synchronized", resourceCulture);
             }
         }
         
