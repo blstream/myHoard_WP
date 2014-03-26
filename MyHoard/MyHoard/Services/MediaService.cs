@@ -41,7 +41,7 @@ namespace MyHoard.Services
             return databaseService.Modify(media);
         }
 
-        public List<Media> MediaList(bool withPictures, bool thumbnail=false)
+        public List<Media> MediaList(bool withPictures, bool thumbnail = false)
         {
             List<Media> mediaList = databaseService.ListAll<Media>();
             if (withPictures)
@@ -57,7 +57,7 @@ namespace MyHoard.Services
 
         }
 
-        public List<Media> MediaList(int itemId, bool withPictures, bool thumbnail=false)
+        public List<Media> MediaList(int itemId, bool withPictures, bool thumbnail = false)
         {
             List<Media> mediaList = databaseService.ListAllTable<Media>().Where(i => i.ItemId == itemId).ToList();
 
@@ -81,7 +81,7 @@ namespace MyHoard.Services
             foreach (Media m in mediaList)
             {
                 switch (backend)
-                {    
+                {
                     case "Python":
                         ids.Add(m.PythonId);
                         break;
@@ -91,7 +91,7 @@ namespace MyHoard.Services
                     case "Java2":
                         ids.Add(m.Java2Id);
                         break;
-                }    
+                }
             }
             return ids;
         }
@@ -100,23 +100,23 @@ namespace MyHoard.Services
         public void SavePictureList(IList<Media> pictureList)
         {
             bool datachanged = false;
-            int parentId=0;
+            int parentId = 0;
             foreach (Media m in pictureList)
             {
                 if (String.IsNullOrEmpty(m.FileName) && !m.ToDelete)
                 {
                     AddMedia(SavePictureToIsolatedStorage(m));
                     datachanged = true;
-                    parentId=m.ItemId;
+                    parentId = m.ItemId;
                 }
                 else if (!String.IsNullOrEmpty(m.FileName) && m.ToDelete)
                 {
                     ModifyMedia(m);
                     datachanged = true;
-                    parentId=m.ItemId;
+                    parentId = m.ItemId;
                 }
             }
-            if(datachanged)
+            if (datachanged)
             {
                 ItemService itemService = IoC.Get<ItemService>();
                 Item i = itemService.GetItem(parentId);
@@ -136,6 +136,13 @@ namespace MyHoard.Services
                         DeleteMedia(m);
                 }
             }
+        }
+
+        public WriteableBitmap ByteArrayToWriteableBitmap(byte[] array)
+        {
+            MemoryStream stream = new MemoryStream(array);
+            WriteableBitmap bmp = PictureDecoder.DecodeJpeg(stream);
+            return bmp;
         }
 
         public Media SavePictureToIsolatedStorage(Media media)
@@ -218,7 +225,7 @@ namespace MyHoard.Services
 
         public void DeleteAll()
         {
-            foreach(Media m in MediaList(false))
+            foreach (Media m in MediaList(false))
             {
                 m.ToDelete = true;
                 m.PythonId = null;

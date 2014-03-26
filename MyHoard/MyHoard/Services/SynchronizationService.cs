@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Microsoft.Phone;
 using MyHoard.Models;
 using MyHoard.Models.Server;
 using Newtonsoft.Json;
@@ -10,10 +11,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.IsolatedStorage;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace MyHoard.Services
 {
@@ -39,7 +42,7 @@ namespace MyHoard.Services
             mediaService = IoC.Get<MediaService>();
         }
 
-        private async Task syncCollections(CancellationToken cancellationToken)
+        private async Task syncDatabase(CancellationToken cancellationToken)
         {
             RegistrationService r = new RegistrationService();
             bool refresh = await r.RefreshToken();
@@ -87,7 +90,7 @@ namespace MyHoard.Services
                     {
                         foreach (Item i in itemService.ItemList(c.Id, true))
                         {
-                            
+
                             foreach (Media m in mediaService.MediaList(i.Id, false, false))
                             {
                                 id = m.GetServerId(backend);
@@ -102,17 +105,17 @@ namespace MyHoard.Services
                             synced = i.IsSynced(backend);
                             if (String.IsNullOrWhiteSpace(id) && !i.ToDelete)
                             {
-                                success = await addItem(i,c.GetServerId(backend));
+                                success = await addItem(i, c.GetServerId(backend));
                                 if (!success)
                                     return;
                             }
-                            else if(!synced && !i.ToDelete)
+                            else if (!synced && !i.ToDelete)
                             {
                                 success = await modifyItem(i, c.GetServerId(backend));
                                 if (!success)
                                     return;
                             }
-                            else if(i.ToDelete && !string.IsNullOrEmpty(id))
+                            else if (i.ToDelete && !string.IsNullOrEmpty(id))
                             {
                                 success = await deleteItem(i);
                                 if (!success)
@@ -125,27 +128,127 @@ namespace MyHoard.Services
 
 
             }
-            List<ServerCollection> serverColections = await getCollections();
-            foreach(ServerCollection serverCollection in serverColections)
-            {
 
-                Collection localCollection = collections.FirstOrDefault(c => c.GetServerId(backend) == serverCollection.id);
-                localCollection = syncCollectionFromServer(localCollection, serverCollection);
-                List<Item> items = itemService.ItemList(localCollection.Id);
-                
-                List<ServerItem> serverItems = await getItems(serverCollection);
-                foreach(ServerItem serverItem in serverItems)
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
+            List<ServerCollection> serverColections = await getCollections();
+            if (serverColections != null)
+            {
+                foreach (ServerCollection serverCollection in serverColections)
                 {
-                    Item localItem = items.FirstOrDefault(i => i.GetServerId(backend) == serverItem.id);
-                    synItemFromServer(localItem, serverItem, localCollection.Id);
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    Collection localCollection = collections.FirstOrDefault(c => c.GetServerId(backend) == serverCollection.id);
+                    localCollection = syncCollectionFromServer(localCollection, serverCollection);
+
+                    List<Item> items = itemService.ItemList(localCollection.Id);
+
+                    List<ServerItem> serverItems = await getItems(serverCollection);
+                    if (serverItems != null)
+                        foreach (ServerItem serverItem in serverItems)
+                        {
+                            Item localItem = items.FirstOrDefault(i => i.GetServerId(backend) == serverItem.id);
+                            syncItemFromServer(localItem, serverItem, localCollection.Id);
+                            syncMedia(localItem, serverItem);
+                        }
+                    else
+                        return;
+                    foreach (Item localItem in items)
+                    {
+                        ServerItem serverItem = serverItems.FirstOrDefault(i => i.id == localItem.GetServerId(backend));
+                        if (serverItem == null)
+                        {
+                            localItem.SetServerId(null, backend);
+                            itemService.ModifyItem(localItem);
+                            itemService.DeleteItem(localItem);
+                        }
+                    }
                 }
             }
+            else 
+                return;
             eventAggregator.Publish(new ServerMessage(true, Resources.AppResources.Synchronized));
         }
 
-        private void synItemFromServer(Item localItem, ServerItem serverItem, int collectionId)
+        private async void syncMedia(Item localItem, ServerItem serverItem)
         {
-            if(localItem == null)
+            List<Media> media = mediaService.MediaList(localItem.Id, false);
+
+            foreach (ServerMedia serverMedia in serverItem.media)
+            {
+                Media localMedia = media.FirstOrDefault(m => m.GetServerId(backend) == serverMedia.id);
+                if (localMedia == null)
+                {
+                    byte[] image = await GetImage(serverMedia);
+                    if (image != null)
+                    {
+                        Media m = mediaService.SavePictureToIsolatedStorage(
+                            new Media()
+                            {
+                                Image = mediaService.ByteArrayToWriteableBitmap(image),
+                                ItemId = localItem.Id
+                            });
+                        m.SetServerId(serverMedia.id, backend);
+                        m.SetSynced(true, backend);
+                        mediaService.AddMedia(m);
+                    }
+                    else
+                        return;
+                }
+            }
+            foreach (Media localMedia in media)
+            {
+                ServerMedia serverMedia = serverItem.media.FirstOrDefault(m => m.id == localMedia.GetServerId(backend));
+                if (serverMedia == null)
+                {
+                    localMedia.SetServerId(null, backend);
+                    localMedia.ToDelete = true;
+                    mediaService.ModifyMedia(localMedia);
+                }
+            }
+        }
+
+        private async Task<byte[]> GetImage(ServerMedia serverMedia)
+        {
+            var request = new RestRequest("/media/" + serverMedia.id + "/", Method.GET);
+            request.RequestFormat = DataFormat.Json;
+            request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
+            request.AddHeader("Content-type", "application/json");
+            var response = await myHoardApi.Execute(request);
+            JObject parsedResponse = new JObject();
+
+            switch (response.StatusCode)
+            {
+                case System.Net.HttpStatusCode.OK:
+                    if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
+                    {
+                        return response.RawBytes;
+                    }
+                    else
+                        return null;
+                case System.Net.HttpStatusCode.Unauthorized:
+                case System.Net.HttpStatusCode.Forbidden:
+                    configurationService.Logout();
+                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                    return null;
+                default:
+                    if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
+                        parsedResponse = JObject.Parse(response.Content);
+                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"]
+                        + "\n" + parsedResponse["errors"]));
+                    return null;
+            }
+        }
+
+        private void syncItemFromServer(Item localItem, ServerItem serverItem, int collectionId)
+        {
+            if (localItem == null)
             {
                 localItem = new Item()
                 {
@@ -160,7 +263,7 @@ namespace MyHoard.Services
                 localItem.SetSynced(true, backend);
                 itemService.AddItem(localItem);
             }
-            else if(DateTime.Compare(serverItem.ModifiedDate(), localItem.ModifiedDate) > 0)
+            else if (DateTime.Compare(serverItem.ModifiedDate(), localItem.ModifiedDate) > 0)
             {
                 localItem.Name = serverItem.name;
                 localItem.Description = serverItem.description;
@@ -200,7 +303,7 @@ namespace MyHoard.Services
             }
             return localCollection;
         }
-        
+
         private async Task<bool> addMedia(Media m)
         {
             var request = new RestRequest("/media/", Method.POST);
@@ -210,7 +313,7 @@ namespace MyHoard.Services
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
 
             request.AddFile("image", mediaService.GetPictureAsByteArray(m), m.FileName);
-            //request.AddFile("image", mediaService.GetAbsolutePath(m.FileName));
+            request.AddFile("image", mediaService.GetAbsolutePath(m.FileName));
             var response = await myHoardApi.Execute(request);
 
             JObject parsedResponse = new JObject();
@@ -269,13 +372,13 @@ namespace MyHoard.Services
 
         private async Task<bool> modifyCollection(Collection c)
         {
-            var request = new RestRequest("/collections/" + c.GetServerId(backend)+"/", Method.PUT);
+            var request = new RestRequest("/collections/" + c.GetServerId(backend) + "/", Method.PUT);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Accept", "application/json");
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
             request.AddBody(new { name = c.Name, description = c.Description, tags = c.TagList });
-            
+
             var response = await myHoardApi.Execute(request);
             JObject parsedResponse = new JObject();
             switch (response.StatusCode)
@@ -283,7 +386,7 @@ namespace MyHoard.Services
                 case System.Net.HttpStatusCode.OK:
                     ServerCollection sc = JsonConvert.DeserializeObject<ServerCollection>(response.Content);
                     c.ModifiedDate = sc.ModifiedDate();
-                    c.SetSynced(true,backend);
+                    c.SetSynced(true, backend);
                     collectionService.ModifyCollection(c);
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
@@ -352,7 +455,7 @@ namespace MyHoard.Services
 
             var response = await myHoardApi.Execute(request);
             JObject parsedResponse = new JObject();
-            
+
             switch (response.StatusCode)
             {
                 case System.Net.HttpStatusCode.Created:
@@ -454,7 +557,7 @@ namespace MyHoard.Services
                 + "?timestamp" + DateTime.Now.ToString(), Method.GET);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
-
+            request.AddHeader("Content-type", "application/json");
             var response = await myHoardApi.Execute(request);
             JObject parsedResponse = new JObject();
 
@@ -483,7 +586,7 @@ namespace MyHoard.Services
 
         private async Task<List<ServerCollection>> getCollections()
         {
-            var request = new RestRequest("/collections/"+"?timestamp"+ DateTime.Now.ToString(), Method.GET);
+            var request = new RestRequest("/collections/" + "?timestamp" + DateTime.Now.ToString(), Method.GET);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
 
@@ -512,9 +615,9 @@ namespace MyHoard.Services
             }
         }
 
-        public async Task SyncCollections(CancellationToken cancellationToken)
+        public async Task SyncDatabase(CancellationToken cancellationToken)
         {
-            await Task.Factory.StartNew(() => syncCollections(cancellationToken));
+            await Task.Factory.StartNew(() => syncDatabase(cancellationToken));
         }
     }
 }
