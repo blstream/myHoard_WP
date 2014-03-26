@@ -26,7 +26,7 @@ namespace MyHoard.ViewModels
         private bool keepLogged;
         private bool dropTables;
         private Visibility isProgressBarVisible;
-        private string userName;
+        private string email;
         private string selectedBackend;
         private PasswordBox passwordBox;
         private RestRequestAsyncHandle asyncHandle;
@@ -116,29 +116,31 @@ namespace MyHoard.ViewModels
 
         public void DataChanged()
         {
-            CanLogin = (!String.IsNullOrWhiteSpace(UserName) && !String.IsNullOrWhiteSpace(passwordBox.Password));
+            CanLogin = (!String.IsNullOrWhiteSpace(Email) && Regex.IsMatch(Email, @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,24}))$", RegexOptions.IgnoreCase) &&
+                !String.IsNullOrWhiteSpace(passwordBox.Password));
         }
 
 
 
         public void Login()
         {
-            if (!string.IsNullOrWhiteSpace(configurationService.Configuration.UserName) && configurationService.Configuration.UserName != UserName)
+            if (!string.IsNullOrWhiteSpace(configurationService.Configuration.UserName) && configurationService.Configuration.UserName != Email)
                 dropTables = true;
             else
                 dropTables = false;
             IsFormAccessible = false;
             RegistrationService registrationService = new RegistrationService();
-            asyncHandle = registrationService.Login(UserName, passwordBox.Password, KeepLogged, SelectedBackend);
+            asyncHandle = registrationService.Login(Email, passwordBox.Password, KeepLogged, SelectedBackend);
         }
 
-        public string UserName
+        public string Email
         {
-            get { return userName; }
+            get { return email; }
             set
             {
-                userName = value;
-                NotifyOfPropertyChange(() => UserName);
+                email = value;
+                NotifyOfPropertyChange(() => Email);
             }
         }
 
