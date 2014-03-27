@@ -125,7 +125,7 @@ namespace MyHoard.ViewModels
 
         public void Login()
         {
-            if (!string.IsNullOrWhiteSpace(configurationService.Configuration.UserName) && configurationService.Configuration.UserName != Email)
+            if (!string.IsNullOrWhiteSpace(configurationService.Configuration.Email) && configurationService.Configuration.Email != Email)
                 dropTables = true;
             else
                 dropTables = false;

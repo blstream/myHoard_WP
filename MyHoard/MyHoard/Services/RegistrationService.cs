@@ -87,6 +87,7 @@ namespace MyHoard.Services
                                     configurationService.Configuration.AccessToken = parsedResponse["access_token"].ToString();
                                     configurationService.Configuration.RefreshToken = parsedResponse["refresh_token"].ToString();
                                     configurationService.Configuration.Password = password;
+                                    configurationService.Configuration.Email = email;
                                     configurationService.Configuration.KeepLogged = keepLogged;
                                     configurationService.Configuration.Backend = backend;
                                     configurationService.Configuration.IsLoggedIn = true;

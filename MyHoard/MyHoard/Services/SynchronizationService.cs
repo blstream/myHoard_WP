@@ -44,14 +44,16 @@ namespace MyHoard.Services
 
         private async Task syncDatabase(CancellationToken cancellationToken)
         {
-            RegistrationService r = new RegistrationService();
-            bool refresh = await r.RefreshToken();
-            if (!refresh)
-            {
-                configurationService.Logout();
-                eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
-                return;
-            }
+            // Temporary commented out due to problem with backend
+
+            //RegistrationService r = new RegistrationService();
+            //bool refresh = await r.RefreshToken();
+            //if (!refresh)
+            //{
+            //    configurationService.Logout();
+            //    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+            //    return;
+            //}
 
             List<Collection> collections = collectionService.CollectionList(true);
 
@@ -160,7 +162,7 @@ namespace MyHoard.Services
                         foreach (ServerItem serverItem in serverItems)
                         {
                             Item localItem = items.FirstOrDefault(i => i.GetServerId(backend) == serverItem.id);
-                            syncItemFromServer(localItem, serverItem, localCollection.Id);
+                            localItem = syncItemFromServer(localItem, serverItem, localCollection.Id);
                             syncMedia(localItem, serverItem);
                         }
                     else
@@ -182,6 +184,19 @@ namespace MyHoard.Services
             eventAggregator.Publish(new ServerMessage(true, Resources.AppResources.Synchronized));
         }
 
+        private void savePicture(byte[] image, int localItemId, string serverMediaId)
+        {
+            Media m = mediaService.SavePictureToIsolatedStorage(
+                            new Media()
+                            {
+                                Image = mediaService.ByteArrayToWriteableBitmap(image),
+                                ItemId = localItemId
+                            });
+            m.SetServerId(serverMediaId, backend);
+            m.SetSynced(true, backend);
+            mediaService.AddMedia(m);
+        }
+
         private async void syncMedia(Item localItem, ServerItem serverItem)
         {
             List<Media> media = mediaService.MediaList(localItem.Id, false);
@@ -194,15 +209,11 @@ namespace MyHoard.Services
                     byte[] image = await GetImage(serverMedia);
                     if (image != null)
                     {
-                        Media m = mediaService.SavePictureToIsolatedStorage(
-                            new Media()
-                            {
-                                Image = mediaService.ByteArrayToWriteableBitmap(image),
-                                ItemId = localItem.Id
-                            });
-                        m.SetServerId(serverMedia.id, backend);
-                        m.SetSynced(true, backend);
-                        mediaService.AddMedia(m);
+                        
+                        Deployment.Current.Dispatcher.BeginInvoke(() =>
+                        {
+                            savePicture(image, localItem.Id, serverMedia.id);
+                        });
                     }
                     else
                         return;
@@ -225,19 +236,13 @@ namespace MyHoard.Services
             var request = new RestRequest("/media/" + serverMedia.id + "/", Method.GET);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
-            request.AddHeader("Content-type", "application/json");
             var response = await myHoardApi.Execute(request);
             JObject parsedResponse = new JObject();
 
             switch (response.StatusCode)
             {
                 case System.Net.HttpStatusCode.OK:
-                    if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
-                    {
-                        return response.RawBytes;
-                    }
-                    else
-                        return null;
+                    return response.RawBytes;
                 case System.Net.HttpStatusCode.Unauthorized:
                 case System.Net.HttpStatusCode.Forbidden:
                     configurationService.Logout();
@@ -252,7 +257,7 @@ namespace MyHoard.Services
             }
         }
 
-        private void syncItemFromServer(Item localItem, ServerItem serverItem, int collectionId)
+        private Item syncItemFromServer(Item localItem, ServerItem serverItem, int collectionId)
         {
             if (localItem == null)
             {
@@ -267,7 +272,7 @@ namespace MyHoard.Services
                 };
                 localItem.SetServerId(serverItem.id, backend);
                 localItem.SetSynced(true, backend);
-                itemService.AddItem(localItem);
+                return itemService.AddItem(localItem);
             }
             else if (DateTime.Compare(serverItem.ModifiedDate(), localItem.ModifiedDate) > 0)
             {
@@ -277,8 +282,9 @@ namespace MyHoard.Services
                 localItem.LocationLng = serverItem.location.lng;
                 localItem.ModifiedDate = serverItem.ModifiedDate();
                 localItem.SetSynced(true, backend);
-                itemService.ModifyItem(localItem);
+                return itemService.ModifyItem(localItem);
             }
+            return localItem;
         }
 
         private Collection syncCollectionFromServer(Collection localCollection, ServerCollection serverCollection)
@@ -314,12 +320,11 @@ namespace MyHoard.Services
         {
             var request = new RestRequest("/media/", Method.POST);
             request.RequestFormat = DataFormat.Json;
-            request.AddHeader("Accept", "application/json");
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
 
             request.AddFile("image", mediaService.GetPictureAsByteArray(m), m.FileName);
-            request.AddFile("image", mediaService.GetAbsolutePath(m.FileName));
+            //request.AddFile("image", mediaService.GetAbsolutePath(m.FileName));
             var response = await myHoardApi.Execute(request);
 
             JObject parsedResponse = new JObject();
@@ -347,7 +352,6 @@ namespace MyHoard.Services
         {
             var request = new RestRequest("/collections/" + c.GetServerId(backend) + "/", Method.DELETE);
             request.RequestFormat = DataFormat.Json;
-            request.AddHeader("Accept", "application/json");
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
 
@@ -381,7 +385,6 @@ namespace MyHoard.Services
         {
             var request = new RestRequest("/collections/" + c.GetServerId(backend) + "/", Method.PUT);
             request.RequestFormat = DataFormat.Json;
-            request.AddHeader("Accept", "application/json");
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
             request.AddBody(new { name = c.Name, description = c.Description, tags = c.TagList });
@@ -414,7 +417,6 @@ namespace MyHoard.Services
         {
             var request = new RestRequest("/collections/", Method.POST);
             request.RequestFormat = DataFormat.Json;
-            request.AddHeader("Accept", "application/json");
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
             request.AddBody(new { name = c.Name, description = c.Description, tags = c.TagList });
@@ -424,6 +426,7 @@ namespace MyHoard.Services
             switch (response.StatusCode)
             {
                 case System.Net.HttpStatusCode.Created:
+                case System.Net.HttpStatusCode.OK:
                     ServerCollection sc = JsonConvert.DeserializeObject<ServerCollection>(response.Content);
                     c.SetServerId(sc.id, backend);
                     c.SetSynced(true, backend);
@@ -448,7 +451,6 @@ namespace MyHoard.Services
         {
             var request = new RestRequest("/items/", Method.POST);
             request.RequestFormat = DataFormat.Json;
-            request.AddHeader("Accept", "application/json");
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
             request.AddBody(new
@@ -490,14 +492,14 @@ namespace MyHoard.Services
         {
             var request = new RestRequest("/items/" + i.GetServerId(backend) + "/", Method.PUT);
             request.RequestFormat = DataFormat.Json;
-            request.AddHeader("Accept", "application/json");
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
+            // Temporary changed due to problem with backend
             request.AddBody(new
             {
                 name = i.Name,
                 description = i.Description,
-                location = new { lat = i.LocationLat, lng = i.LocationLng },
+                //location = new { lat = i.LocationLat, lng = i.LocationLng },
                 media = mediaService.MediaStringList(i.Id, backend),
                 collection = parentServerId
             });
@@ -530,7 +532,6 @@ namespace MyHoard.Services
         {
             var request = new RestRequest("/items/" + i.GetServerId(backend) + "/", Method.DELETE);
             request.RequestFormat = DataFormat.Json;
-            request.AddHeader("Accept", "application/json");
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
 
@@ -564,7 +565,7 @@ namespace MyHoard.Services
                 + "?timestamp" + DateTime.Now.ToString(), Method.GET);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
-            request.AddHeader("Content-type", "application/json");
+            //request.AddHeader("Content-type", "application/json");
             var response = await myHoardApi.Execute(request);
             JObject parsedResponse = new JObject();
 
