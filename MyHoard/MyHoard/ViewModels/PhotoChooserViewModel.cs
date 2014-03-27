@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 
 namespace MyHoard.ViewModels
 {
-    public class PhotoChooserViewModel:ViewModelBase
+    public class PhotoChooserViewModel : ViewModelBase
     {
 
         private ObservableCollection<Media> pictures;
@@ -22,9 +22,8 @@ namespace MyHoard.ViewModels
 
         public PhotoChooserViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator)
             : base(navigationService, collectionService)
-
         {
-            this.eventAggregator=eventAggregator;
+            this.eventAggregator = eventAggregator;
         }
 
         protected override void OnInitialize()
@@ -35,20 +34,29 @@ namespace MyHoard.ViewModels
             MediaLibrary mediaLibrary = new MediaLibrary();
 
             var spictures = mediaLibrary.Pictures;
-           
+
             foreach (var picture in spictures)
             {
-                
-                if (picture.Name.EndsWith(".jpg", StringComparison.CurrentCultureIgnoreCase) || 
-                    picture.Name.EndsWith(".png", StringComparison.CurrentCultureIgnoreCase) || 
-                    picture.Name.EndsWith(".jpeg", StringComparison.CurrentCultureIgnoreCase))
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    BitmapImage bi = new BitmapImage();
-                    bi.SetSource(picture.GetThumbnail());
-                    WriteableBitmap image = new WriteableBitmap(bi);
-                    Pictures.Add(new Media() { FileName=picture.Name, Image = image });
-                    
-                }
+                    addPicture(picture);
+                });
+            }
+
+
+        }
+
+        private void addPicture(Picture picture)
+        {
+            if (picture.Name.EndsWith(".jpg", StringComparison.CurrentCultureIgnoreCase) ||
+                        picture.Name.EndsWith(".png", StringComparison.CurrentCultureIgnoreCase) ||
+                        picture.Name.EndsWith(".jpeg", StringComparison.CurrentCultureIgnoreCase))
+            {
+                BitmapImage bi = new BitmapImage();
+                bi.SetSource(picture.GetThumbnail());
+                WriteableBitmap image = new WriteableBitmap(bi);
+                Pictures.Add(new Media() { FileName = picture.Name, Image = image });
+
             }
         }
 
@@ -78,7 +86,7 @@ namespace MyHoard.ViewModels
             }
         }
 
-        
+
         public ObservableCollection<Media> Pictures
         {
             get { return pictures; }
