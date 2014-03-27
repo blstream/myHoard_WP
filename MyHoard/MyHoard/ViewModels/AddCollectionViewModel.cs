@@ -5,8 +5,10 @@ using MyHoard.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -29,6 +31,9 @@ namespace MyHoard.ViewModels
         private readonly IEventAggregator eventAggregator;
         private ObservableCollection<string> tags;
         private ConfigurationService configurationService;
+        private Visibility isProgressBarVisible;
+        private bool isFormAccessible;
+        private CancellationTokenSource tokenSource;
 
                
         public AddCollectionViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator, ConfigurationService configurationService)
@@ -38,6 +43,42 @@ namespace MyHoard.ViewModels
             this.configurationService = configurationService;
             eventAggregator.Subscribe(this);
             Thumbnails = new BindableCollection<string> { "","\uE114", "\uE104", "\uE107", "\uE10F", "\uE113", "\uE116", "\uE119", "\uE128", "\uE13D", "\uE15D", "\uE15E" };
+        }
+
+        public void OnGoBack(CancelEventArgs eventArgs)
+        {
+            if (!IsFormAccessible)
+            {
+                MessageBoxResult messageResult = MessageBox.Show(Resources.AppResources.CancelConfirm, "", MessageBoxButton.OKCancel);
+                if (messageResult == MessageBoxResult.OK)
+                {
+                    tokenSource.Cancel();
+                    IsFormAccessible = true;
+                    CollectionService.ModifyCollection(editedCollection);
+                }
+                eventArgs.Cancel = true;
+            }
+        }
+
+        public bool IsFormAccessible
+        {
+            get { return isFormAccessible; }
+            set
+            {
+                isFormAccessible = value;
+                NotifyOfPropertyChange(() => IsFormAccessible);
+                IsProgressBarVisible = (IsFormAccessible ? Visibility.Collapsed : Visibility.Visible);
+            }
+        }
+
+        public Visibility IsProgressBarVisible
+        {
+            get { return isProgressBarVisible; }
+            set
+            {
+                isProgressBarVisible = value;
+                NotifyOfPropertyChange(() => IsProgressBarVisible);
+            }
         }
 
         public ObservableCollection<string> Tags
@@ -188,7 +229,20 @@ namespace MyHoard.ViewModels
 
         public void Handle(ServerMessage message)
         {
-            MessageBox.Show(message.Message);
+            if (message.IsSuccessfull)
+            {
+                if (CurrentCollection.IsPrivate)
+                {
+                    MessageBox.Show(AppResources.DeleteFromServerSuccess);
+                }
+            }
+            else
+            {
+                MessageBox.Show(message.Message + "\n" + AppResources.SyncError);
+            }
+            NavigationService.UriFor<CollectionDetailsViewModel>().WithParam(x => x.CollectionId, CurrentCollection.Id).Navigate();
+            this.NavigationService.RemoveBackEntry();
+            this.NavigationService.RemoveBackEntry();
         }
 
         public void DataChanged()
@@ -207,38 +261,27 @@ namespace MyHoard.ViewModels
                 {
                     if (CurrentCollection.IsPrivate != editedCollection.IsPrivate)
                     {
+                        IsFormAccessible = false;
+                        tokenSource = new CancellationTokenSource();
                         SynchronizationService synchronizationService = new SynchronizationService();
                         if (CurrentCollection.IsPrivate)
                         {
                             MessageBoxResult messageResult = MessageBox.Show(AppResources.DeleteFromServerDialog, AppResources.Delete, MessageBoxButton.OKCancel);
                             if (messageResult == MessageBoxResult.OK)
                             {
-                                if (await synchronizationService.DeleteCollection(CurrentCollection, true))
-                                {
-                                    MessageBox.Show(AppResources.DeleteFromServerSuccess);
-                                }
-                                else
-                                {
-                                    CollectionService.ModifyCollection(editedCollection);
-                                    return;
-                                }
+                                await synchronizationService.SyncDatabase(tokenSource.Token);
                             }
                             else
                             {
                                 CollectionService.ModifyCollection(editedCollection);
-                                return;
                             }
                         }
                         else
                         {
-                            if(!await synchronizationService.AddCollection(CurrentCollection))
-                            {
-                                CollectionService.ModifyCollection(editedCollection);
-                                return;
-                            }
+                            await synchronizationService.SyncDatabase(tokenSource.Token); 
                         }
+                        return;
                     }
-
 
                     NavigationService.UriFor<CollectionDetailsViewModel>().WithParam(x => x.CollectionId, CurrentCollection.Id).Navigate();
                     this.NavigationService.RemoveBackEntry();
@@ -283,6 +326,7 @@ namespace MyHoard.ViewModels
 
         protected override void OnActivate()
         {
+            IsFormAccessible = true;
             eventAggregator.Subscribe(this);
             base.OnActivate();
         }

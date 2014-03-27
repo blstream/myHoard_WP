@@ -365,7 +365,20 @@ namespace MyHoard.Services
                 case System.Net.HttpStatusCode.NotFound:
                     c.SetServerId(null, backend);
                     collectionService.ModifyCollection(c);
-                    if(!isPrivate)
+                    if(isPrivate)
+                    {
+                        foreach(Item i in itemService.ItemList(c.Id))
+                        {
+                            i.SetServerId(null, backend);
+                            itemService.ModifyItem(i);
+                            foreach(Media m in mediaService.MediaList(i.Id,false))
+                            {
+                                m.SetServerId(null, backend);
+                                mediaService.ModifyMedia(m);
+                            }
+                        }
+                    }
+                    else
                         collectionService.DeleteCollection(c);
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:

@@ -196,7 +196,7 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Collection had been deleted from the server.
+        ///   Looks up a localized string similar to Collection has been deleted from the server.
         /// </summary>
         public static string DeleteFromServerSuccess {
             get {
@@ -411,6 +411,15 @@ namespace MyHoard.Resources {
         public static string Sync {
             get {
                 return ResourceManager.GetString("Sync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes will be saved during next synchronization.
+        /// </summary>
+        public static string SyncError {
+            get {
+                return ResourceManager.GetString("SyncError", resourceCulture);
             }
         }
         

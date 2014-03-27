@@ -252,9 +252,12 @@
     <value>Are you sure you want to delete data from the server?</value>
   </data>
   <data name="DeleteFromServerSuccess" xml:space="preserve">
-    <value>Collection had been deleted from the server</value>
+    <value>Collection has been deleted from the server</value>
   </data>
   <data name="Offline" xml:space="preserve">
     <value>offline</value>
+  </data>
+  <data name="SyncError" xml:space="preserve">
+    <value>Changes will be saved during next synchronization</value>
   </data>
 </root>
