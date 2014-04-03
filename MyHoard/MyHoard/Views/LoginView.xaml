@@ -46,7 +46,7 @@
                     <TextBlock Text="{Binding Path=LocalizedResources.Email, Source={StaticResource LocalizedStrings}}" 
                        Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
                     <TextBox Name="Email" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]"  
-                     Grid.Row="1" Height="72" TextWrapping="Wrap" />
+                     Grid.Row="1" Height="72" TextWrapping="Wrap" InputScope="EmailUserName" />
                     <TextBlock Text="{Binding Path=LocalizedResources.Password, Source={StaticResource LocalizedStrings}}" 
                        Grid.Row="2" Style="{StaticResource PhoneTextNormalStyle}" />
                     <PasswordBox Name="Password" Grid.Row="3" Height="72"  />
