@@ -24,7 +24,7 @@ namespace MyHoard.ViewModels
         private bool canLogin;
         private bool isFormAccessible;
         private bool keepLogged;
-        private bool dropTables;
+        private bool changeUser;
         private Visibility isProgressBarVisible;
         private string email;
         private string selectedBackend;
@@ -73,11 +73,9 @@ namespace MyHoard.ViewModels
 
             if (message.IsSuccessfull)
             {
-                if(dropTables)
+                if(changeUser)
                 {
-                    CollectionService.DeleteAll();
-                    itemService.DeleteAll();
-                    mediaService.DeleteAll();
+                    configurationService.ChangeUser();
                 }
                 NavigationService.UriFor<CollectionListViewModel>().Navigate();
                 while (NavigationService.BackStack.Any())
@@ -126,9 +124,9 @@ namespace MyHoard.ViewModels
         public void Login()
         {
             if (!string.IsNullOrWhiteSpace(configurationService.Configuration.Email) && configurationService.Configuration.Email != Email)
-                dropTables = true;
+                changeUser = true;
             else
-                dropTables = false;
+                changeUser = false;
             IsFormAccessible = false;
             RegistrationService registrationService = new RegistrationService();
             asyncHandle = registrationService.Login(Email, passwordBox.Password, KeepLogged, SelectedBackend);

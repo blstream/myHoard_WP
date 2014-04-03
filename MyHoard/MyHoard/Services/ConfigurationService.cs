@@ -34,6 +34,15 @@ namespace MyHoard.Services
                 Configuration = new Configuration();
                 databaseService.Add(Configuration);
             }
+            if(Configuration.IsLoggedIn)
+            {
+                ChangeUser();
+            }
+        }
+
+        public void ChangeUser()
+        {
+            databaseService.ChangeDatabase(Configuration.Email);
         }
 
         public Configuration Configuration
