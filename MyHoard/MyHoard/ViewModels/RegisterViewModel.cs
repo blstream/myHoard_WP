@@ -65,7 +65,11 @@ namespace MyHoard.ViewModels
             
             if (message.IsSuccessfull)
             {
-                NavigationService.GoBack();
+                NavigationService.UriFor<CollectionListViewModel>().Navigate();
+                while (NavigationService.BackStack.Any())
+                {
+                    this.NavigationService.RemoveBackEntry();
+                }
             }
         }
 

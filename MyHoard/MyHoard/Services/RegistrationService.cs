@@ -33,7 +33,7 @@ namespace MyHoard.Services
                         {
                             if (response.StatusCode == System.Net.HttpStatusCode.Created)
                             {
-                                eventAggregator.Publish(new ServerMessage(true, Resources.AppResources.UserCreated));
+                                Login(email, password, true, backend);
                             }
                             else
                             {
