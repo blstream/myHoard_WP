@@ -123,7 +123,7 @@ namespace MyHoard.ViewModels
 
         public void Login()
         {
-            if (!string.IsNullOrWhiteSpace(configurationService.Configuration.Email) && configurationService.Configuration.Email != Email)
+            if (configurationService.Configuration.Email != Email)
                 changeUser = true;
             else
                 changeUser = false;
