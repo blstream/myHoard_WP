@@ -266,10 +266,13 @@ namespace MyHoard.Services
                     Name = serverItem.name,
                     Description = serverItem.description,
                     CollectionId = collectionId,
-                    LocationLat = serverItem.location.lat,
-                    LocationLng = serverItem.location.lng,
                     ModifiedDate = serverItem.ModifiedDate(),
                 };
+                if(serverItem.location != null)
+                {
+                    localItem.LocationLat = serverItem.location.lat;
+                    localItem.LocationLng = serverItem.location.lng;
+                }
                 localItem.SetServerId(serverItem.id, backend);
                 localItem.SetSynced(true, backend);
                 return itemService.AddItem(localItem);
@@ -278,8 +281,11 @@ namespace MyHoard.Services
             {
                 localItem.Name = serverItem.name;
                 localItem.Description = serverItem.description;
-                localItem.LocationLat = serverItem.location.lat;
-                localItem.LocationLng = serverItem.location.lng;
+                if (serverItem.location != null)
+                {
+                    localItem.LocationLat = serverItem.location.lat;
+                    localItem.LocationLng = serverItem.location.lng;
+                }
                 localItem.ModifiedDate = serverItem.ModifiedDate();
                 localItem.SetSynced(true, backend);
                 return itemService.ModifyItem(localItem);
@@ -470,7 +476,7 @@ namespace MyHoard.Services
             {
                 name = i.Name,
                 description = i.Description,
-                location = new { lat = i.LocationLat, lng = i.LocationLng },
+                //location = new { lat = i.LocationLat, lng = i.LocationLng },
                 media = mediaService.MediaStringList(i.Id, backend),
                 collection = parentServerId
             });
