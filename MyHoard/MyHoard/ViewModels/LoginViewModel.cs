@@ -25,6 +25,7 @@ namespace MyHoard.ViewModels
         private bool isFormAccessible;
         private bool keepLogged;
         private bool changeUser;
+        private bool copyDefault;
         private Visibility isProgressBarVisible;
         private string email;
         private string selectedBackend;
@@ -64,7 +65,7 @@ namespace MyHoard.ViewModels
         }
 
 
-        public void Handle(ServerMessage message)
+        public async void Handle(ServerMessage message)
         {
             IsFormAccessible = true; ;
             CanLogin = true;
@@ -75,7 +76,7 @@ namespace MyHoard.ViewModels
             {
                 if(changeUser)
                 {
-                    configurationService.ChangeUser();
+                    await configurationService.ChangeUser(copyDefault);
                 }
                 NavigationService.UriFor<CollectionListViewModel>().Navigate();
                 while (NavigationService.BackStack.Any())
@@ -125,8 +126,8 @@ namespace MyHoard.ViewModels
         {
             if (configurationService.Configuration.Email != Email)
                 changeUser = true;
-            else
-                changeUser = false;
+            if (string.IsNullOrWhiteSpace(configurationService.Configuration.Email))
+                copyDefault = true;
             IsFormAccessible = false;
             RegistrationService registrationService = new RegistrationService();
             asyncHandle = registrationService.Login(Email, passwordBox.Password, KeepLogged, SelectedBackend);

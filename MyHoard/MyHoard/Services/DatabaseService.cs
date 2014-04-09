@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using Windows.Storage;
 
 namespace MyHoard.Services
@@ -31,15 +32,32 @@ namespace MyHoard.Services
             
         }
 
-        public void ChangeDatabase(string UserName)
+        public async Task ChangeDatabase(string UserName, bool copyDefault=false)
         {
             CloseConnection();
-            dbConnection = new SQLiteConnection(Path.Combine(ApplicationData.Current.LocalFolder.Path, UserName+DefaultName));
+            if (!String.IsNullOrWhiteSpace(UserName))
+            {
+                if (copyDefault)
+                {
+                    if (!System.IO.File.Exists(ApplicationData.Current.LocalFolder.Path + "\\" + UserName + "_" + DefaultName))
+                    {
+                        StorageFile databaseFile = await ApplicationData.Current.LocalFolder.GetFileAsync(DefaultName);
+                        await databaseFile.RenameAsync(UserName + "_" + DefaultName);
+                    }
+                }
+                dbConnection = new SQLiteConnection(Path.Combine(ApplicationData.Current.LocalFolder.Path, UserName + "_" + DefaultName));
+            }
+            else
+            {
+                dbConnection = new SQLiteConnection(Path.Combine(ApplicationData.Current.LocalFolder.Path, DefaultName));
+            }
+
             dbConnection.CreateTable<Collection>();
             dbConnection.CreateTable<Item>();
             dbConnection.CreateTable<Media>();
         }
 
+        
         public T Add<T>(T item)
         {
             dbConnection.Insert(item);

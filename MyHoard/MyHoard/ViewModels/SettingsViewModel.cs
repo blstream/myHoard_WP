@@ -48,7 +48,7 @@ namespace MyHoard.ViewModels
 
         public void Logout()
         {
-            configurationService.Logout();
+            configurationService.Logout(true);
             NavigationService.GoBack();
         }
 

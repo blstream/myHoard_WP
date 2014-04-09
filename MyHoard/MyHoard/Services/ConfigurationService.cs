@@ -40,9 +40,9 @@ namespace MyHoard.Services
             }
         }
 
-        public void ChangeUser()
+        public async Task ChangeUser(bool copyDefault=false)
         {
-            databaseService.ChangeDatabase(Configuration.Email);
+            await databaseService.ChangeDatabase(Configuration.Email,copyDefault);
         }
 
         public Configuration Configuration
@@ -56,10 +56,15 @@ namespace MyHoard.Services
             databaseService.Modify(Configuration);
         }
 
-        public void Logout()
+        public async void Logout(bool userRequest=false)
         {
             Configuration.IsLoggedIn = false;
             Configuration.KeepLogged = false;
+            if(userRequest)
+            {
+                Configuration.Email = null;
+                await ChangeUser();
+            }
             SaveConfig();
         }
 
