@@ -57,7 +57,7 @@ namespace MyHoard.ViewModels
             }
         }
 
-        public void Handle(ServerMessage message)
+        public async void Handle(ServerMessage message)
         {
             IsFormAccessible = true;
             CanRegister = true;
@@ -65,6 +65,7 @@ namespace MyHoard.ViewModels
             
             if (message.IsSuccessfull)
             {
+                await IoC.Get<ConfigurationService>().ChangeUser(true);
                 NavigationService.UriFor<CollectionListViewModel>().Navigate();
                 while (NavigationService.BackStack.Any())
                 {

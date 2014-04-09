@@ -81,6 +81,7 @@ namespace MyHoard
             }
             else
             {
+                configurationService.Configuration.Email = null;
                 configurationService.Configuration.IsLoggedIn = false;
                 configurationService.SaveConfig();
             }

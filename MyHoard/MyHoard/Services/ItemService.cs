@@ -49,6 +49,7 @@ namespace MyHoard.Services
             MediaService ms = IoC.Get<MediaService>();
             foreach(Media m in ms.MediaList(item.Id, false, false))
             {
+                m.Java1Id = m.Java2Id = m.PythonId = null;
                 m.ToDelete = true;
                 ms.ModifyMedia(m);
             }
