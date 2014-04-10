@@ -26,7 +26,7 @@ namespace MyHoard.Models
             {
                 name = value;
                 ModifiedDate = DateTime.Now;
-                Desync();
+                IsSynced = false;
             }
         }
         public string Description
@@ -36,7 +36,7 @@ namespace MyHoard.Models
             {
                 description = value;
                 ModifiedDate = DateTime.Now;
-                Desync();
+                IsSynced = false;
             }
         }
 
@@ -48,7 +48,7 @@ namespace MyHoard.Models
             {
                 quantity = value;
                 ModifiedDate = DateTime.Now;
-                Desync();
+                IsSynced = false;
             }
         }
 
@@ -70,7 +70,7 @@ namespace MyHoard.Models
             {
                 locationLat = value;
                 ModifiedDate = DateTime.Now;
-                Desync();
+                IsSynced = false;
             }
         }
 
@@ -81,7 +81,7 @@ namespace MyHoard.Models
             {
                 locationLng = value;
                 ModifiedDate = DateTime.Now;
-                Desync();
+                IsSynced = false;
             }
         }
 

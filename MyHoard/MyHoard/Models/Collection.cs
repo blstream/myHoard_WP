@@ -34,7 +34,7 @@ namespace MyHoard.Models
             set
             {
                 name = value;
-                Desync();
+                IsSynced = false;
             }
         }
 
@@ -45,7 +45,7 @@ namespace MyHoard.Models
             set
             {
                 description = value;
-                Desync();
+                IsSynced = false;
             }
         }
 
@@ -73,7 +73,7 @@ namespace MyHoard.Models
             set
             {
                 tags = value;
-                Desync();
+                IsSynced = false;
             }
         }
 
@@ -84,7 +84,7 @@ namespace MyHoard.Models
             set
             {
                 itemsNumber = value;
-                Desync();
+                IsSynced = false;
             }
         }
 

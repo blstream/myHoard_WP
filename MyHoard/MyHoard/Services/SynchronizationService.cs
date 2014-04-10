@@ -63,24 +63,23 @@ namespace MyHoard.Services
                 {
                     return;
                 }
-                string id = c.GetServerId(backend);
-                bool synced = c.IsSynced(backend);
+                
                 bool success;
                 if (!c.IsPrivate)
                 {
-                    if (String.IsNullOrWhiteSpace(id) && !c.ToDelete)
+                    if (String.IsNullOrWhiteSpace(c.ServerId) && !c.ToDelete)
                     {
                         success = await AddCollection(c);
                         if (!success)
                             return;
                     }
-                    else if (!synced && !c.ToDelete)
+                    else if (!c.IsSynced && !c.ToDelete)
                     {
                         success = await modifyCollection(c);
                         if (!success)
                             return;
                     }
-                    else if (c.ToDelete && !String.IsNullOrEmpty(id))
+                    else if (c.ToDelete && !String.IsNullOrEmpty(c.ServerId))
                     {
                         success = await DeleteCollection(c);
                         if (!success)
@@ -94,29 +93,28 @@ namespace MyHoard.Services
 
                             foreach (Media m in mediaService.MediaList(i.Id, false, false))
                             {
-                                id = m.GetServerId(backend);
-                                if (String.IsNullOrWhiteSpace(id) && !m.ToDelete)
+                                
+                                if (String.IsNullOrWhiteSpace(m.ServerId) && !m.ToDelete)
                                 {
                                     success = await addMedia(m);
                                     if (!success)
                                         return;
                                 }
                             }
-                            id = i.GetServerId(backend);
-                            synced = i.IsSynced(backend);
-                            if (String.IsNullOrWhiteSpace(id) && !i.ToDelete)
+                           
+                            if (String.IsNullOrWhiteSpace(i.ServerId) && !i.ToDelete)
                             {
-                                success = await addItem(i, c.GetServerId(backend));
+                                success = await addItem(i, c.ServerId);
                                 if (!success)
                                     return;
                             }
-                            else if (!synced && !i.ToDelete)
+                            else if (!i.IsSynced && !i.ToDelete)
                             {
-                                success = await modifyItem(i, c.GetServerId(backend));
+                                success = await modifyItem(i, c.ServerId);
                                 if (!success)
                                     return;
                             }
-                            else if (i.ToDelete && !string.IsNullOrEmpty(id))
+                            else if (i.ToDelete && !string.IsNullOrEmpty(i.ServerId))
                             {
                                 success = await deleteItem(i);
                                 if (!success)
@@ -127,7 +125,7 @@ namespace MyHoard.Services
                 }
                 else
                 {
-                    if(!string.IsNullOrWhiteSpace(id))
+                    if(!string.IsNullOrWhiteSpace(c.ServerId))
                     {
                         success = await DeleteCollection(c, true);
                         if (!success)
@@ -152,7 +150,7 @@ namespace MyHoard.Services
                         return;
                     }
 
-                    Collection localCollection = collections.FirstOrDefault(c => c.GetServerId(backend) == serverCollection.id);
+                    Collection localCollection = collections.FirstOrDefault(c => c.ServerId == serverCollection.id);
                     localCollection = syncCollectionFromServer(localCollection, serverCollection);
 
                     List<Item> items = itemService.ItemList(localCollection.Id);
@@ -161,7 +159,7 @@ namespace MyHoard.Services
                     if (serverItems != null)
                         foreach (ServerItem serverItem in serverItems)
                         {
-                            Item localItem = items.FirstOrDefault(i => i.GetServerId(backend) == serverItem.id);
+                            Item localItem = items.FirstOrDefault(i => i.ServerId == serverItem.id);
                             localItem = syncItemFromServer(localItem, serverItem, localCollection.Id);
                             syncMedia(localItem, serverItem);
                         }
@@ -169,10 +167,10 @@ namespace MyHoard.Services
                         return;
                     foreach (Item localItem in items)
                     {
-                        ServerItem serverItem = serverItems.FirstOrDefault(i => i.id == localItem.GetServerId(backend));
+                        ServerItem serverItem = serverItems.FirstOrDefault(i => i.id == localItem.ServerId);
                         if (serverItem == null)
                         {
-                            localItem.SetServerId(null, backend);
+                            localItem.ServerId=null;
                             itemService.ModifyItem(localItem);
                             itemService.DeleteItem(localItem);
                         }
@@ -192,8 +190,8 @@ namespace MyHoard.Services
                                 Image = mediaService.ByteArrayToWriteableBitmap(image),
                                 ItemId = localItemId
                             });
-            m.SetServerId(serverMediaId, backend);
-            m.SetSynced(true, backend);
+            m.ServerId = serverMediaId;
+            m.IsSynced = true;
             mediaService.AddMedia(m);
         }
 
@@ -203,7 +201,7 @@ namespace MyHoard.Services
 
             foreach (ServerMedia serverMedia in serverItem.media)
             {
-                Media localMedia = media.FirstOrDefault(m => m.GetServerId(backend) == serverMedia.id);
+                Media localMedia = media.FirstOrDefault(m => m.ServerId == serverMedia.id);
                 if (localMedia == null)
                 {
                     byte[] image = await GetImage(serverMedia);
@@ -221,10 +219,10 @@ namespace MyHoard.Services
             }
             foreach (Media localMedia in media)
             {
-                ServerMedia serverMedia = serverItem.media.FirstOrDefault(m => m.id == localMedia.GetServerId(backend));
+                ServerMedia serverMedia = serverItem.media.FirstOrDefault(m => m.id == localMedia.ServerId);
                 if (serverMedia == null)
                 {
-                    localMedia.SetServerId(null, backend);
+                    localMedia.ServerId = null;
                     localMedia.ToDelete = true;
                     mediaService.ModifyMedia(localMedia);
                 }
@@ -273,8 +271,8 @@ namespace MyHoard.Services
                     localItem.LocationLat = serverItem.location.lat;
                     localItem.LocationLng = serverItem.location.lng;
                 }
-                localItem.SetServerId(serverItem.id, backend);
-                localItem.SetSynced(true, backend);
+                localItem.ServerId = serverItem.id;
+                localItem.IsSynced = true;
                 return itemService.AddItem(localItem);
             }
             else if (DateTime.Compare(serverItem.ModifiedDate(), localItem.ModifiedDate) > 0)
@@ -287,7 +285,7 @@ namespace MyHoard.Services
                     localItem.LocationLng = serverItem.location.lng;
                 }
                 localItem.ModifiedDate = serverItem.ModifiedDate();
-                localItem.SetSynced(true, backend);
+                localItem.IsSynced = true;
                 return itemService.ModifyItem(localItem);
             }
             return localItem;
@@ -305,8 +303,8 @@ namespace MyHoard.Services
                     TagList = serverCollection.tags,
                     ModifiedDate = serverCollection.ModifiedDate()
                 };
-                localCollection.SetSynced(true, backend);
-                localCollection.SetServerId(serverCollection.id, backend);
+                localCollection.IsSynced = true;
+                localCollection.ServerId = serverCollection.id;
                 localCollection = collectionService.AddCollection(localCollection);
             }
             else if (DateTime.Compare(serverCollection.ModifiedDate(), localCollection.ModifiedDate) > 0)
@@ -316,7 +314,7 @@ namespace MyHoard.Services
                 localCollection.ModifiedDate = serverCollection.ModifiedDate();
                 localCollection.Name = serverCollection.name;
                 localCollection.TagList = serverCollection.tags;
-                localCollection.SetSynced(true, backend);
+                localCollection.IsSynced = true;
                 collectionService.ModifyCollection(localCollection);
             }
             return localCollection;
@@ -339,7 +337,7 @@ namespace MyHoard.Services
             switch (response.StatusCode)
             {
                 case System.Net.HttpStatusCode.Created:
-                    m.SetServerId((string)parsedResponse["id"], backend);
+                    m.ServerId = (string)parsedResponse["id"];
                     mediaService.ModifyMedia(m);
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
@@ -356,7 +354,7 @@ namespace MyHoard.Services
 
         public async Task<bool> DeleteCollection(Collection c, bool isPrivate=false)
         {
-            var request = new RestRequest("/collections/" + c.GetServerId(backend) + "/", Method.DELETE);
+            var request = new RestRequest("/collections/" + c.ServerId + "/", Method.DELETE);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
@@ -369,17 +367,17 @@ namespace MyHoard.Services
             {
                 case System.Net.HttpStatusCode.NoContent:
                 case System.Net.HttpStatusCode.NotFound:
-                    c.SetServerId(null, backend);
+                    c.ServerId = null;
                     collectionService.ModifyCollection(c);
                     if(isPrivate)
                     {
                         foreach(Item i in itemService.ItemList(c.Id))
                         {
-                            i.SetServerId(null, backend);
+                            i.ServerId = null;
                             itemService.ModifyItem(i);
                             foreach(Media m in mediaService.MediaList(i.Id,false))
                             {
-                                m.SetServerId(null, backend);
+                                m.ServerId = null;
                                 mediaService.ModifyMedia(m);
                             }
                         }
@@ -402,7 +400,7 @@ namespace MyHoard.Services
 
         private async Task<bool> modifyCollection(Collection c)
         {
-            var request = new RestRequest("/collections/" + c.GetServerId(backend) + "/", Method.PUT);
+            var request = new RestRequest("/collections/" + c.ServerId + "/", Method.PUT);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
@@ -415,7 +413,7 @@ namespace MyHoard.Services
                 case System.Net.HttpStatusCode.OK:
                     ServerCollection sc = JsonConvert.DeserializeObject<ServerCollection>(response.Content);
                     c.ModifiedDate = sc.ModifiedDate();
-                    c.SetSynced(true, backend);
+                    c.IsSynced = true;
                     collectionService.ModifyCollection(c);
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
@@ -447,8 +445,8 @@ namespace MyHoard.Services
                 case System.Net.HttpStatusCode.Created:
                 case System.Net.HttpStatusCode.OK:
                     ServerCollection sc = JsonConvert.DeserializeObject<ServerCollection>(response.Content);
-                    c.SetServerId(sc.id, backend);
-                    c.SetSynced(true, backend);
+                    c.ServerId = sc.id;
+                    c.IsSynced = true;
                     c.ModifiedDate = sc.ModifiedDate();
                     collectionService.ModifyCollection(c);
                     return true;
@@ -488,8 +486,8 @@ namespace MyHoard.Services
             {
                 case System.Net.HttpStatusCode.Created:
                     ServerItem si = JsonConvert.DeserializeObject<ServerItem>(response.Content);
-                    i.SetServerId(si.id, backend);
-                    i.SetSynced(true, backend);
+                    i.ServerId = si.id;
+                    i.IsSynced = true;
                     i.ModifiedDate = si.ModifiedDate();
                     itemService.ModifyItem(i);
                     return true;
@@ -509,7 +507,7 @@ namespace MyHoard.Services
 
         private async Task<bool> modifyItem(Item i, string parentServerId)
         {
-            var request = new RestRequest("/items/" + i.GetServerId(backend) + "/", Method.PUT);
+            var request = new RestRequest("/items/" + i.ServerId + "/", Method.PUT);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
@@ -529,7 +527,7 @@ namespace MyHoard.Services
             {
                 case System.Net.HttpStatusCode.OK:
                     ServerItem si = JsonConvert.DeserializeObject<ServerItem>(response.Content);
-                    i.SetSynced(true, backend);
+                    i.IsSynced=true;
                     i.ModifiedDate = si.ModifiedDate();
                     itemService.ModifyItem(i);
                     return true;
@@ -549,7 +547,7 @@ namespace MyHoard.Services
 
         private async Task<bool> deleteItem(Item i)
         {
-            var request = new RestRequest("/items/" + i.GetServerId(backend) + "/", Method.DELETE);
+            var request = new RestRequest("/items/" + i.ServerId + "/", Method.DELETE);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
@@ -562,7 +560,7 @@ namespace MyHoard.Services
             {
                 case System.Net.HttpStatusCode.NoContent:
                 case System.Net.HttpStatusCode.NotFound:
-                    i.SetServerId(null, backend);
+                    i.ServerId = null;
                     itemService.ModifyItem(i);
                     itemService.DeleteItem(i);
                     return true;

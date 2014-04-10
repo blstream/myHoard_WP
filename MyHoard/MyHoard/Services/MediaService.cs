@@ -76,23 +76,9 @@ namespace MyHoard.Services
         public List<string> MediaStringList(int itemId, string backend)
         {
             List<Media> mediaList = databaseService.ListAllTable<Media>().Where(i => i.ItemId == itemId && i.ToDelete == false).ToList();
-            List<string> ids = new List<string>();
-
-            foreach (Media m in mediaList)
-            {
-                switch (backend)
-                {
-                    case "Python":
-                        ids.Add(m.PythonId);
-                        break;
-                    case "Java1":
-                        ids.Add(m.Java1Id);
-                        break;
-                    case "Java2":
-                        ids.Add(m.Java2Id);
-                        break;
-                }
-            }
+            List<string> ids = (from m in mediaList
+                               select m.ServerId).ToList();
+            
             return ids;
         }
 
@@ -120,7 +106,7 @@ namespace MyHoard.Services
             {
                 ItemService itemService = IoC.Get<ItemService>();
                 Item i = itemService.GetItem(parentId);
-                i.Desync();
+                i.IsSynced = false;
                 itemService.ModifyItem(i);
             }
         }
@@ -132,7 +118,7 @@ namespace MyHoard.Services
                 if (m.ToDelete)
                 {
                     DeleteMediaFromIsolatedStorage(m);
-                    if (String.IsNullOrEmpty(m.PythonId) && String.IsNullOrEmpty(m.Java1Id) && String.IsNullOrEmpty(m.Java2Id))
+                    if (String.IsNullOrEmpty(m.ServerId))
                         DeleteMedia(m);
                 }
             }
@@ -223,17 +209,6 @@ namespace MyHoard.Services
             }
         }
 
-        public void DeleteAll()
-        {
-            foreach (Media m in MediaList(false))
-            {
-                m.ToDelete = true;
-                m.PythonId = null;
-                m.Java1Id = null;
-                m.Java2Id = null;
-                ModifyMedia(m);
-            }
-        }
 
     }
 }

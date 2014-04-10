@@ -42,7 +42,7 @@ namespace MyHoard.Services
 
         public async Task ChangeUser(bool copyDefault=false)
         {
-            await databaseService.ChangeDatabase(Configuration.Email,copyDefault);
+            await databaseService.ChangeDatabase(Configuration.Email,Configuration.Backend, copyDefault);
             IoC.Get<MediaService>().CleanIsolatedStorage();
         }
 

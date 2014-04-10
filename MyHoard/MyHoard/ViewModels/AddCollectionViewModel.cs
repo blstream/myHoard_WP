@@ -346,13 +346,9 @@ namespace MyHoard.ViewModels
                     CreatedDate = CurrentCollection.CreatedDate,
                     Id = CurrentCollection.Id,
                     ItemsNumber = CurrentCollection.ItemsNumber,
-                    Java1Id = CurrentCollection.Java1Id,
-                    Java1IsSynced = CurrentCollection.Java1IsSynced,
-                    Java2Id = CurrentCollection.Java2Id,
-                    Java2IsSynced = CurrentCollection.Java2IsSynced,
+                    ServerId = CurrentCollection.ServerId,
+                    IsSynced = CurrentCollection.IsSynced,
                     ModifiedDate = CurrentCollection.ModifiedDate,
-                    PythonId = CurrentCollection.PythonId,
-                    PythonIsSynced = CurrentCollection.PythonIsSynced,
                     Tags = CurrentCollection.Tags,
                     IsPrivate = CurrentCollection.IsPrivate
                 };

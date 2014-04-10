@@ -32,20 +32,20 @@ namespace MyHoard.Services
             
         }
 
-        public async Task ChangeDatabase(string UserName, bool copyDefault=false)
+        public async Task ChangeDatabase(string userName, string backend, bool copyDefault=false)
         {
             CloseConnection();
-            if (!String.IsNullOrWhiteSpace(UserName))
+            if (!String.IsNullOrWhiteSpace(userName))
             {
                 if (copyDefault)
                 {
-                    if (!System.IO.File.Exists(ApplicationData.Current.LocalFolder.Path + "\\" + UserName + "_" + DefaultName))
+                    if (!System.IO.File.Exists(ApplicationData.Current.LocalFolder.Path + "\\" + backend + "_" + userName + "_" + DefaultName))
                     {
                         StorageFile databaseFile = await ApplicationData.Current.LocalFolder.GetFileAsync(DefaultName);
-                        await databaseFile.RenameAsync(UserName + "_" + DefaultName);
+                        await databaseFile.RenameAsync(backend + "_" + userName + "_" + DefaultName);
                     }
                 }
-                dbConnection = new SQLiteConnection(Path.Combine(ApplicationData.Current.LocalFolder.Path, UserName + "_" + DefaultName));
+                dbConnection = new SQLiteConnection(Path.Combine(ApplicationData.Current.LocalFolder.Path, backend + "_" + userName + "_" + DefaultName));
             }
             else
             {

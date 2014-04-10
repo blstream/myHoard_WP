@@ -35,8 +35,7 @@ namespace MyHoard.Services
         public void DeleteItem(Item item, bool forceDelete = false)
         {
 
-            if(forceDelete || (String.IsNullOrEmpty(item.PythonId)
-                    && String.IsNullOrEmpty(item.Java1Id) && String.IsNullOrEmpty(item.Java2Id)))
+            if(forceDelete || String.IsNullOrEmpty(item.ServerId))
             {
                 databaseService.Delete(item);
             }
@@ -49,7 +48,7 @@ namespace MyHoard.Services
             MediaService ms = IoC.Get<MediaService>();
             foreach(Media m in ms.MediaList(item.Id, false, false))
             {
-                m.Java1Id = m.Java2Id = m.PythonId = null;
+                m.ServerId = null;
                 m.ToDelete = true;
                 ms.ModifyMedia(m);
             }

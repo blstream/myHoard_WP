@@ -35,8 +35,7 @@ namespace MyHoard.Services
 
         public void DeleteCollection(Collection collection, bool forceDelete=false)
         {
-            if (forceDelete || collection.IsPrivate || (String.IsNullOrEmpty(collection.PythonId)
-                    && String.IsNullOrEmpty(collection.Java1Id) && String.IsNullOrEmpty(collection.Java2Id)))
+            if (forceDelete || collection.IsPrivate || String.IsNullOrEmpty(collection.ServerId))
             {
                 databaseService.Delete(collection);
             }
