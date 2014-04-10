@@ -34,7 +34,7 @@ namespace MyHoard.Services
                 Configuration = new Configuration();
                 databaseService.Add(Configuration);
             }
-            if(Configuration.IsLoggedIn)
+            if(!string.IsNullOrEmpty(Configuration.Email))
             {
                 ChangeUser();
             }

@@ -69,24 +69,16 @@ namespace MyHoard
         protected override void OnLaunch(object sender, Microsoft.Phone.Shell.LaunchingEventArgs e)
         {
             base.OnLaunch(sender, e);
-            IoC.Get<MediaService>().CleanIsolatedStorage();
+            ConfigurationService configurationService = IoC.Get<ConfigurationService>();
         }
         protected override void OnClose(object sender, Microsoft.Phone.Shell.ClosingEventArgs e)
         {
             ConfigurationService configurationService = IoC.Get<ConfigurationService>();
-            if(configurationService.Configuration.KeepLogged)
+            if (!configurationService.Configuration.KeepLogged)
             {
-                RegistrationService rs = new RegistrationService();
-                rs.Login(configurationService.Configuration.UserName, configurationService.Configuration.Password, true, configurationService.Configuration.Backend);
-            }
-            else
-            {
-                configurationService.Configuration.Email = null;
                 configurationService.Configuration.IsLoggedIn = false;
                 configurationService.SaveConfig();
             }
-
-            
             base.OnClose(sender, e);
         }
 
