@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MyHoard.Services
@@ -19,11 +20,13 @@ namespace MyHoard.Services
         private const int ThumbnailSize = 100;
         private DatabaseService databaseService;
         private IsolatedStorageFile isolatedStorageFile;
+        private ImageSource defaultThumbnail;
 
         public MediaService()
         {
             databaseService = IoC.Get<DatabaseService>();
             isolatedStorageFile = IsolatedStorageFile.GetUserStoreForApplication();
+            defaultThumbnail = new BitmapImage(new Uri("/Images/camera.png", UriKind.Relative));
         }
 
         public Media AddMedia(Media media)
@@ -71,6 +74,17 @@ namespace MyHoard.Services
             }
 
             return mediaList;
+        }
+
+        public ImageSource GetRandomThumbnail(int itemId)
+        {
+            List<Media> mediaList = MediaList(itemId, false, false);
+            Media m = mediaList.ElementAtOrDefault(new System.Random().Next(mediaList.Count()));
+            if (m != null)
+                return GetPictureFromIsolatedStorage(m, true);
+            else
+                return defaultThumbnail;
+
         }
 
         public List<string> MediaStringList(int itemId, string backend)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace MyHoard.Models
 {
@@ -14,12 +15,12 @@ namespace MyHoard.Models
 
         private string name;
         private string description;
-        private string thumbnail;
         private string tags;
         private int itemsNumber;
         private DateTime createdDate;
         private DateTime modifiedDate;
         private bool isPrivate;
+        private ImageSource thumbnail;
 
         public Collection()
         {
@@ -49,8 +50,8 @@ namespace MyHoard.Models
             }
         }
 
-        
-        public string Thumbnail
+        [Ignore]
+        public ImageSource Thumbnail
         {
             get { return thumbnail; }
             set

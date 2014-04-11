@@ -28,7 +28,7 @@ namespace MyHoard.ViewModels
         protected override void OnActivate()
         {
             base.OnActivate();
-            Items = itemService.ItemList(CollectionId);
+            Items = itemService.ItemList(CollectionId, false, true);
         }
 
         public List<Item> Items

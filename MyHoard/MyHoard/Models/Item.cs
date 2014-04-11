@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace MyHoard.Models
 {
@@ -17,7 +18,7 @@ namespace MyHoard.Models
         private float locationLng;
         private DateTime createdDate;
         private DateTime modifiedDate;
-
+        private ImageSource thumbnail;
 
         public string Name
         {
@@ -40,7 +41,16 @@ namespace MyHoard.Models
             }
         }
 
-       
+        [Ignore]
+        public ImageSource Thumbnail
+        {
+            get { return thumbnail; }
+            set
+            {
+                thumbnail = value;
+            }
+        }
+
         public int Quantity
         {
             get { return quantity; }

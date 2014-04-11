@@ -40,12 +40,26 @@
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock  Style="{StaticResource PhoneTextLargeStyle}" 
-                                        Margin="10,0" Grid.Column="0" 
-                                        VerticalAlignment="Center"
-                                        TextWrapping="Wrap" Text="{Binding Name}"
-                                    cal:Message.Attach="[Event Tap] = [Action ItemDetails]" />
-                        
+                        <Border BorderThickness="0,0,0,1" BorderBrush="{StaticResource PhoneForegroundBrush}" 
+                                Margin="0" Padding="0,12" cal:Message.Attach="[Event Tap] = [Action ItemDetails]">
+                            <Grid>
+                                <Grid.Resources>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Margin" Value="0,0,4,0" />
+                                    </Style>
+                                </Grid.Resources>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Image Width="80" Height="80" Stretch="UniformToFill" Grid.Column="0"
+                                    Source="{Binding Thumbnail}" />
+                                <TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" 
+                                           VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="1" 
+                                           TextWrapping="Wrap" />
+                            </Grid>
+                        </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

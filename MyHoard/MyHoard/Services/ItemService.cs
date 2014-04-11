@@ -86,12 +86,21 @@ namespace MyHoard.Services
             return databaseService.ListAll<Item>();
         }
 
-        public List<Item> ItemList(int collectionId, bool withDeleted=false)
+        public List<Item> ItemList(int collectionId, bool withDeleted=false, bool withThumbnails = false)
         {
-            if (withDeleted)
-                return databaseService.ListAllTable<Item>().Where(i => i.CollectionId == collectionId).ToList();
-            else
-                return databaseService.ListAllTable<Item>().Where(i => (i.CollectionId == collectionId && i.ToDelete == false)).ToList();
+            List<Item> itemList;
+                itemList = withDeleted? databaseService.ListAllTable<Item>().Where(i => i.CollectionId == collectionId).ToList():
+                    databaseService.ListAllTable<Item>().Where(i => (i.CollectionId == collectionId && i.ToDelete == false)).ToList();
+            if(withThumbnails)
+            {
+                MediaService ms = IoC.Get<MediaService>();
+                foreach(Item i in itemList)
+                {
+                    i.Thumbnail = ms.GetRandomThumbnail(i.Id);
+                }
+            }
+
+            return itemList;
         }
 
     }
