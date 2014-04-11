@@ -161,7 +161,7 @@ namespace MyHoard.Services
                         {
                             Item localItem = items.FirstOrDefault(i => i.ServerId == serverItem.id);
                             localItem = syncItemFromServer(localItem, serverItem, localCollection.Id);
-                            syncMedia(localItem, serverItem);
+                            await syncMedia(localItem, serverItem);
                         }
                     else
                         return;
@@ -195,7 +195,7 @@ namespace MyHoard.Services
             mediaService.AddMedia(m);
         }
 
-        private async void syncMedia(Item localItem, ServerItem serverItem)
+        private async Task syncMedia(Item localItem, ServerItem serverItem)
         {
             List<Media> media = mediaService.MediaList(localItem.Id, false);
 
