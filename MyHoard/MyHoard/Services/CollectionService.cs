@@ -75,12 +75,20 @@ namespace MyHoard.Services
         }
 
         
-        public List<Collection> CollectionList(bool withDeleted=false)
+        public List<Collection> CollectionList(bool withDeleted=false, bool withThumbnails = false)
         {
-            if(withDeleted)
-                return databaseService.ListAll<Collection>();
-            else
-                return databaseService.ListAll<Collection>().Where(x=>x.ToDelete==false).ToList();
+            List<Collection> collectionList = withDeleted? databaseService.ListAll<Collection>():
+                databaseService.ListAll<Collection>().Where(x=>x.ToDelete==false).ToList();
+            if(withThumbnails)
+            {
+                MediaService ms = IoC.Get<MediaService>();
+                foreach (Collection c in collectionList)
+                {
+                    c.Thumbnail = ms.GetRandomThumbnail(c);
+                }
+            }
+
+            return collectionList;
             
         }
 

@@ -96,7 +96,7 @@ namespace MyHoard.Services
                 MediaService ms = IoC.Get<MediaService>();
                 foreach(Item i in itemList)
                 {
-                    i.Thumbnail = ms.GetRandomThumbnail(i.Id);
+                    i.Thumbnail = ms.GetRandomThumbnail(i);
                 }
             }
 

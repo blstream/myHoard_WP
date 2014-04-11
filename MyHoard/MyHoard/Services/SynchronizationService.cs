@@ -475,7 +475,7 @@ namespace MyHoard.Services
                 name = i.Name,
                 description = i.Description,
                 //location = new { lat = i.LocationLat, lng = i.LocationLng },
-                media = mediaService.MediaStringList(i.Id, backend),
+                media = mediaService.MediaStringList(i.Id),
                 collection = parentServerId
             });
 
@@ -517,7 +517,7 @@ namespace MyHoard.Services
                 name = i.Name,
                 description = i.Description,
                 //location = new { lat = i.LocationLat, lng = i.LocationLng },
-                media = mediaService.MediaStringList(i.Id, backend),
+                media = mediaService.MediaStringList(i.Id),
                 collection = parentServerId
             });
 

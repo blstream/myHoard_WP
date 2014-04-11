@@ -97,7 +97,7 @@ namespace MyHoard.ViewModels
         {
             base.OnActivate();
             eventAggregator.Subscribe(this);
-            Collections = CollectionService.CollectionList().OrderBy(e => e.Name).ToList<Collection>();
+            Collections = CollectionService.CollectionList(false, true).OrderBy(e => e.Name).ToList<Collection>();
             if (configurationService.Configuration.IsLoggedIn)
                 IsSyncVisible = Visibility.Visible;
             else

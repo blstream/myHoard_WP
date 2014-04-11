@@ -76,18 +76,35 @@ namespace MyHoard.Services
             return mediaList;
         }
 
-        public ImageSource GetRandomThumbnail(int itemId)
+        public ImageSource GetRandomThumbnail(Item item)
         {
-            List<Media> mediaList = MediaList(itemId, false, false);
+            List<Media> mediaList = MediaList(item.Id, false, false);
             Media m = mediaList.ElementAtOrDefault(new System.Random().Next(mediaList.Count()));
             if (m != null)
                 return GetPictureFromIsolatedStorage(m, true);
             else
                 return defaultThumbnail;
-
         }
 
-        public List<string> MediaStringList(int itemId, string backend)
+
+        public  ImageSource GetRandomThumbnail(Collection colleciton)
+        {
+            
+            List<Media> mediaList = new List<Media>();
+            foreach(Item i in IoC.Get<ItemService>().ItemList(colleciton.Id, false, false))
+            {
+                mediaList.AddRange(MediaList(i.Id, false, false));
+            }
+
+            Media m = mediaList.ElementAtOrDefault(new System.Random().Next(mediaList.Count()));
+            if (m != null)
+                return GetPictureFromIsolatedStorage(m, true);
+            else
+                return defaultThumbnail;
+            
+        }
+
+        public List<string> MediaStringList(int itemId)
         {
             List<Media> mediaList = databaseService.ListAllTable<Media>().Where(i => i.ItemId == itemId && i.ToDelete == false).ToList();
             List<string> ids = (from m in mediaList
