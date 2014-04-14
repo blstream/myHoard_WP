@@ -79,6 +79,7 @@ namespace MyHoard
                 configurationService.Configuration.IsLoggedIn = false;
                 configurationService.SaveConfig();
             }
+            IoC.Get<MediaService>().CleanIsolatedStorage();
             base.OnClose(sender, e);
         }
 
