@@ -324,11 +324,9 @@ namespace MyHoard.Services
         {
             var request = new RestRequest("/media/", Method.POST);
             request.RequestFormat = DataFormat.Json;
-            request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
+            request.AddFile("image", mediaService.GetPictureAsByteArray(m), m.FileName, "image");
 
-            request.AddFile("image", mediaService.GetPictureAsByteArray(m), m.FileName);
-            //request.AddFile("image", mediaService.GetAbsolutePath(m.FileName));
             var response = await myHoardApi.Execute(request);
 
             JObject parsedResponse = new JObject();

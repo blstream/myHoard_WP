@@ -210,11 +210,10 @@ namespace MyHoard.Services
 
             if (isoStore.FileExists(filename))
             {
-                IsolatedStorageFileStream output = new IsolatedStorageFileStream(filename, FileMode.Open, isoStore);
-                absoulutePath = output.Name;
-
-                output.Close();
-                output = null;
+                using(IsolatedStorageFileStream output = new IsolatedStorageFileStream(filename, FileMode.Open, isoStore))
+                { 
+                    absoulutePath = output.Name;
+                }
             }
 
             return absoulutePath;
