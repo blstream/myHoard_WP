@@ -78,7 +78,7 @@ namespace MyHoard.Services
 
         public ImageSource GetRandomThumbnail(Item item)
         {
-            List<Media> mediaList = MediaList(item.Id, false, false);
+            List<Media> mediaList = MediaList(item.Id, false, false).Where(x => x.ToDelete == false).ToList();
             Media m = mediaList.ElementAtOrDefault(new System.Random().Next(mediaList.Count()));
             if (m != null)
                 return GetPictureFromIsolatedStorage(m, true);
@@ -93,7 +93,7 @@ namespace MyHoard.Services
             List<Media> mediaList = new List<Media>();
             foreach(Item i in IoC.Get<ItemService>().ItemList(colleciton.Id, false, false))
             {
-                mediaList.AddRange(MediaList(i.Id, false, false));
+                mediaList.AddRange(MediaList(i.Id, false, false).Where(x => x.ToDelete == false).ToList());
             }
 
             Media m = mediaList.ElementAtOrDefault(new System.Random().Next(mediaList.Count()));
