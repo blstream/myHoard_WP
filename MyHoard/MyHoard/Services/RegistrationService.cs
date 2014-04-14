@@ -13,8 +13,8 @@ namespace MyHoard.Services
 {
     public class RegistrationService
     {
-        
-        public RestRequestAsyncHandle Register( string email, string password, string backend)
+
+        public RestRequestAsyncHandle Register(string email, string password, string backend)
         {
             MyHoardApi myHoardApi = new MyHoardApi(ConfigurationService.Backends[backend]);
 
@@ -24,7 +24,7 @@ namespace MyHoard.Services
                 var request = new RestRequest("/users/", Method.POST);
                 request.RequestFormat = DataFormat.Json;
                 request.AddHeader("Content-type", "application/json");
-                request.AddBody(new {email = email, password = password });
+                request.AddBody(new { email = email, password = password });
                 return myHoardApi.ExecuteAsync(request, (response) =>
                 {
                     if (response.ResponseStatus != ResponseStatus.Aborted)
@@ -48,7 +48,7 @@ namespace MyHoard.Services
                             eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError));
                         }
                     }
-                        
+
                 });
             }
             else
@@ -75,38 +75,33 @@ namespace MyHoard.Services
                     if (response.ResponseStatus != ResponseStatus.Aborted)
                     {
                         ServerMessage serverMessage = new ServerMessage(false, Resources.AppResources.AuthenticationError);
-                        try
+                        JObject parsedResponse = JObject.Parse(response.Content);
+                        switch (response.StatusCode)
                         {
-                            
-                            if(response.StatusCode==System.Net.HttpStatusCode.OK)
-                            {
-                                JObject parsedResponse = JObject.Parse(response.Content);
-                                if (String.IsNullOrWhiteSpace((string)parsedResponse["error_code"]))
-                                {
-                                    
-                                    configurationService.Configuration.AccessToken = parsedResponse["access_token"].ToString();
-                                    configurationService.Configuration.RefreshToken = parsedResponse["refresh_token"].ToString();
-                                    configurationService.Configuration.Password = password;
-                                    configurationService.Configuration.Email = email;
-                                    configurationService.Configuration.KeepLogged = keepLogged;
-                                    configurationService.Configuration.Backend = backend;
-                                    configurationService.Configuration.IsLoggedIn = true;
-                                    configurationService.SaveConfig();
-                                    serverMessage.IsSuccessfull = true;
-                                    serverMessage.Message = Resources.AppResources.LoginSuccess;
-                                }
-                                else
-                                {
-                                    configurationService.Logout();
-                                    serverMessage.Message += ": " + parsedResponse["error_message"]+ "\n" + parsedResponse["errors"];
-                                }
-                            }
+                            case System.Net.HttpStatusCode.OK:
+                            case System.Net.HttpStatusCode.Created:
+                                configurationService.Configuration.AccessToken = parsedResponse["access_token"].ToString();
+                                configurationService.Configuration.RefreshToken = parsedResponse["refresh_token"].ToString();
+                                configurationService.Configuration.Password = password;
+                                configurationService.Configuration.Email = email;
+                                configurationService.Configuration.KeepLogged = keepLogged;
+                                configurationService.Configuration.Backend = backend;
+                                configurationService.Configuration.IsLoggedIn = true;
+                                configurationService.SaveConfig();
+                                serverMessage.IsSuccessfull = true;
+                                serverMessage.Message = Resources.AppResources.LoginSuccess;
+                                break;
+                            case System.Net.HttpStatusCode.Unauthorized:
+                            case System.Net.HttpStatusCode.Forbidden:
+                                configurationService.Logout();
+                                serverMessage.Message += ": " + parsedResponse["error_message"] + "\n" + parsedResponse["errors"];
+                                break;
+                            default:
+                                configurationService.Logout();
+                                serverMessage.Message += ": " + parsedResponse["error_message"] + "\n" + parsedResponse["errors"];
+                                break;
+                        }
 
-                        }
-                        catch (Exception e)
-                        {
-                            Debug.WriteLine(e.Message);
-                        }
                         eventAggregator.Publish(serverMessage);
                     }
                 });
@@ -120,8 +115,8 @@ namespace MyHoard.Services
 
         public async Task<bool> RefreshToken()
         {
-            bool success=false;
-            
+            bool success = false;
+
             IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
             if (NetworkInterface.GetIsNetworkAvailable())
             {
@@ -158,7 +153,7 @@ namespace MyHoard.Services
                             else
                             {
                                 configurationService.Logout();
-                                ServerMessage serverMessage = new ServerMessage(false, Resources.AppResources.AuthenticationError+ ": " + parsedResponse["error_message"]);
+                                ServerMessage serverMessage = new ServerMessage(false, Resources.AppResources.AuthenticationError + ": " + parsedResponse["error_message"]);
                                 eventAggregator.Publish(serverMessage);
                             }
                         }
@@ -168,7 +163,7 @@ namespace MyHoard.Services
                     {
                         Debug.WriteLine(e.Message);
                     }
-                    
+
                 }
             }
 
@@ -177,7 +172,7 @@ namespace MyHoard.Services
                 ServerMessage serverMessage = new ServerMessage(false, Resources.AppResources.InternetConnectionError);
                 eventAggregator.Publish(serverMessage);
             }
-            
+
             return success;
         }
     }

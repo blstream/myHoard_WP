@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,10 @@ namespace MyHoard.Models.Server
 {
     public class Location
     {
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public float lat { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public float lng { get; set; }
     }
 }
