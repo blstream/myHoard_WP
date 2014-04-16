@@ -313,7 +313,7 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log In.
+        ///   Looks up a localized string similar to login.
         /// </summary>
         public static string Login {
             get {
@@ -331,7 +331,7 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log out.
+        ///   Looks up a localized string similar to logout.
         /// </summary>
         public static string Logout {
             get {

@@ -228,7 +228,7 @@
     <value>User Name</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Log In</value>
+    <value>login</value>
   </data>
   <data name="LoginSuccess" xml:space="preserve">
     <value>You have successfully logged in</value>
@@ -237,7 +237,7 @@
     <value>Remember my password</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Log out</value>
+    <value>logout</value>
   </data>
   <data name="Sync" xml:space="preserve">
     <value>Sync</value>
