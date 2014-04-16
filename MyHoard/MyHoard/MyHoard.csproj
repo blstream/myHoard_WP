@@ -257,6 +257,8 @@
     <Content Include="Images\delete.png" />
     <Content Include="Images\edit.png" />
     <Content Include="Images\camera.png" />
+    <Content Include="Images\logo_login.png" />
+    <Content Include="Images\next.png" />
     <Content Include="Images\settings.png" />
     <Content Include="Images\folder.png" />
     <Content Include="Images\save.png" />

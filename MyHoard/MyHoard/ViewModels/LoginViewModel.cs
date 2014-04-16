@@ -34,6 +34,8 @@ namespace MyHoard.ViewModels
         private ConfigurationService configurationService;
         private ItemService itemService;
         private MediaService mediaService;
+        private double passwordBoxOpacity;
+        private double watermarkOpacity=100;
 
         public LoginViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator, ConfigurationService configurationService, ItemService itemService, MediaService mediaService)
             : base(navigationService, collectionService)
@@ -122,6 +124,26 @@ namespace MyHoard.ViewModels
 
 
 
+        public void PasswordLostFocus()
+        {
+            CheckPasswordWatermark();
+        }
+
+        public void CheckPasswordWatermark()
+        {
+            var passwordEmpty = string.IsNullOrEmpty(passwordBox.Password);
+            WatermarkOpacity = passwordEmpty ? 100 : 0;
+            PasswordBoxOpacity = passwordEmpty ? 0 : 100;
+        }
+
+        public void PasswordGotFocus()
+        {
+            WatermarkOpacity = 0;
+            PasswordBoxOpacity = 100;
+        }
+
+
+
         public void Login()
         {
             if (configurationService.Configuration.Email != Email)
@@ -140,6 +162,26 @@ namespace MyHoard.ViewModels
             {
                 email = value;
                 NotifyOfPropertyChange(() => Email);
+            }
+        }
+
+        public double PasswordBoxOpacity
+        {
+            get { return passwordBoxOpacity; }
+            set
+            {
+                passwordBoxOpacity = value;
+                NotifyOfPropertyChange(() => PasswordBoxOpacity);
+            }
+        }
+
+        public double WatermarkOpacity
+        {
+            get { return watermarkOpacity; }
+            set
+            {
+                watermarkOpacity = value;
+                NotifyOfPropertyChange(() => WatermarkOpacity);
             }
         }
 

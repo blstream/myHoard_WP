@@ -75,7 +75,16 @@ namespace MyHoard.Services
                     if (response.ResponseStatus != ResponseStatus.Aborted)
                     {
                         ServerMessage serverMessage = new ServerMessage(false, Resources.AppResources.AuthenticationError);
-                        JObject parsedResponse = JObject.Parse(response.Content);
+
+                        JObject parsedResponse = new JObject();
+                        try
+                        {
+                            parsedResponse = JObject.Parse(response.Content);
+                        }
+                        catch(Newtonsoft.Json.JsonException)
+                        {
+                            serverMessage.Message = Resources.AppResources.GeneralError;
+                        }
                         switch (response.StatusCode)
                         {
                             case System.Net.HttpStatusCode.OK:

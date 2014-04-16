@@ -198,7 +198,7 @@
     <value>Confirm Password</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
   </data>
   <data name="AuthenticationError" xml:space="preserve">
     <value>An authentication error occurred</value>
@@ -233,8 +233,8 @@
   <data name="LoginSuccess" xml:space="preserve">
     <value>You have successfully logged in</value>
   </data>
-  <data name="KeepLogin" xml:space="preserve">
-    <value>Keep me logged in</value>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Remember my password</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Log out</value>
@@ -259,5 +259,17 @@
   </data>
   <data name="SyncError" xml:space="preserve">
     <value>Changes will be saved during next synchronization</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Forgot my password</value>
+  </data>
+  <data name="InsertEmail" xml:space="preserve">
+    <value>Insert e-mail here</value>
+  </data>
+  <data name="InsertPassword" xml:space="preserve">
+    <value>Insert password here</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>welcome!</value>
   </data>
 </root>
