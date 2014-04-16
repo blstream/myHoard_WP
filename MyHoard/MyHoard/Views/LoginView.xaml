@@ -88,7 +88,7 @@
                 <TextBlock Height="56" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Welcome, Source={StaticResource LocalizedStrings}}" Foreground="#FFFFC002" VerticalAlignment="Center" FontSize="33.333" TextAlignment="Center" Margin="0,-10,0,0" FontFamily="Segoe WP Light"/>
                 <TextBlock Height="30" Margin="24,10,0,0" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Email, Source={StaticResource LocalizedStrings}}" />
                 <toolkit:PhoneTextBox Name="Email" Hint="{Binding Path=LocalizedResources.InsertEmail, Source={StaticResource LocalizedStrings}}" Height="80" Margin="12,-10,12,0" TextWrapping="Wrap" BorderThickness="3" Width="460" Foreground="#FF333333"
-                              InputScope="EmailUserName" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]" />
+                              InputScope="EmailUserName" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]" Style="{StaticResource CustomTextBox}" />
 
                 <TextBlock Height="30" Margin="24,10,0,0" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Password, Source={StaticResource LocalizedStrings}}"/>
                 <Grid>
