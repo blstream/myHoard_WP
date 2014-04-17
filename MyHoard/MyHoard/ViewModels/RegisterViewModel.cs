@@ -23,13 +23,15 @@ namespace MyHoard.ViewModels
         private Dictionary<string, string> backends;
         private bool canRegister;
         private bool isFormAccessible;
-        private Visibility arePasswordRequirementsVisible;
+        private bool termsAccepted;
         private Visibility isProgressBarVisible;
         private string email;
         private string selectedBackend;
         private PasswordBox passwordBox;
-        private PasswordBox confirmPasswordBox;
         private RestRequestAsyncHandle asyncHandle;
+        private string password;
+        private double passwordBoxOpacity;
+        private double watermarkOpacity = 100;
 
         public RegisterViewModel(INavigationService navigationService, CollectionService collectionService, IEventAggregator eventAggregator)
             : base(navigationService, collectionService)
@@ -92,34 +94,24 @@ namespace MyHoard.ViewModels
         protected override void OnViewLoaded(object view)
         {
             passwordBox = ((RegisterView)view).Password;
-            confirmPasswordBox = ((RegisterView)view).ConfirmPassword;
             passwordBox.PasswordChanged += new RoutedEventHandler(PasswordChanged);
-            confirmPasswordBox.PasswordChanged += new RoutedEventHandler(PasswordChanged);
             base.OnViewLoaded(view);
         }
 
         public void PasswordChanged(object sender, RoutedEventArgs e)
         {
-
-            if (!String.IsNullOrEmpty(passwordBox.Password) &&
-                Regex.IsMatch(passwordBox.Password, "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{5,}$", RegexOptions.IgnoreCase))
-            {
-                ArePasswordRequirementsVisible = Visibility.Collapsed;
-            }
-            else
-            {
-                ArePasswordRequirementsVisible = Visibility.Visible;
-            }
+            Password = passwordBox.Password;
             DataChanged();
 
         }
-
+        
         public void DataChanged()
         {
             CanRegister = (!String.IsNullOrEmpty(Email) &&
                 Regex.IsMatch(Email, @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,24}))$", RegexOptions.IgnoreCase) &&
-                ArePasswordRequirementsVisible == Visibility.Collapsed && passwordBox.Password == confirmPasswordBox.Password);
+                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,24}))$") &&
+                !String.IsNullOrEmpty(passwordBox.Password) && TermsAccepted &&
+                Regex.IsMatch(passwordBox.Password, "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{5,}$"));
         }
 
         public void Register()
@@ -129,6 +121,44 @@ namespace MyHoard.ViewModels
             asyncHandle = registrationService.Register(Email, passwordBox.Password, SelectedBackend);
         }
 
+        public void PasswordLostFocus()
+        {
+            CheckPasswordWatermark();
+        }
+
+        public void CheckPasswordWatermark()
+        {
+            var passwordEmpty = string.IsNullOrEmpty(passwordBox.Password);
+            WatermarkOpacity = passwordEmpty ? 100 : 0;
+            PasswordBoxOpacity = passwordEmpty ? 0 : 100;
+        }
+
+
+        public void PasswordGotFocus()
+        {
+            WatermarkOpacity = 0;
+            PasswordBoxOpacity = 100;
+        }
+
+        public double PasswordBoxOpacity
+        {
+            get { return passwordBoxOpacity; }
+            set
+            {
+                passwordBoxOpacity = value;
+                NotifyOfPropertyChange(() => PasswordBoxOpacity);
+            }
+        }
+
+        public double WatermarkOpacity
+        {
+            get { return watermarkOpacity; }
+            set
+            {
+                watermarkOpacity = value;
+                NotifyOfPropertyChange(() => WatermarkOpacity);
+            }
+        }
         
         public string Email
         {
@@ -137,6 +167,16 @@ namespace MyHoard.ViewModels
             {
                 email = value;
                 NotifyOfPropertyChange(() => Email);
+            }
+        }
+
+        public string Password
+        {
+            get { return password; }
+            set
+            {
+                password = value;
+                NotifyOfPropertyChange(() => Password);
             }
         }
 
@@ -157,6 +197,17 @@ namespace MyHoard.ViewModels
             {
                 canRegister = value;
                 NotifyOfPropertyChange(() => CanRegister);
+            }
+        }
+
+        public bool TermsAccepted
+        {
+            get { return termsAccepted; }
+            set
+            {
+                termsAccepted = value;
+                NotifyOfPropertyChange(() => TermsAccepted);
+                DataChanged();
             }
         }
 
@@ -183,16 +234,7 @@ namespace MyHoard.ViewModels
             }
         }
 
-        public Visibility ArePasswordRequirementsVisible
-        {
-            get { return arePasswordRequirementsVisible; }
-            set
-            {
-                arePasswordRequirementsVisible = value;
-                NotifyOfPropertyChange(() => ArePasswordRequirementsVisible);
-            }
-        }
-
+        
         public Dictionary<string, string> Backends
         {
             get { return backends; }

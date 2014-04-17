@@ -40,11 +40,11 @@
                     <TextBlock  VerticalAlignment="Center" TextWrapping="Wrap" FontSize="16" Margin="0,27,0,25" HorizontalAlignment="Right" 
                         Text="{Binding Path=LocalizedResources.ForgotPassword, Source={StaticResource LocalizedStrings}}" />
                 </Grid>
-                <TextBlock Height="30" Margin="24,10,0,0" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Backend, Source={StaticResource LocalizedStrings}}"/>
+                <TextBlock Height="30" Margin="24,0,0,0" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Backend, Source={StaticResource LocalizedStrings}}"/>
                 <toolkit:ListPicker Margin="24,0,24,0" Foreground="#FF333333" 
                                 ItemsSource="{Binding Backends.Keys}"
                                 
-                                SelectedItem="{Binding SelectedBackend, Mode=TwoWay}" BorderBrush="{StaticResource PhoneTextBoxBrush}" Background="{StaticResource PhoneTextBoxBrush}" BorderThickness="3,6" Template="{StaticResource CustomListPickerTemplate}">
+                                SelectedItem="{Binding SelectedBackend, Mode=TwoWay}" BorderBrush="{StaticResource PhoneTextBoxBrush}" Background="{StaticResource PhoneTextBoxBrush}" BorderThickness="3" Template="{StaticResource CustomListPickerTemplate}">
                     
                 </toolkit:ListPicker>
 

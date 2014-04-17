@@ -12,25 +12,26 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True"
+    xmlns:local="clr-namespace:MyHoard"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
     xmlns:bab="clr-namespace:Caliburn.Micro.BindableAppBar;assembly=Caliburn.Micro.BindableAppBar"
     cal:Message.Attach="[Event BackKeyPress] = [Action OnGoBack($eventArgs)]">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <!--<Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!--TitlePanel contains the name of the application and page title-->
+        --><!--TitlePanel contains the name of the application and page title--><!--
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextLargeStyle}" Margin="12,0"/>
         </StackPanel>
 
-        <!--ContentPanel - place additional content here-->
+        --><!--ContentPanel - place additional content here--><!--
         <Grid x:Name="ContentPanel" Grid.Row="1" >
             <ScrollViewer IsEnabled="{Binding IsFormAccessible}">
                 <Grid Margin="12,0,12,0">
@@ -81,6 +82,73 @@
                                       Text="{Binding Path=LocalizedResources.Register, Source={StaticResource LocalizedStrings}}"
                                       IconUri="Images/add.png"/>
         </bab:BindableAppBar>
+    </Grid>-->
+
+    <UserControl.Resources>
+        <local:StringToBrushConverter x:Key="Converter"/>
+    </UserControl.Resources>
+    
+    <Grid x:Name="LayoutRoot" Background="#FF333333" >
+
+        <ScrollViewer IsEnabled="{Binding IsFormAccessible}">
+            <StackPanel >
+                <Image Source="/Images/logo_login.png" Height="140" Margin="2,8,0,0"/>
+                <TextBlock Height="56" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Welcome, Source={StaticResource LocalizedStrings}}" Foreground="#FFFFC002" VerticalAlignment="Center" FontSize="33.333" TextAlignment="Center" Margin="0,-10,0,0" FontFamily="Segoe WP Light"/>
+                <TextBlock Height="30" Margin="24,10,0,0" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Email, Source={StaticResource LocalizedStrings}}" />
+                <toolkit:PhoneTextBox Name="Email" Hint="{Binding Path=LocalizedResources.InsertEmail, Source={StaticResource LocalizedStrings}}" Height="80" Margin="12,-10,12,0" TextWrapping="Wrap" BorderThickness="3" Width="460" Foreground="#FF333333"
+                              InputScope="EmailUserName" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]" Style="{StaticResource CustomTextBoxStyle}" />
+
+                <TextBlock Height="30" Margin="24,10,0,0" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Password, Source={StaticResource LocalizedStrings}}"/>
+                <Grid>
+                    <toolkit:PhoneTextBox Name="PasswordWatermark" Hint="{Binding Path=LocalizedResources.InsertPassword, Source={StaticResource LocalizedStrings}}" Height="80" Margin="12,-10,8,0"  BorderThickness="3" Width="460" 
+                     IsHitTestVisible="False" Foreground="#FF333333" Opacity="{Binding WatermarkOpacity;}" />
+                    <PasswordBox Name="Password" Height="80" Margin="12,-10,8,0" Opacity="{Binding PasswordBoxOpacity;}" BorderThickness="3" Width="460" Foreground="#FF333333"
+                         cal:Message.Attach="[Event LostFocus] = [Action PasswordLostFocus]; [Event GotFocus] = [Action PasswordGotFocus]" Style="{StaticResource CustomPasswordBoxStyle}"/>
+                </Grid>
+                <TextBlock Margin="24,0,0,0" Text="Password strength" TextWrapping="Wrap" Width="198" FontSize="20" HorizontalAlignment="Left" Height="30"/>
+                <Grid Height="16" Margin="24,2,24,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Background="{Binding Path=Password, Converter={StaticResource Converter}, ConverterParameter=0, Mode=OneWay}" />
+                    <Border Grid.Column="1" Background="{Binding Path=Password, Converter={StaticResource Converter}, ConverterParameter=1, Mode=OneWay}" />
+                    <Border Grid.Column="2" Background="{Binding Path=Password, Converter={StaticResource Converter}, ConverterParameter=2, Mode=OneWay}" />
+                    <Border Grid.Column="3" Background="{Binding Path=Password, Converter={StaticResource Converter}, ConverterParameter=3, Mode=OneWay}" />
+                </Grid>
+                <Grid Margin="14,0,24,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox  Name ="TermsAccepted" Background="#FF333333" HorizontalAlignment="Left"  VerticalAlignment="Center" FontSize="16"
+                       Content="I accept the" Grid.Column="0" />
+                    <TextBlock  VerticalAlignment="Center" TextWrapping="Wrap" FontSize="16"  
+                        Text="Terms of Service" Grid.Column="1" TextDecorations="Underline" Margin="-5,0,0,0" />
+                </Grid>
+                <TextBlock Height="30" Margin="24,0,0,0" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Backend, Source={StaticResource LocalizedStrings}}"/>
+                <toolkit:ListPicker Margin="24,0,24,0" Foreground="#FF333333" 
+                                ItemsSource="{Binding Backends.Keys}"
+                                
+                                SelectedItem="{Binding SelectedBackend, Mode=TwoWay}" BorderBrush="{StaticResource PhoneTextBoxBrush}" Background="{StaticResource PhoneTextBoxBrush}" BorderThickness="3" Template="{StaticResource CustomListPickerTemplate}">
+
+                </toolkit:ListPicker>
+
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+        <ProgressBar Margin="5" Foreground="#FFFFC002" IsIndeterminate="True" Visibility="{Binding IsProgressBarVisible;}" VerticalAlignment="Top" />
+
+        <bab:BindableAppBar x:Name="AppBar">
+            <bab:BindableAppBarButton x:Name="Register"
+                                      Text="{Binding Path=LocalizedResources.Register, Source={StaticResource LocalizedStrings}}"
+                                      IconUri="Images/next.png"/>
+        </bab:BindableAppBar>
     </Grid>
+
 
 </phone:PhoneApplicationPage>

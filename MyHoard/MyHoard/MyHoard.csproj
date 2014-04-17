@@ -114,6 +114,7 @@
     <Compile Include="Services\ServiceErrorMessage.cs" />
     <Compile Include="Services\ItemService.cs" />
     <Compile Include="Services\SynchronizationService.cs" />
+    <Compile Include="StringToBrushConverter.cs" />
     <Compile Include="ViewModels\AddCollectionViewModel.cs" />
     <Compile Include="ViewModels\AddItemViewModel.cs" />
     <Compile Include="ViewModels\CollectionDetailsViewModel.cs" />
