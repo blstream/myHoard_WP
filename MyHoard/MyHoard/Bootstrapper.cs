@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 
 namespace MyHoard
@@ -25,7 +26,7 @@ namespace MyHoard
             container = new PhoneContainer();
 
             container.RegisterPhoneServices(RootFrame);
-            container.PerRequest<MainPageViewModel>();
+            container.PerRequest<WelcomeViewModel>();
             container.PerRequest<AddCollectionViewModel>();
             container.PerRequest<CollectionListViewModel>();
             container.PerRequest<CollectionDetailsViewModel>();
