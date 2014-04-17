@@ -59,7 +59,13 @@ namespace MyHoard.ViewModels
             }
         }
 
-        
+        public void Trim()
+        {
+            if (!string.IsNullOrEmpty(CurrentItem.Name))
+                CurrentItem.Name = CurrentItem.Name.Trim();
+            if (!string.IsNullOrEmpty(CurrentItem.Description))
+                CurrentItem.Description = CurrentItem.Description.Trim();
+        }
 
         public void DataChanged()
         {
@@ -118,6 +124,7 @@ namespace MyHoard.ViewModels
         
         public void Save()
         {
+            Trim();
             if (ItemId > 0)
             {
                 if (itemService.ModifyItem(CurrentItem).Id == CurrentItem.Id)

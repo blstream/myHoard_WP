@@ -26,8 +26,8 @@ namespace MyHoard.Models
             set
             {
                 name = value;
-                ModifiedDate = DateTime.Now;
                 IsSynced = false;
+                NotifyOfPropertyChange(() => Name);
             }
         }
         public string Description
@@ -36,8 +36,8 @@ namespace MyHoard.Models
             set
             {
                 description = value;
-                ModifiedDate = DateTime.Now;
                 IsSynced = false;
+                NotifyOfPropertyChange(() => Description);
             }
         }
 

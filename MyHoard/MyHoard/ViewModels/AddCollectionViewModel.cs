@@ -230,6 +230,7 @@ namespace MyHoard.ViewModels
 
         public async void Save()
         {
+            Trim();
             if (CollectionId > 0)
             {
                 if (CollectionService.ModifyCollection(CurrentCollection).Id == CurrentCollection.Id)
@@ -272,6 +273,14 @@ namespace MyHoard.ViewModels
                     this.NavigationService.RemoveBackEntry();
                 }
             }
+        }
+
+        public void Trim()
+        {
+            if(!string.IsNullOrEmpty(CurrentCollection.Name))
+                CurrentCollection.Name = CurrentCollection.Name.Trim();
+            if (!string.IsNullOrEmpty(CurrentCollection.Description))
+                CurrentCollection.Description = CurrentCollection.Description.Trim();
         }
 
         public void Delete()

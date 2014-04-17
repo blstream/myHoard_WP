@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using Caliburn.Micro;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyHoard.Models
 {
-    public class BaseEntity
+    public class BaseEntity: PropertyChangedBase
     {
         private int id;
         private string serverId;

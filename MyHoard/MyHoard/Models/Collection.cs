@@ -36,6 +36,7 @@ namespace MyHoard.Models
             {
                 name = value;
                 IsSynced = false;
+                NotifyOfPropertyChange(() => Name);
             }
         }
 
@@ -47,6 +48,7 @@ namespace MyHoard.Models
             {
                 description = value;
                 IsSynced = false;
+                NotifyOfPropertyChange(() => Description);
             }
         }
 
