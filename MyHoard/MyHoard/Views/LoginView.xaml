@@ -35,7 +35,7 @@
                 </Grid>
                 <Grid Margin="14,0,24,0">
                     <CheckBox  Name ="KeepLogged" Background="#FF333333" HorizontalAlignment="Left"  VerticalAlignment="Center" FontSize="16"
-                       Content="{Binding Path=LocalizedResources.RememberMe, Source={StaticResource LocalizedStrings}}" />
+                       Content="{Binding Path=LocalizedResources.RememberMe, Source={StaticResource LocalizedStrings}}" Style="{StaticResource CustomCheckBoxStyle}" />
                     <TextBlock  VerticalAlignment="Center" TextWrapping="Wrap" FontSize="16" Margin="0,27,0,25" HorizontalAlignment="Right" 
                         Text="{Binding Path=LocalizedResources.ForgotPassword, Source={StaticResource LocalizedStrings}}" />
                 </Grid>
