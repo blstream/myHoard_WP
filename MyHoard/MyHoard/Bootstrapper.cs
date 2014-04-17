@@ -70,6 +70,7 @@ namespace MyHoard
         protected override void OnLaunch(object sender, Microsoft.Phone.Shell.LaunchingEventArgs e)
         {
             base.OnLaunch(sender, e);
+            (App.Current.Resources["PhoneAccentBrush"] as SolidColorBrush).Color = Color.FromArgb(255,255,192,2);
             ConfigurationService configurationService = IoC.Get<ConfigurationService>();
         }
         protected override void OnClose(object sender, Microsoft.Phone.Shell.ClosingEventArgs e)

@@ -11,7 +11,11 @@
     <Application.Resources>
         <myHoard:Bootstrapper x:Key="bootstrapper" />
         <local:LocalizedStrings xmlns:local="clr-namespace:MyHoard" x:Key="LocalizedStrings"/>
-    	<Style x:Key="CustomTextBoxStyle" TargetType="toolkit:PhoneTextBox">
+
+        <Color x:Key="MainAccent">#FFFFC002</Color>
+        <SolidColorBrush x:Key="MainAccentBrush" Color="{StaticResource MainAccent}" />
+
+        <Style x:Key="CustomTextBoxStyle" TargetType="toolkit:PhoneTextBox">
     		<Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilyNormal}"/>
     		<Setter Property="FontSize" Value="{StaticResource PhoneFontSizeMediumLarge}"/>
     		<Setter Property="Background" Value="{StaticResource PhoneTextBoxBrush}"/>
@@ -67,7 +71,7 @@
     											<DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneTextBoxEditBackgroundBrush}"/>
     										</ObjectAnimationUsingKeyFrames>
     										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="HintBorder">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="#FFFFC002"/>
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MainAccent}"/>
     										</ObjectAnimationUsingKeyFrames>
     									</Storyboard>
     								</VisualState>
@@ -192,7 +196,7 @@
     											<DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneTextBoxEditBackgroundBrush}"/>
     										</ObjectAnimationUsingKeyFrames>
     										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="EnabledBorder">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="#FFFFC002"/>
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MainAccent}"/>
                                             </ObjectAnimationUsingKeyFrames>
     									</Storyboard>
     								</VisualState>
@@ -238,7 +242,7 @@
     								Storyboard.TargetProperty="BorderBrush"
     								Duration="0">
     								<DiscreteObjectKeyFrame
-    									Value="#FFFFC002"
+    									Value="{StaticResource MainAccent}"
     									KeyTime="0"/>
     							</ObjectAnimationUsingKeyFrames>
     						</Storyboard>

@@ -22,7 +22,6 @@
         <ScrollViewer IsEnabled="{Binding IsFormAccessible}">
             <StackPanel >
                 <Image Source="/Images/logo_login.png" Height="140" Margin="2,8,0,0"/>
-                <TextBlock Height="56" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Welcome, Source={StaticResource LocalizedStrings}}" Foreground="#FFFFC002" VerticalAlignment="Center" FontSize="33.333" TextAlignment="Center" Margin="0,-10,0,0" FontFamily="Segoe WP Light"/>
                 <TextBlock Height="30" Margin="24,10,0,0" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Email, Source={StaticResource LocalizedStrings}}" />
                 <toolkit:PhoneTextBox Name="Email" Hint="{Binding Path=LocalizedResources.InsertEmail, Source={StaticResource LocalizedStrings}}" Height="80" Margin="12,-10,12,0" TextWrapping="Wrap" BorderThickness="3" Width="460" Foreground="#FF333333"
                               InputScope="EmailUserName" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]" Style="{StaticResource CustomTextBoxStyle}" />
@@ -52,14 +51,15 @@
             </StackPanel>
 
         </ScrollViewer>
-        
-        <ProgressBar Margin="5" Foreground="#FFFFC002" IsIndeterminate="True" Visibility="{Binding IsProgressBarVisible;}" VerticalAlignment="Top" />
-        
+
+        <ProgressBar Margin="5" Foreground="{StaticResource MainAccentBrush}" IsIndeterminate="True" Visibility="{Binding IsProgressBarVisible;}" VerticalAlignment="Top" />
+
         <bab:BindableAppBar x:Name="AppBar">
             <bab:BindableAppBarButton x:Name="Login"
                                       Text="{Binding Path=LocalizedResources.Login, Source={StaticResource LocalizedStrings}}"
                                       IconUri="Images/next.png"/>
         </bab:BindableAppBar>
+
     </Grid>
 
 </phone:PhoneApplicationPage>
