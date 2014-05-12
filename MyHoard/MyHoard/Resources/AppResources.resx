@@ -138,7 +138,7 @@
     <value>Add</value>
   </data>
   <data name="AddCollection" xml:space="preserve">
-    <value>Add New Collection</value>
+    <value>ADD COLLECTION</value>
   </data>
   <data name="Collection" xml:space="preserve">
     <value>Collection</value>
@@ -159,7 +159,7 @@
     <value>Element with given name already exists in Database</value>
   </data>
   <data name="EditCollection" xml:space="preserve">
-    <value>Edit Collection</value>
+    <value>EDIT COLLECTION</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
@@ -280,5 +280,18 @@
   </data>
   <data name="AddTags" xml:space="preserve">
     <value>Add tags</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="Element" xml:space="preserve">
+    <value> Element</value>
+  </data>
+  <data name="Elements" xml:space="preserve">
+    <value> Elements</value>
+  </data>
+  <data name="EmptyCollectionListString" xml:space="preserve">
+    <value>You don't have any collections yet!
+If you'd like to change that - tap here</value>
   </data>
 </root>

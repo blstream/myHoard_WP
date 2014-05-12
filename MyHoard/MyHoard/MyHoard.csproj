@@ -93,6 +93,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BooleanToVisibilityConverter.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="Models\BaseEntity.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Models\Server\ServerCollection.cs" />
     <Compile Include="Models\Server\ServerItem.cs" />
     <Compile Include="Models\Server\ServerMedia.cs" />
+    <Compile Include="OppositeBooleanToVisibilityConverter.cs" />
     <Compile Include="Services\CollectionService.cs" />
     <Compile Include="Services\ConfigurationService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
@@ -261,6 +263,7 @@
     <Content Include="Images\camera.png" />
     <Content Include="Images\logo_login.png" />
     <Content Include="Images\next.png" />
+    <Content Include="Images\plus.png" />
     <Content Include="Images\settings.png" />
     <Content Include="Images\folder.png" />
     <Content Include="Images\save.png" />

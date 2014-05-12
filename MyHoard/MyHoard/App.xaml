@@ -15,6 +15,9 @@
         <Color x:Key="MainAccent">#FFFFC002</Color>
         <SolidColorBrush x:Key="MainAccentBrush" Color="{StaticResource MainAccent}" />
 
+        <myHoard:OppositeBooleanToVisibilityConverter x:Key="OppositeBooleanToVisibilityConverter" />
+        <myHoard:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
         <Style x:Key="CustomTextBoxStyle" TargetType="toolkit:PhoneTextBox">
     		<Setter Property="FontFamily" Value="{StaticResource PhoneFontFamilyNormal}"/>
     		<Setter Property="FontSize" Value="{StaticResource PhoneFontSizeMediumLarge}"/>

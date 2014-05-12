@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using MyHoard.Resources;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -130,7 +131,15 @@ namespace MyHoard.Models
             return tagList.Where(t => !string.IsNullOrWhiteSpace(t)).ToList();
         }
 
-        
+        [Ignore]
+        public string Elements
+        {
+            get 
+            { 
+                string elements = ItemsNumber==1? ItemsNumber.ToString() + AppResources.Element: ItemsNumber.ToString() + AppResources.Elements;
+                return elements;
+            }
+        }
 
         private void setTagList(ICollection<string> tagList)
         {

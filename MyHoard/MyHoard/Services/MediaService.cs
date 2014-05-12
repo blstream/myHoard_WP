@@ -26,7 +26,7 @@ namespace MyHoard.Services
         {
             databaseService = IoC.Get<DatabaseService>();
             isolatedStorageFile = IsolatedStorageFile.GetUserStoreForApplication();
-            defaultThumbnail = new BitmapImage(new Uri("/Images/camera.png", UriKind.Relative));
+            defaultThumbnail = new BitmapImage(new Uri("/Images/plus.png", UriKind.Relative));
         }
 
         public Media AddMedia(Media media)

@@ -17,7 +17,7 @@
     cal:Message.Attach="[Event BackKeyPress] = [Action OnGoBack($eventArgs)]">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot" Background="#FF333333">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -25,13 +25,17 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
-                       Style="{StaticResource PhoneTextLargeStyle}" Margin="12,0"/>
+            <Image Source="/Images/logo_login.png" Height="88" Margin="-3,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="297"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.Collections, Source={StaticResource LocalizedStrings}}"  Margin="24,-5,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <ListBox Grid.Row="0" Name="Collections" ItemsSource="{Binding Collections, Mode=OneWay}" 
+            <StackPanel VerticalAlignment="Top" Grid.Row="0" Orientation="Horizontal" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource BooleanToVisibilityConverter}}" cal:Message.Attach="[Event Tap] = [Action AddCollection]">
+                <Image Source="/Images/plus.png" Margin="12" Width="100" Height="100"/>
+                <TextBlock Text="{Binding Path=LocalizedResources.EmptyCollectionListString, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap" Height="96" Width="349" FontSize="17.333" FontFamily="Segoe WP Light" Margin="10" />
+            </StackPanel>
+            <ListBox Grid.Row="0" Name="Collections" ItemsSource="{Binding Collections, Mode=OneWay}" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource OppositeBooleanToVisibilityConverter}}"
                      SelectedItem="{Binding SelectedCollection, Mode=TwoWay}" IsEnabled="{Binding IsFormAccessible}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
@@ -40,12 +44,11 @@
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderThickness="0,0,0,1" BorderBrush="{StaticResource PhoneForegroundBrush}" 
-                                Margin="0" Padding="0,12" cal:Message.Attach="[Event Tap] = [Action CollectionDetails]">
+                        <Border Margin="12,8" Height="100" cal:Message.Attach="[Event Tap] = [Action CollectionDetails]">
                             <Grid>
                                 <Grid.Resources>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Margin" Value="0,0,4,0" />
+                                        <!--<Setter Property="Margin" Value="0,0,4,0" />-->
                                     </Style>
                                 </Grid.Resources>
 
@@ -53,22 +56,28 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Image Width="80" Height="80" Stretch="UniformToFill" Grid.Column="0"
+                                <Image Width="100" Height="100" Stretch="UniformToFill" Grid.Column="0"
                                     Source="{Binding Thumbnail}" />
-                                <TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" 
-                                           VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="1" 
+                                <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Top" >
+                                    <TextBlock Text="{Binding Name}" Margin="0,-4,0,0" Style="{StaticResource PhoneTextLargeStyle}"  FontSize="24" FontFamily="Segoe WP" 
+                                           VerticalAlignment="Center" Foreground="{StaticResource MainAccentBrush}"
                                            TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding Elements}" Style="{StaticResource PhoneTextLargeStyle}"  FontFamily="Segoe WP Light" FontSize="18.667"
+                                           VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,-4,0,0" />
+                                    <TextBlock Text="{Binding Tags}" Style="{StaticResource PhoneTextLargeStyle}"  FontFamily="Segoe WP Light" FontSize="18.667"
+                                           VerticalAlignment="Center" Height="54" TextWrapping="Wrap" Margin="0,-4,0,0" />
+                                </StackPanel>
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Grid Opacity="0.7" Background="Black" Visibility="{Binding IsProgressBarVisible;}" >
+            <!--<Grid Opacity="0.7" Background="Black" Visibility="{Binding IsProgressBarVisible;}" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <ProgressBar IsIndeterminate="True"   />
-            </Grid>
+            </Grid>-->
         </Grid>
 
         <bab:BindableAppBar x:Name="AppBar" IsEnabled="{Binding IsFormAccessible}" >

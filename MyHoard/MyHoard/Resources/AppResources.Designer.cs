@@ -70,7 +70,7 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add New Collection.
+        ///   Looks up a localized string similar to ADD COLLECTION.
         /// </summary>
         public static string AddCollection {
             get {
@@ -187,6 +187,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Collections.
+        /// </summary>
+        public static string Collections {
+            get {
+                return ResourceManager.GetString("Collections", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm Password.
         /// </summary>
         public static string ConfirmPassword {
@@ -259,7 +268,7 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Collection.
+        ///   Looks up a localized string similar to EDIT COLLECTION.
         /// </summary>
         public static string EditCollection {
             get {
@@ -277,11 +286,39 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Element.
+        /// </summary>
+        public static string Element {
+            get {
+                return ResourceManager.GetString("Element", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Elements.
+        /// </summary>
+        public static string Elements {
+            get {
+                return ResourceManager.GetString("Elements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to E-mail.
         /// </summary>
         public static string Email {
             get {
                 return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have any collections yet!
+        ///If you&apos;d like to change that - tap here.
+        /// </summary>
+        public static string EmptyCollectionListString {
+            get {
+                return ResourceManager.GetString("EmptyCollectionListString", resourceCulture);
             }
         }
         

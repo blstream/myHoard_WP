@@ -21,6 +21,8 @@ namespace MyHoard.ViewModels
         private Visibility isSyncVisible;
         private readonly IEventAggregator eventAggregator;
         private bool isFormAccessible;
+        private bool isPlaceholderVisible;
+
         private Visibility isProgressBarVisible;
         private CancellationTokenSource tokenSource;
 
@@ -76,6 +78,16 @@ namespace MyHoard.ViewModels
                 NotifyOfPropertyChange(() => IsSyncVisible);
             }
         }
+
+        public bool IsPlaceholderVisible
+        {
+            get { return isPlaceholderVisible; }
+            set
+            {
+                isPlaceholderVisible = value;
+                NotifyOfPropertyChange(() => IsPlaceholderVisible);
+            }
+        }
             
 
         public Collection SelectedCollection
@@ -98,6 +110,7 @@ namespace MyHoard.ViewModels
             base.OnActivate();
             eventAggregator.Subscribe(this);
             Collections = CollectionService.CollectionList(false, true).OrderBy(e => e.Name).ToList<Collection>();
+            IsPlaceholderVisible = Collections.Count < 1;
             if (configurationService.Configuration.IsLoggedIn)
                 IsSyncVisible = Visibility.Visible;
             else

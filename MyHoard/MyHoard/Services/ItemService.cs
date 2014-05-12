@@ -22,6 +22,10 @@ namespace MyHoard.Services
         {
             if (ItemList(item.CollectionId).Count(i => i.Name == item.Name) == 0)
             {
+                CollectionService cs = IoC.Get<CollectionService>();
+                Collection c = cs.GetCollection(item.CollectionId);
+                c.ItemsNumber++;
+                cs.ModifyCollection(c);
                 return databaseService.Add(item);
             }
             else
@@ -34,7 +38,10 @@ namespace MyHoard.Services
 
         public void DeleteItem(Item item, bool forceDelete = false)
         {
-
+            CollectionService cs = IoC.Get<CollectionService>();
+            Collection c = cs.GetCollection(item.CollectionId);
+            c.ItemsNumber--;
+            cs.ModifyCollection(c);
             if(forceDelete || String.IsNullOrEmpty(item.ServerId))
             {
                 databaseService.Delete(item);
