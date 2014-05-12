@@ -18,8 +18,27 @@
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
     cal:Message.Attach="[Event BackKeyPress] = [Action OnGoBack($eventArgs)]">
 
+    <phone:PhoneApplicationPage.Resources>
+
+        <Style x:Key="txtboxstyle" TargetType="TextBox">
+            <Setter Property="BorderThickness" Value="3,3,3,3"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="SelectionBackground" Value="#FFFFC002" />
+            <Setter Property="Background" Value="#BFFFFFFF" />
+        </Style>
+
+        
+        <!--<Style  x:Key="listpickerstyle" TargetType="toolkit:ListPicker">
+			<Setter Property="BorderThickness" Value="3,3,3,3"/>
+			<Setter Property="BorderBrush" Value="#FFFFC002" />
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="Background" Value="#BFFFFFFF" />
+		</Style>-->
+
+    </phone:PhoneApplicationPage.Resources>
+
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
+    <Grid x:Name="LayoutRoot" Background="#FF333333" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -27,13 +46,11 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
-                       Style="{StaticResource PhoneTextLargeStyle}" Margin="12,0"/>
-            <TextBlock Name="PageTitle"  Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Name="PageTitle" Margin="12,0" FontSize="22.667" Foreground="{StaticResource MainAccentBrush}" Style="{StaticResource PhoneTextNormalStyle}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
-        <ScrollViewer IsEnabled="{Binding IsFormAccessible}" Grid.Row="1" >
+        <ContentControl IsEnabled="{Binding IsFormAccessible}" Grid.Row="1" >
             <Grid x:Name="ContentPanel" Margin="12,0,12,0" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -49,64 +66,39 @@
                 </Grid.RowDefinitions>
                 <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" 
                        Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
-                <TextBox Name="CurrentCollection_Name" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]"  
-                     Grid.Row="1" Height="72" TextWrapping="Wrap"/>
-                <CheckBox Name="CurrentCollection_IsPrivate"  Grid.Row="2" Content="{Binding Path=LocalizedResources.Offline, 
-                    Source={StaticResource LocalizedStrings}}" IsEnabled="{Binding IsLoggedIn}" cal:Message.Attach="[Event Tap] = [Action DataChanged]" />
-                <TextBlock Grid.Row="3" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
-                       Style="{StaticResource PhoneTextNormalStyle}" />
-                <TextBox Name="CurrentCollection_Description"  Grid.Row="4" Height="216" TextWrapping="Wrap" 
-                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]" AcceptsReturn="True" />
-                
-                <TextBlock Text="{Binding Path=LocalizedResources.Tags, Source={StaticResource LocalizedStrings}}" 
-                       Grid.Row="6" Style="{StaticResource PhoneTextNormalStyle}" />
-                <Grid Grid.Row="7">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Name="NewTag" Grid.Column="0" Height="72" TextWrapping="Wrap"/>
-                    <Button Name="AddTag" Grid.Column="1" Width="72" Height="72" BorderThickness="0" Padding="0">
-                        <TextBlock FontSize="38" Text="&#xE109;" FontFamily="Segoe UI Symbol"  />
-                    </Button>
-                </Grid>
-                <ListBox Grid.Row="8" Name="Tags">
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock  Style="{StaticResource PhoneTextLargeStyle}" 
-                                        Margin="10,0" Grid.Column="0" 
-                                        VerticalAlignment="Center"
-                                        TextWrapping="Wrap" Text="{Binding}"/>
-                                <TextBlock FontSize="32" Text="&#xE106;" FontFamily="Segoe UI Symbol" Grid.Column="1"
-                                           cal:Message.Attach="[Event Tap] = [Action DeleteTag]"/>
 
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                <toolkit:PhoneTextBox Name="CurrentCollection_Name" Hint="{Binding Path=LocalizedResources.AddName, Source={StaticResource LocalizedStrings}}" Height="72" TextWrapping="Wrap" BorderThickness="3" Width="460" Foreground="#FF333333"
+                              cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]"  Style="{StaticResource CustomTextBoxStyle}" Grid.Row="1" Margin="0,-5,0,0" />
+                <TextBlock Text="{Binding Path=LocalizedResources.Tags, Source={StaticResource LocalizedStrings}}" 
+                       Grid.Row="2" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,40,12,0" />
+
+                <toolkit:PhoneTextBox Name="CurrentCollection_Tags" Grid.Row="3" Hint="{Binding Path=LocalizedResources.AddTags, Source={StaticResource LocalizedStrings}}" Height="105" TextWrapping="Wrap" BorderThickness="3" Width="460" Foreground="#FF333333"
+                              VerticalAlignment="Top"  Style="{StaticResource CustomTextBoxStyleTopAlignment}"  Margin="0,-5,0,0" cal:Message.Attach="[Event LostFocus] = [Action TagsLostFocus]" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="KeyUp">
+                            <cal:ActionMessage MethodName="TagsChanged">
+                                <cal:Parameter Value="$source" />
+                                <cal:Parameter Value="$eventArgs" />
+                            </cal:ActionMessage>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </toolkit:PhoneTextBox>
+
+                <TextBlock Grid.Row="4" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
+                       Style="{StaticResource PhoneTextNormalStyle}" Margin="12,40,12,0" />
+                <toolkit:PhoneTextBox Name="CurrentCollection_Description"  Grid.Row="5" Height="105" TextWrapping="Wrap"  Hint="{Binding Path=LocalizedResources.AddDescription, Source={StaticResource LocalizedStrings}}"
+                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]" AcceptsReturn="True" Margin="0,-5,0,0" Style="{StaticResource CustomTextBoxStyleTopAlignment}" />
+                
+                <CheckBox Name="CurrentCollection_IsPrivate"  Grid.Row="7" Content="{Binding Path=LocalizedResources.Offline, 
+                    Source={StaticResource LocalizedStrings}}" IsEnabled="{Binding IsLoggedIn}" cal:Message.Attach="[Event Tap] = [Action DataChanged]" Style="{StaticResource CustomCheckBoxStyle}" Margin="0,40,0,0" />
             </Grid>
             
-        </ScrollViewer>
-        <Grid Grid.Row="1" Opacity="0.7" Background="Black" Visibility="{Binding IsProgressBarVisible;}" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <ProgressBar IsIndeterminate="True"   />
-        </Grid>
+        </ContentControl>
+        <ProgressBar Margin="5" Foreground="{StaticResource MainAccentBrush}" IsIndeterminate="True" Visibility="{Binding IsProgressBarVisible;}" VerticalAlignment="Top" />
         <bab:BindableAppBar x:Name="AppBar">
             <bab:BindableAppBarButton x:Name="Save"
                                       Text="{Binding Path=LocalizedResources.Save, Source={StaticResource LocalizedStrings}}"
-                                      IconUri="Images/save.png"/>
+                                      IconUri="Images/check.png"/>
             <bab:BindableAppBarButton x:Name="Delete"
                                       Text="{Binding Path=LocalizedResources.Delete, Source={StaticResource LocalizedStrings}}"
                                       IconUri="Images/delete.png" Visibility="{Binding IsDeleteVisible}"/>

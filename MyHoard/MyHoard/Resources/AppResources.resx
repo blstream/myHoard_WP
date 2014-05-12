@@ -272,4 +272,13 @@
   <data name="Welcome" xml:space="preserve">
     <value>welcome!</value>
   </data>
+  <data name="AddDescription" xml:space="preserve">
+    <value>Add description</value>
+  </data>
+  <data name="AddName" xml:space="preserve">
+    <value>Add name</value>
+  </data>
+  <data name="AddTags" xml:space="preserve">
+    <value>Add tags</value>
+  </data>
 </root>

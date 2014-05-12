@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Microsoft.Phone.Controls;
 using MyHoard.Models;
 using MyHoard.Resources;
 using MyHoard.Services;
@@ -11,6 +12,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace MyHoard.ViewModels
 {
@@ -27,7 +30,6 @@ namespace MyHoard.ViewModels
         private Visibility isDeleteVisible;
         private int collectionId;
         private readonly IEventAggregator eventAggregator;
-        private ObservableCollection<string> tags;
         private ConfigurationService configurationService;
         private Visibility isProgressBarVisible;
         private bool isFormAccessible;
@@ -77,17 +79,7 @@ namespace MyHoard.ViewModels
                 NotifyOfPropertyChange(() => IsProgressBarVisible);
             }
         }
-
-        public ObservableCollection<string> Tags
-        {
-            get { return tags; }
-            set
-            {
-                tags = value;
-                NotifyOfPropertyChange(() => Tags);
-            }
-        }
-
+                
         public string SelectedTag
         {
             get { return selectedTag; }
@@ -112,24 +104,7 @@ namespace MyHoard.ViewModels
             }
         }
 
-        public void AddTag()
-        {
-            if (!Tags.Contains(NewTag))
-            {
-                Tags.Add(NewTag);
-                CurrentCollection.TagList = Tags.ToList();
-                DataChanged();
-            }
-            NewTag = "";
-        }
-
-        public void DeleteTag()
-        {
-            Tags.Remove(SelectedTag);
-            CurrentCollection.TagList = Tags.ToList();
-            DataChanged();
-        }
-                             
+                                    
 
         public string PageTitle
         {
@@ -228,9 +203,72 @@ namespace MyHoard.ViewModels
                 || !StringsEqual(editedCollection.Tags, CurrentCollection.Tags) || editedCollection.IsPrivate != CurrentCollection.IsPrivate);
         }
 
+        public void TagsChanged(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            
+            var tagsField = sender as PhoneTextBox;
+            int startLength = tagsField.Text.Length;
+            var tagList = tagsField.Text.Split(new string[] { Collection.TagSeparator }, StringSplitOptions.None);
+            string temptext = "";
+            int carretPosition = tagsField.SelectionStart;
+            foreach (string t in tagList)
+            {
+                if (!string.IsNullOrWhiteSpace(t))
+                {
+                    if (t.Contains(" "))
+                    {
+                        var newtag = t.Split(' ');
+                        foreach (string t1 in newtag)
+                        {
+                            if (!string.IsNullOrWhiteSpace(t1))
+                                temptext += " #" + t1.Replace("#", "");
+                        }
+                    }
+                    else
+                        temptext += " #" + t.Replace("#","");
+                }
+            }
+            if (e.Key == Key.Space || e.Key == Key.Enter)
+            {
+                tagsField.Text = temptext + " ";
+            }
+            tagsField.SelectionStart = carretPosition + (tagsField.Text.Length - startLength);
+            
+            DataChanged();
+            
+        }
+
+        public void TagsLostFocus()
+        {
+            
+            var tagList = CurrentCollection.Tags.Split(new string[] { Collection.TagSeparator }, StringSplitOptions.None);
+            string temptext = "";
+
+            foreach (string t in tagList)
+            {
+                if (!string.IsNullOrWhiteSpace(t))
+                {
+                    if (t.Contains(" "))
+                    {
+                        var newtag = t.Split(' ');
+                        foreach (string t1 in newtag)
+                        {
+                            if (!string.IsNullOrWhiteSpace(t1))
+                                temptext += " #" + t1.Replace("#", "");
+                        }
+                    }
+                    else
+                        temptext += " #" + t.Replace("#", "");
+                }
+            }
+            CurrentCollection.Tags = temptext + " ";
+            DataChanged();
+        }
+
         public async void Save()
         {
             Trim();
+            TagsLostFocus();
             if (CollectionId > 0)
             {
                 if (CollectionService.ModifyCollection(CurrentCollection).Id == CurrentCollection.Id)
@@ -281,6 +319,8 @@ namespace MyHoard.ViewModels
                 CurrentCollection.Name = CurrentCollection.Name.Trim();
             if (!string.IsNullOrEmpty(CurrentCollection.Description))
                 CurrentCollection.Description = CurrentCollection.Description.Trim();
+            if (!string.IsNullOrEmpty(CurrentCollection.Tags))
+                CurrentCollection.Tags = CurrentCollection.Tags.TrimEnd();
         }
 
         public void Delete()
@@ -335,14 +375,12 @@ namespace MyHoard.ViewModels
                     Tags = CurrentCollection.Tags,
                     IsPrivate = CurrentCollection.IsPrivate
                 };
-                Tags = new ObservableCollection<string>(CurrentCollection.TagList);
                 IsDeleteVisible = Visibility.Visible;
             }
             else
             {
                 PageTitle = AppResources.AddCollection;
                 CurrentCollection = new Collection() { IsPrivate = true };
-                Tags = new ObservableCollection<string>();
                 IsDeleteVisible = Visibility.Collapsed;
             }
             

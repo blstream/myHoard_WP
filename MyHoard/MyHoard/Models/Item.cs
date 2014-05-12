@@ -10,8 +10,8 @@ namespace MyHoard.Models
 {
     public class Item : BaseEntity
     {
-        private string name;
-        private string description;
+        private string name = string.Empty;
+        private string description = string.Empty;
         private int quantity;
         private int collectionId;
         private float locationLat;

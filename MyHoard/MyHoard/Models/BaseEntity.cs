@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyHoard.Models
 {
-    public class BaseEntity: PropertyChangedBase
+    public class BaseEntity : PropertyChangedBase
     {
         private int id;
         private string serverId;
@@ -24,7 +24,7 @@ namespace MyHoard.Models
                 id = value;
             }
         }
-                
+
         public bool ToDelete
         {
             get { return toDelete; }
@@ -41,9 +41,6 @@ namespace MyHoard.Models
         }
 
 
-        
-
-        
         public bool IsSynced
         {
             get { return isSynced; }

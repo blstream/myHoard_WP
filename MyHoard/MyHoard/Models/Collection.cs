@@ -11,11 +11,11 @@ namespace MyHoard.Models
     public class Collection : BaseEntity
     {
 
-        static private string TagSeparator = "<;>";
+        public static string TagSeparator = " #";
 
-        private string name;
-        private string description;
-        private string tags;
+        private string name = string.Empty;
+        private string description = string.Empty;
+        private string tags = string.Empty;
         private int itemsNumber;
         private DateTime createdDate;
         private DateTime modifiedDate;
@@ -77,6 +77,7 @@ namespace MyHoard.Models
             {
                 tags = value;
                 IsSynced = false;
+                NotifyOfPropertyChange(() => Tags);
             }
         }
 
@@ -123,22 +124,23 @@ namespace MyHoard.Models
 
         private List<string> getTagList()
         {
-            List<String> tagList = new List<string>();
-            if (!String.IsNullOrEmpty(Tags))
+            List<string> tagList = new List<string>();
+            if (!string.IsNullOrEmpty(Tags))
                 tagList = Tags.Split(new string[] { TagSeparator }, StringSplitOptions.None).ToList<string>();
-
-            return tagList;
+            return tagList.Where(t => !string.IsNullOrWhiteSpace(t)).ToList();
         }
+
+        
 
         private void setTagList(ICollection<string> tagList)
         {
+            
             Tags = "";
             foreach (string tag in tagList)
             {
-                Tags += tag + TagSeparator;
+                Tags += TagSeparator + tag;
             }
-            if (Tags.Length > TagSeparator.Length)
-                Tags = Tags.Remove(Tags.Length - TagSeparator.Length);
+            
         }
     }
 }

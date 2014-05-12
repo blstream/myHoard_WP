@@ -79,11 +79,38 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add description.
+        /// </summary>
+        public static string AddDescription {
+            get {
+                return ResourceManager.GetString("AddDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add New Item.
         /// </summary>
         public static string AddItem {
             get {
                 return ResourceManager.GetString("AddItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add name.
+        /// </summary>
+        public static string AddName {
+            get {
+                return ResourceManager.GetString("AddName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add tags.
+        /// </summary>
+        public static string AddTags {
+            get {
+                return ResourceManager.GetString("AddTags", resourceCulture);
             }
         }
         
