@@ -43,7 +43,7 @@
                     <TextBlock Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" FontSize="20" FontFamily="Segoe WP Light" Margin="0,20,0,5" Visibility="{Binding AreTagsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <TextBlock Name="CurrentItem_Description" FontSize="21.333" FontFamily="Segoe WP Light" TextWrapping="Wrap" />
                     <TextBlock Text="{Binding Path=LocalizedResources.Date, Source={StaticResource LocalizedStrings}}" FontSize="20" FontFamily="Segoe WP Light" Margin="0,20,0,5" Visibility="{Binding AreTagsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    <TextBlock Text="{Binding CurrentItem.CreatedDate, StringFormat='{}{0:dd/MM/yyyy hh:mm}'}" FontSize="21.333" FontFamily="Segoe WP Light" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding CurrentItem.CreatedDate, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}" FontSize="21.333" FontFamily="Segoe WP Light" TextWrapping="Wrap" />
 
                 </StackPanel>
             </phone:PivotItem>

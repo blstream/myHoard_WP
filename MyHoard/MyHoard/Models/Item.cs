@@ -20,6 +20,11 @@ namespace MyHoard.Models
         private DateTime modifiedDate;
         private ImageSource thumbnail;
 
+        public Item()
+        {
+            CreatedDate = DateTime.Now;
+        }
+
         public string Name
         {
             get { return name; }
