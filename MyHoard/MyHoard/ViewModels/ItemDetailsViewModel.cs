@@ -21,6 +21,7 @@ namespace MyHoard.ViewModels
         private Item currentItem;
         private List<Media> pictures;
         private Media selectedPicture;
+        private string title;
 
         public ItemDetailsViewModel(INavigationService navigationService, CollectionService collectionService, ItemService itemService, MediaService mediaService)
             : base(navigationService, collectionService)
@@ -35,6 +36,7 @@ namespace MyHoard.ViewModels
             if (ItemId > 0)
             {
                 CurrentItem = itemService.GetItem(ItemId);
+                Title = CurrentItem.Name;
                 Pictures = mediaService.MediaList(ItemId,true, true);
             }
         }
@@ -80,6 +82,16 @@ namespace MyHoard.ViewModels
             {
                 pictures = value;
                 NotifyOfPropertyChange(() => Pictures);
+            }
+        }
+
+        public string Title
+        {
+            get { return title; }
+            set
+            {
+                title = value;
+                NotifyOfPropertyChange(() => Title);
             }
         }
 

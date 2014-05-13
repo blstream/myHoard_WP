@@ -294,13 +294,22 @@
     <value>You don't have any collections yet!
 If you'd like to change that - tap here</value>
   </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
   <data name="EmptyItemListString" xml:space="preserve">
     <value>Hey! You don’t have any elements
 in this collection. If you’d like to change
 that tap here or in the camera icon
 and make your first photo!</value>
   </data>
+  <data name="Localization" xml:space="preserve">
+    <value>Localization</value>
+  </data>
   <data name="NoTagsString" xml:space="preserve">
     <value>This collection doesn’t have a description nor tags. You can change that by tapping the edit button.</value>
+  </data>
+  <data name="Photos" xml:space="preserve">
+    <value>photos</value>
   </data>
 </root>

@@ -17,53 +17,40 @@
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
-                       Style="{StaticResource PhoneTextLargeStyle}" Margin="12,0"/>
-        </StackPanel>
-
-        <!--ContentPanel - place additional content here-->
-        <ScrollViewer Grid.Row="1">
-            <Grid x:Name="ContentPanel" Margin="12,0,12,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" 
-                       Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
-                <TextBlock Name="CurrentItem_Name" Grid.Row="1" Height="auto"
-                           Style="{StaticResource PhoneTextLargeStyle}" TextWrapping="Wrap" />
-                <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
-                       Style="{StaticResource PhoneTextNormalStyle}" />
-                <TextBlock Name="CurrentItem_Description"  Grid.Row="3" Height="auto"
-                           Style="{StaticResource PhoneTextNormalStyle}" TextWrapping="Wrap" />
-                <ListBox Name="Pictures" Grid.Row="4" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+    <Grid x:Name="LayoutRoot" Background="#FF333333">
+        <phone:Pivot Title="{Binding Title, Converter={StaticResource LowerUpperCaseConverter}, ConverterParameter=1}" x:Name="ContentPanel" Style="{StaticResource PivotCustomStyle}" >
+            <phone:PivotItem Header="{Binding Path=LocalizedResources.Photos, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Foreground="White" >
+                <Grid>
+                    <ListBox Name="Pictures" Grid.Row="4" ScrollViewer.VerticalScrollBarVisibility="Disabled"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <toolkit:WrapPanel  />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate >
-                            <Image Width="100" Height="100" Stretch="UniformToFill"
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <toolkit:WrapPanel  />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate >
+                                <Image Width="100" Height="100" Stretch="UniformToFill"
                                    cal:Message.Attach="[Event Tap] = [Action ShowPicture]"
-                                Source="{Binding Image}" Margin="20,10" />
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
-        </ScrollViewer>
+                                Source="{Binding Image}" Margin="5,5" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </phone:PivotItem>
+            <phone:PivotItem Header="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Foreground="White" >
+                <StackPanel Margin="10,0">
+                    <TextBlock Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" FontSize="20" FontFamily="Segoe WP Light" Margin="0,20,0,5" Visibility="{Binding AreTagsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <TextBlock Name="CurrentItem_Description" FontSize="21.333" FontFamily="Segoe WP Light" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding Path=LocalizedResources.Date, Source={StaticResource LocalizedStrings}}" FontSize="20" FontFamily="Segoe WP Light" Margin="0,20,0,5" Visibility="{Binding AreTagsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <TextBlock Text="{Binding CurrentItem.CreatedDate, StringFormat='{}{0:dd/MM/yyyy hh:mm}'}" FontSize="21.333" FontFamily="Segoe WP Light" TextWrapping="Wrap" />
+
+                </StackPanel>
+            </phone:PivotItem>
+            <phone:PivotItem Header="{Binding Path=LocalizedResources.Localization, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Foreground="White" >
+            </phone:PivotItem>
+        </phone:Pivot>
+        
         <bab:BindableAppBar x:Name="AppBar">
             <bab:BindableAppBarButton x:Name="Edit"
                                       Text="{Binding Path=LocalizedResources.Edit, Source={StaticResource LocalizedStrings}}"
