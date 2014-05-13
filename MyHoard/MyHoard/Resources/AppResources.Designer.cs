@@ -286,7 +286,7 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Element.
+        ///   Looks up a localized string similar to Element.
         /// </summary>
         public static string Element {
             get {
@@ -295,7 +295,7 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Elements.
+        ///   Looks up a localized string similar to Elements.
         /// </summary>
         public static string Elements {
             get {
@@ -319,6 +319,18 @@ namespace MyHoard.Resources {
         public static string EmptyCollectionListString {
             get {
                 return ResourceManager.GetString("EmptyCollectionListString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hey! You don’t have any elements
+        ///in this collection. If you’d like to change
+        ///that tap here or in the camera icon
+        ///and make your first photo!.
+        /// </summary>
+        public static string EmptyItemListString {
+            get {
+                return ResourceManager.GetString("EmptyItemListString", resourceCulture);
             }
         }
         
@@ -409,6 +421,15 @@ namespace MyHoard.Resources {
         public static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This collection doesn’t have a description nor tags. You can change that by tapping the edit button..
+        /// </summary>
+        public static string NoTagsString {
+            get {
+                return ResourceManager.GetString("NoTagsString", resourceCulture);
             }
         }
         

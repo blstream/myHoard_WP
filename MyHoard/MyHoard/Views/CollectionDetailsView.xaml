@@ -16,55 +16,57 @@
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,12,28">
-            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" 
-                       Style="{StaticResource PhoneTextLargeStyle}" Margin="12,0"/>
-            <TextBlock Name="CollectionName" TextWrapping="Wrap"
-                       Margin="9,-7,0,0" Style="{StaticResource PhoneTextGroupHeaderStyle}"/>
-        </StackPanel>
-
-        <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <ListBox Grid.Row="0" Name="Items">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderThickness="0,0,0,1" BorderBrush="{StaticResource PhoneForegroundBrush}" 
-                                Margin="0" Padding="0,12" cal:Message.Attach="[Event Tap] = [Action ItemDetails]">
-                            <Grid>
-                                <Grid.Resources>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Margin" Value="0,0,4,0" />
-                                    </Style>
-                                </Grid.Resources>
-
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Image Width="80" Height="80" Stretch="UniformToFill" Grid.Column="0"
+    <Grid x:Name="LayoutRoot" Background="#FF333333">
+        <phone:Pivot Title="{Binding Title, Converter={StaticResource LowerUpperCaseConverter}, ConverterParameter=1}" x:Name="ContentPanel" Style="{StaticResource PivotCustomStyle}" >
+            <phone:PivotItem Header="{Binding Path=LocalizedResources.Elements, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Foreground="White" >
+                <Grid>
+                    <StackPanel VerticalAlignment="Top" Orientation="Horizontal" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource BooleanToVisibilityConverter}}" cal:Message.Attach="[Event Tap] = [Action AddItem]">
+                        <Image Source="/Images/plus.png" Margin="12" Width="100" Height="100"/>
+                        <TextBlock Text="{Binding Path=LocalizedResources.EmptyItemListString, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap" Height="96" Width="349" FontSize="17.333" FontFamily="Segoe WP Light" Margin="10"/>
+                    </StackPanel>
+                    <ListBox  Name="Items" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource OppositeBooleanToVisibilityConverter}}"
+                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="12,8" Height="100" cal:Message.Attach="[Event Tap] = [Action ItemDetails]">
+                                <Grid Background="Transparent">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Width="100" Height="100" Stretch="UniformToFill" Grid.Column="0"
                                     Source="{Binding Thumbnail}" />
-                                <TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextLargeStyle}" 
-                                           VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="1" 
+                                    <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Top" >
+                                        <TextBlock Text="{Binding Name}" Margin="0,-4,0,0" Style="{StaticResource PhoneTextLargeStyle}"  FontSize="24" FontFamily="Segoe WP" 
+                                           VerticalAlignment="Center" Foreground="{StaticResource MainAccentBrush}"
                                            TextWrapping="Wrap" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </Grid>
-
+                                        <TextBlock Text="{Binding Description}" Style="{StaticResource PhoneTextLargeStyle}"  FontFamily="Segoe WP Light" FontSize="18.667"
+                                           VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,-4,0,0" />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                </Grid>
+            </phone:PivotItem>
+            <phone:PivotItem Header="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Foreground="White" >
+                <StackPanel Margin="10,0">
+                    <TextBlock Text="{Binding Path=LocalizedResources.NoTagsString, Source={StaticResource LocalizedStrings}}" FontSize="21.333" FontFamily="Segoe WP Light" TextWrapping="Wrap" Visibility="{Binding IsTagsPlaceholderVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <TextBlock Name="CurrentCollection_Description" FontSize="21.333" FontFamily="Segoe WP Light" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding Path=LocalizedResources.Tags, Source={StaticResource LocalizedStrings}}" FontSize="20" FontFamily="Segoe WP Light" Margin="0,20,0,5" Visibility="{Binding AreTagsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <TextBlock Name="CurrentCollection_Tags" FontSize="21.333" FontFamily="Segoe WP Light" TextWrapping="Wrap" />
+                    
+                </StackPanel>
+            </phone:PivotItem>
+        </phone:Pivot>
+        
+        
         <bab:BindableAppBar x:Name="AppBar">
             <bab:BindableAppBarButton x:Name="Edit"
                                       Text="{Binding Path=LocalizedResources.Edit, Source={StaticResource LocalizedStrings}}"

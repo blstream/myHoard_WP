@@ -285,13 +285,22 @@
     <value>Collections</value>
   </data>
   <data name="Element" xml:space="preserve">
-    <value> Element</value>
+    <value>Element</value>
   </data>
   <data name="Elements" xml:space="preserve">
-    <value> Elements</value>
+    <value>Elements</value>
   </data>
   <data name="EmptyCollectionListString" xml:space="preserve">
     <value>You don't have any collections yet!
 If you'd like to change that - tap here</value>
+  </data>
+  <data name="EmptyItemListString" xml:space="preserve">
+    <value>Hey! You don’t have any elements
+in this collection. If you’d like to change
+that tap here or in the camera icon
+and make your first photo!</value>
+  </data>
+  <data name="NoTagsString" xml:space="preserve">
+    <value>This collection doesn’t have a description nor tags. You can change that by tapping the edit button.</value>
   </data>
 </root>

@@ -13,12 +13,13 @@ namespace MyHoard.ViewModels
     {
         private ItemService itemService;
         private Collection currentCollection;
-        private String collectionName;
         private int collectionId;
         private Item selectedItem;
         private List<Item> items;
-        
-
+        private bool isPlaceholderVisible;
+        private bool isTagsPlaceholderVisible;
+        private bool areTagsVisible;
+        private string title;
                 
         public CollectionDetailsViewModel(INavigationService navigationService, CollectionService collectionService, ItemService itemService) : base(navigationService,collectionService)
         {
@@ -28,7 +29,22 @@ namespace MyHoard.ViewModels
         protected override void OnActivate()
         {
             base.OnActivate();
+            CurrentCollection = CollectionService.GetCollection(CollectionId);
             Items = itemService.ItemList(CollectionId, false, true);
+            IsPlaceholderVisible = Items.Count == 0;
+            AreTagsVisible = !string.IsNullOrWhiteSpace(CurrentCollection.Tags);
+            IsTagsPlaceholderVisible = !AreTagsVisible && string.IsNullOrWhiteSpace(CurrentCollection.Description);
+            Title = CurrentCollection.Name;
+        }
+
+        public string Title
+        {
+            get { return title; }
+            set
+            {
+                title = value;
+                NotifyOfPropertyChange(() => Title);
+            }
         }
 
         public List<Item> Items
@@ -38,6 +54,36 @@ namespace MyHoard.ViewModels
             { 
                 items = value;
                 NotifyOfPropertyChange(() => Items);
+            }
+        }
+
+        public bool IsPlaceholderVisible
+        {
+            get { return isPlaceholderVisible; }
+            set
+            {
+                isPlaceholderVisible = value;
+                NotifyOfPropertyChange(() => IsPlaceholderVisible);
+            }
+        }
+
+        public bool IsTagsPlaceholderVisible
+        {
+            get { return isTagsPlaceholderVisible; }
+            set
+            {
+                isTagsPlaceholderVisible = value;
+                NotifyOfPropertyChange(() => IsTagsPlaceholderVisible);
+            }
+        }
+
+        public bool AreTagsVisible
+        {
+            get { return areTagsVisible; }
+            set
+            {
+                areTagsVisible = value;
+                NotifyOfPropertyChange(() => AreTagsVisible);
             }
         }
 
@@ -58,19 +104,10 @@ namespace MyHoard.ViewModels
             { 
                 currentCollection = value;
                 NotifyOfPropertyChange(() => CurrentCollection);
-                CollectionName = CurrentCollection.Name;
             }
         }
 
-        public String CollectionName
-        {
-            get { return collectionName; }
-            set 
-            { 
-                collectionName = value;
-                NotifyOfPropertyChange(() => CollectionName);
-            }
-        }
+        
 
         public int CollectionId
         {
@@ -82,12 +119,7 @@ namespace MyHoard.ViewModels
             }
         }
 
-        protected override void OnInitialize()
-        {
-            base.OnInitialize();
-            CurrentCollection = CollectionService.GetCollection(CollectionId);
-        }
-
+        
         public void Edit()
         {
             NavigationService.UriFor<AddCollectionViewModel>().WithParam(x => x.CollectionId, CurrentCollection.Id).Navigate();

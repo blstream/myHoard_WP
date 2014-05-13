@@ -135,9 +135,9 @@ namespace MyHoard.Models
         public string Elements
         {
             get 
-            { 
-                string elements = ItemsNumber==1? ItemsNumber.ToString() + AppResources.Element: ItemsNumber.ToString() + AppResources.Elements;
-                return elements;
+            {
+                string elements = ItemsNumber == 1 ? AppResources.Element : AppResources.Elements;
+                return string.Format("{0} {1}", ItemsNumber, elements);
             }
         }
 

@@ -72,13 +72,8 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <!--<Grid Opacity="0.7" Background="Black" Visibility="{Binding IsProgressBarVisible;}" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <ProgressBar IsIndeterminate="True"   />
-            </Grid>-->
         </Grid>
+        <ProgressBar Margin="5" Foreground="{StaticResource MainAccentBrush}" IsIndeterminate="True" Visibility="{Binding IsProgressBarVisible;}" VerticalAlignment="Top" />
 
         <bab:BindableAppBar x:Name="AppBar" IsEnabled="{Binding IsFormAccessible}" >
             <bab:BindableAppBarButton x:Name="AddCollection"

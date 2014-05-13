@@ -96,6 +96,7 @@
     <Compile Include="BooleanToVisibilityConverter.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="LocalizedStrings.cs" />
+    <Compile Include="LowerUpperCaseConverter.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\Collection.cs" />
     <Compile Include="Models\Configuration.cs" />
