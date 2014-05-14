@@ -312,4 +312,13 @@ and make your first photo!</value>
   <data name="Photos" xml:space="preserve">
     <value>photos</value>
   </data>
+  <data name="AddGeoTag" xml:space="preserve">
+    <value>Add geotag</value>
+  </data>
+  <data name="EditElement" xml:space="preserve">
+    <value>EDIT ELEMENT</value>
+  </data>
+  <data name="NewElement" xml:space="preserve">
+    <value>NEW ELEMENT</value>
+  </data>
 </root>

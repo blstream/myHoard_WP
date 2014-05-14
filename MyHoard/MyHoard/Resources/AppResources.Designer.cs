@@ -88,6 +88,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add geotag.
+        /// </summary>
+        public static string AddGeoTag {
+            get {
+                return ResourceManager.GetString("AddGeoTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add New Item.
         /// </summary>
         public static string AddItem {
@@ -286,6 +295,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EDIT ELEMENT.
+        /// </summary>
+        public static string EditElement {
+            get {
+                return ResourceManager.GetString("EditElement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Item.
         /// </summary>
         public static string EditItem {
@@ -439,6 +457,15 @@ namespace MyHoard.Resources {
         public static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NEW ELEMENT.
+        /// </summary>
+        public static string NewElement {
+            get {
+                return ResourceManager.GetString("NewElement", resourceCulture);
             }
         }
         

@@ -18,38 +18,19 @@
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
     cal:Message.Attach="[Event BackKeyPress] = [Action OnGoBack($eventArgs)]">
 
-    <phone:PhoneApplicationPage.Resources>
 
-        <Style x:Key="txtboxstyle" TargetType="TextBox">
-            <Setter Property="BorderThickness" Value="3,3,3,3"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="SelectionBackground" Value="#FFFFC002" />
-            <Setter Property="Background" Value="#BFFFFFFF" />
-        </Style>
-
-        
-        <!--<Style  x:Key="listpickerstyle" TargetType="toolkit:ListPicker">
-			<Setter Property="BorderThickness" Value="3,3,3,3"/>
-			<Setter Property="BorderBrush" Value="#FFFFC002" />
-			<Setter Property="HorizontalContentAlignment" Value="Center"/>
-			<Setter Property="Background" Value="#BFFFFFFF" />
-		</Style>-->
-
-    </phone:PhoneApplicationPage.Resources>
-
-    <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="#FF333333" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!--TitlePanel contains the name of the application and page title-->
+
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
             <TextBlock Name="PageTitle" Margin="12,0" FontSize="22.667" Foreground="{StaticResource MainAccentBrush}" Style="{StaticResource PhoneTextNormalStyle}"/>
         </StackPanel>
 
-        <!--ContentPanel - place additional content here-->
+
         <ContentControl IsEnabled="{Binding IsFormAccessible}" Grid.Row="1" >
             <Grid x:Name="ContentPanel" Margin="12,0,12,0" >
                 <Grid.RowDefinitions>

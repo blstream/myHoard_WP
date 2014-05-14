@@ -27,9 +27,10 @@ namespace MyHoard.ViewModels
         private Item editedItem;
         private bool canSave;
         private bool staySubscribed;
-        private Visibility isDeleteVisible;
+        private bool newItem;
+        private bool isGeoTagChecked;
         private Media selectedPicture;
-        
+
         private ObservableCollection<Media> pictures;
         private List<Media> picturesToDelete;
         
@@ -83,6 +84,7 @@ namespace MyHoard.ViewModels
                         picturesChanged = true;
                     }
                 }
+            IsGeoTagChecked = !IsGeoTagChecked;
 
             CanSave = !String.IsNullOrEmpty(CurrentItem.Name) && CurrentItem.Name.Length>=2 && (ItemId == 0 ||
                 !StringsEqual(editedItem.Name, CurrentItem.Name) || !StringsEqual(editedItem.Description, CurrentItem.Description) || picturesChanged);
@@ -125,19 +127,7 @@ namespace MyHoard.ViewModels
         public void Save()
         {
             Trim();
-            if (ItemId > 0)
-            {
-                if (itemService.ModifyItem(CurrentItem).Id == CurrentItem.Id)
-                {
-                    mediaService.SavePictureList(Pictures);
-                    mediaService.SavePictureList(picturesToDelete);
-                    NavigationService.UriFor<ItemDetailsViewModel>().WithParam(x => x.ItemId, ItemId).Navigate();
-                    this.NavigationService.RemoveBackEntry();
-                    this.NavigationService.RemoveBackEntry();
-                    
-                }
-            }
-            else
+            if (NewItem)
             {
                 if (itemService.AddItem(CurrentItem).Id > 0)
                 {
@@ -150,14 +140,32 @@ namespace MyHoard.ViewModels
                     this.NavigationService.RemoveBackEntry();
                 }
             }
+            else
+            {
+                if (itemService.ModifyItem(CurrentItem).Id == CurrentItem.Id)
+                {
+                    mediaService.SavePictureList(Pictures);
+                    mediaService.SavePictureList(picturesToDelete);
+                    NavigationService.UriFor<ItemDetailsViewModel>().WithParam(x => x.ItemId, ItemId).Navigate();
+                    this.NavigationService.RemoveBackEntry();
+                    this.NavigationService.RemoveBackEntry();
+
+                }
+            }
         }
 
         
         protected override void OnInitialize()
         {
-            if (ItemId > 0)
+            NewItem = ItemId == 0;
+            if (NewItem)
+            {   PageTitle = AppResources.NewElement;
+                CurrentItem = new Item() { CollectionId = CollectionId };
+                Pictures = new ObservableCollection<Media>();
+            }
+            else
             {
-                PageTitle = AppResources.EditItem;
+                PageTitle = AppResources.EditElement;
                 CurrentItem = itemService.GetItem(ItemId);
                 CollectionId = CurrentItem.CollectionId;
                 editedItem = new Item()
@@ -165,16 +173,9 @@ namespace MyHoard.ViewModels
                     Name = CurrentItem.Name,
                     Description = CurrentItem.Description,
                 };
-                Pictures = new ObservableCollection<Media>(mediaService.MediaList(ItemId,true, true));
-                IsDeleteVisible = Visibility.Visible;
+                Pictures = new ObservableCollection<Media>(mediaService.MediaList(ItemId, true, true));
             }
-            else
-            {
-                PageTitle = AppResources.AddItem;
-                CurrentItem = new Item() { CollectionId = CollectionId };
-                IsDeleteVisible = Visibility.Collapsed;
-                Pictures= new ObservableCollection<Media>();
-            }
+
             picturesToDelete = new List<Media>();
         }
 
@@ -214,16 +215,7 @@ namespace MyHoard.ViewModels
         }
 
         
-        public Visibility IsDeleteVisible
-        {
-            get { return isDeleteVisible; }
-            set
-            {
-                isDeleteVisible = value;
-                NotifyOfPropertyChange(() => IsDeleteVisible);
-            }
-        }
-
+        
         public Item EditedItem
         {
             get { return editedItem; }
@@ -272,6 +264,26 @@ namespace MyHoard.ViewModels
             {
                 itemId = value;
                 NotifyOfPropertyChange(() => ItemId);
+            }
+        }
+
+        public bool NewItem
+        {
+            get { return newItem; }
+            set
+            {
+                newItem= value;
+                NotifyOfPropertyChange(()=>NewItem);
+            }
+        }
+
+        public bool IsGeoTagChecked
+        {
+            get { return isGeoTagChecked; }
+            set
+            {
+                isGeoTagChecked = value;
+                NotifyOfPropertyChange(() => IsGeoTagChecked);
             }
         }
 
