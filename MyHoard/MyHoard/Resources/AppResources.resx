@@ -321,4 +321,13 @@ and make your first photo!</value>
   <data name="NewElement" xml:space="preserve">
     <value>NEW ELEMENT</value>
   </data>
+  <data name="AlphabeticallyAZ" xml:space="preserve">
+    <value>alphabetically A-Z</value>
+  </data>
+  <data name="AlphabeticallyZA" xml:space="preserve">
+    <value>alphabetically Z-A</value>
+  </data>
+  <data name="NewestTop" xml:space="preserve">
+    <value>newest at the top</value>
+  </data>
 </root>

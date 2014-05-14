@@ -37,6 +37,21 @@ namespace MyHoard.ViewModels
             Title = CurrentCollection.Name;
         }
 
+        public void SortAlphabetically()
+        {
+            Items = Items.OrderBy(x => x.Name).ToList();
+        }
+
+        public void SortAlphabeticallyZA()
+        {
+            Items = Items.OrderByDescending(x => x.Name).ToList();
+        }
+
+        public void SortFromNewest()
+        {
+            Items = Items.OrderBy(x => x.CreatedDate).ToList();
+        }
+
         public string Title
         {
             get { return title; }

@@ -124,6 +124,24 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to alphabetically A-Z.
+        /// </summary>
+        public static string AlphabeticallyAZ {
+            get {
+                return ResourceManager.GetString("AlphabeticallyAZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to alphabetically Z-A.
+        /// </summary>
+        public static string AlphabeticallyZA {
+            get {
+                return ResourceManager.GetString("AlphabeticallyZA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to add.
         /// </summary>
         public static string AppBarButtonText {
@@ -466,6 +484,15 @@ namespace MyHoard.Resources {
         public static string NewElement {
             get {
                 return ResourceManager.GetString("NewElement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to newest at the top.
+        /// </summary>
+        public static string NewestTop {
+            get {
+                return ResourceManager.GetString("NewestTop", resourceCulture);
             }
         }
         
