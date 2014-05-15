@@ -84,6 +84,10 @@
                                   Text="{Binding Path=LocalizedResources.Settings, Source={StaticResource LocalizedStrings}}"
                                   IconUri="Images/settings.png"                                
                                   />
+            <bab:BindableAppBarButton x:Name="Search"
+                                  Text="{Binding Path=LocalizedResources.Search, Source={StaticResource LocalizedStrings}}"
+                                  IconUri="Images/search.png"                                
+                                  />
             <bab:BindableAppBarButton x:Name="Sync"
                                   Text="{Binding Path=LocalizedResources.Sync, Source={StaticResource LocalizedStrings}}"
                                   IconUri="Images/sync.png"    Visibility="{Binding IsSyncVisible}"                             

@@ -37,6 +37,7 @@ namespace MyHoard
             container.PerRequest<SettingsViewModel>();
             container.PerRequest<RegisterViewModel>();
             container.PerRequest<LoginViewModel>();
+            container.PerRequest<SearchViewModel>();
             container.Singleton<DatabaseService>();
             container.Singleton<CollectionService>();
             container.Singleton<ItemService>();

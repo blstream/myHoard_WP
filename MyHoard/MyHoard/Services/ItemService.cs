@@ -80,6 +80,17 @@ namespace MyHoard.Services
         }
 
 
+        public List<Item> ItemListWithThumbnails()
+        {
+            List<Item> itemList = databaseService.ListAll<Item>();
+            MediaService ms = IoC.Get<MediaService>();
+            foreach (Item i in itemList)
+            {
+                i.Thumbnail = ms.GetRandomThumbnail(i);
+            }
+            return itemList;
+        }
+
         public List<Item> ItemList()
         {
             return databaseService.ListAll<Item>();

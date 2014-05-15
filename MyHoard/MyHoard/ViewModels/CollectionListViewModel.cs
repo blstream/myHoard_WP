@@ -105,6 +105,11 @@ namespace MyHoard.ViewModels
             NavigationService.UriFor<CollectionDetailsViewModel>().WithParam(x => x.CollectionId, SelectedCollection.Id).Navigate();
         }
 
+        public void Search()
+        {
+            NavigationService.UriFor<SearchViewModel>().Navigate();
+        }
+
         protected override void OnActivate()
         {
             base.OnActivate();
