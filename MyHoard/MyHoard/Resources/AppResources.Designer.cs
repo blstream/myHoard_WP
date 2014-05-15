@@ -90,15 +90,9 @@ namespace MyHoard.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Add geotag.
         /// </summary>
-<<<<<<< HEAD
-        public static string AddGeotag {
-            get {
-                return ResourceManager.GetString("AddGeotag", resourceCulture);
-=======
         public static string AddGeoTag {
             get {
                 return ResourceManager.GetString("AddGeoTag", resourceCulture);
->>>>>>> dev
             }
         }
         

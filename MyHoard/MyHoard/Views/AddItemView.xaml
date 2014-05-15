@@ -50,7 +50,7 @@
                      Height="72" TextWrapping="Wrap"/>
                 <Grid>
                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" 
-                               Text="{Binding Path=LocalizedResources.AddGeotag, Source={StaticResource LocalizedStrings}}"/>
+                               Text="{Binding Path=LocalizedResources.AddGeoTag, Source={StaticResource LocalizedStrings}}"/>
                     <toolkitPrimitives:ToggleSwitchButton HorizontalAlignment="Right" 
                                                           Name="CurrentItem_LocationSet"
                                                           cal:Message.Attach="[Event Tap] = [Action GetGeolcation]"
