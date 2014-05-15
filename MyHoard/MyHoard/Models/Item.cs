@@ -15,6 +15,7 @@ namespace MyHoard.Models
         private int quantity;
         private int collectionId;
         private bool locationSet;
+        private bool locationRecognitionNotInProgress;
         private float locationLat;
         private float locationLng;
         private string locationName;
@@ -92,6 +93,18 @@ namespace MyHoard.Models
             }
         }
 
+        public bool LocationRecognitionNotInProgress
+        {
+            get { return locationRecognitionNotInProgress; }
+            set
+            {
+                locationRecognitionNotInProgress = value;
+                ModifiedDate = DateTime.Now;
+                IsSynced = false;
+                NotifyOfPropertyChange(() => LocationRecognitionNotInProgress);
+            }
+        }
+        
         public float LocationLat
         {
             get { return locationLat; }

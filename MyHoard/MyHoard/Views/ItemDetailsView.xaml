@@ -53,8 +53,17 @@
 
                 <maps:Map HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                           ZoomLevel="12"
-                          Center="{Binding CurrentItem,Converter={StaticResource ItemToGeoCoordinateConverter}}">
-
+                          Center="{Binding CurrentItem, Converter={StaticResource ItemToGeoCoordinateConverter}}">
+                    <!-- It should work, but I missed something I can't find what
+                    <maps:Map.Layers>
+                        <maps:MapLayer>
+                            <maps:MapOverlay PositionOrigin="0,0.5"  GeoCoordinate="{Binding CurrentItem, Converter={StaticResource ItemToMapLayersListWithPointConverter}}">
+                                <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                    <Rectangle Fill="Black" Height="20" Width="20" />
+                                </Grid>
+                            </maps:MapOverlay>
+                        </maps:MapLayer>
+                    </maps:Map.Layers>-->
                 </maps:Map>
 
             </phone:PivotItem>

@@ -16,6 +16,8 @@ namespace MyHoard.Services
     {
         public static async Task GetCurrentLocation(Item item)
         {
+            item.LocationRecognitionNotInProgress = false;
+
             Geolocator geolocator = new Geolocator();
             geolocator.DesiredAccuracyInMeters = 50;
 
@@ -27,7 +29,6 @@ namespace MyHoard.Services
                     );
 
                 item.LocationLat = (float)geoposition.Coordinate.Latitude;
-;
                 item.LocationLng = (float) geoposition.Coordinate.Longitude;
                 item.LocationSet = true;
             }
@@ -44,6 +45,7 @@ namespace MyHoard.Services
                     MessageBox.Show(AppResources.CannotObtainLocation);
                 }
             }
+            item.LocationRecognitionNotInProgress = true;
         }
 
         public static void ClearLocation(Item item)
