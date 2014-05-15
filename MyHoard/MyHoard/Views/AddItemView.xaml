@@ -56,14 +56,6 @@
                                                           cal:Message.Attach="[Event Tap] = [Action GetGeolcation]"
                                                           Background="#FFFFC002" />
                 </Grid>
-                <StackPanel Visibility="{Binding CurrentItem.LocationSet, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" 
-                               Text="{Binding Path=LocalizedResources.Latitude, Source={StaticResource LocalizedStrings}}"/>
-                    <TextBox IsEnabled="{Binding CurrentItem.LocationRecognitionNotInProgress}" Name="CurrentItem_LocationLat" VerticalAlignment="Center" />
-                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" 
-                               Text="{Binding Path=LocalizedResources.Longitude, Source={StaticResource LocalizedStrings}}" />
-                    <TextBox IsEnabled="{Binding CurrentItem.LocationRecognitionNotInProgress}" Name="CurrentItem_LocationLng" VerticalAlignment="Center" />
-                </StackPanel>
                 <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}"/>
                 <toolkit:PhoneTextBox Name="CurrentItem_Description"  Grid.Row="6" Height="105" TextWrapping="Wrap"  Hint="{Binding Path=LocalizedResources.AddDescription, Source={StaticResource LocalizedStrings}}"
                      cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]" AcceptsReturn="True" Margin="0,-5,0,0" Style="{StaticResource CustomTextBoxStyleTopAlignment}" />
@@ -77,7 +69,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate >
                             <Image Width="100" Height="100" cal:Message.Attach="[Event Tap] = [Action DeleteImage]"
-                                Source="{Binding Image}" Margin="5,5" Stretch="UniformToFill" />
+                                   Source="{Binding Image}" Margin="5,5" Stretch="UniformToFill" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
