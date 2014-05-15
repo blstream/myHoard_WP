@@ -93,6 +93,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ItemToGeoCoordinateConverter.cs" />
     <Compile Include="BooleanToVisibilityConverter.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="LocalizedStrings.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Services\CollectionService.cs" />
     <Compile Include="Services\ConfigurationService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
+    <Compile Include="Services\GeolocationHelper.cs" />
     <Compile Include="Services\MediaService.cs" />
     <Compile Include="Services\MyHoardApi.cs" />
     <Compile Include="Services\RegistrationService.cs" />

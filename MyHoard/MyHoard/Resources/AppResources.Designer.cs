@@ -88,6 +88,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add geotag.
+        /// </summary>
+        public static string AddGeotag {
+            get {
+                return ResourceManager.GetString("AddGeotag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add New Item.
         /// </summary>
         public static string AddItem {
@@ -174,6 +183,15 @@ namespace MyHoard.Resources {
         public static string CancelConfirm {
             get {
                 return ResourceManager.GetString("CancelConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot get location..
+        /// </summary>
+        public static string CannotObtainLocation {
+            get {
+                return ResourceManager.GetString("CannotObtainLocation", resourceCulture);
             }
         }
         
@@ -398,6 +416,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Latitude.
+        /// </summary>
+        public static string Latitude {
+            get {
+                return ResourceManager.GetString("Latitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Localization.
         /// </summary>
         public static string Localization {
@@ -430,6 +457,15 @@ namespace MyHoard.Resources {
         public static string Logout {
             get {
                 return ResourceManager.GetString("Logout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Longitude.
+        /// </summary>
+        public static string Longitude {
+            get {
+                return ResourceManager.GetString("Longitude", resourceCulture);
             }
         }
         

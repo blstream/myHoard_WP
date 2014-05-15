@@ -59,6 +59,17 @@ namespace MyHoard.ViewModels
             }
         }
 
+        public void GetGeolcation()
+        {
+            if (CurrentItem.LocationSet)
+                GeolocationHelper.GetCurrentLocation(CurrentItem);
+                //    .ContinueWith(_ => GeolocationHelper.GetLocationName(CurrentItem));
+            else
+            {
+                GeolocationHelper.ClearLocation(CurrentItem);
+            }
+        }
+
         public void Trim()
         {
             if (!string.IsNullOrEmpty(CurrentItem.Name))
@@ -85,7 +96,8 @@ namespace MyHoard.ViewModels
                 }
 
             CanSave = !String.IsNullOrEmpty(CurrentItem.Name) && CurrentItem.Name.Length>=2 && (ItemId == 0 ||
-                !StringsEqual(editedItem.Name, CurrentItem.Name) || !StringsEqual(editedItem.Description, CurrentItem.Description) || picturesChanged);
+                !StringsEqual(editedItem.Name, CurrentItem.Name) || !StringsEqual(editedItem.Description, CurrentItem.Description) || picturesChanged ||
+                editedItem.LocationLat != CurrentItem.LocationLat || editedItem.LocationLng != CurrentItem.LocationLng || editedItem.LocationSet != CurrentItem.LocationSet);
         }
 
 
@@ -167,6 +179,9 @@ namespace MyHoard.ViewModels
                 };
                 Pictures = new ObservableCollection<Media>(mediaService.MediaList(ItemId,true, true));
                 IsDeleteVisible = Visibility.Visible;
+
+                if (CurrentItem.LocationSet)
+                    GeolocationHelper.GetLocationName(CurrentItem);
             }
             else
             {

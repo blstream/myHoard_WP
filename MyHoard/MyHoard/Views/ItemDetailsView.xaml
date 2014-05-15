@@ -1,28 +1,29 @@
 ﻿<phone:PhoneApplicationPage
-    x:Class="MyHoard.Views.ItemDetailsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:bab="clr-namespace:Caliburn.Micro.BindableAppBar;assembly=Caliburn.Micro.BindableAppBar"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro" xmlns:maps="clr-namespace:Microsoft.Phone.Maps.Controls;assembly=Microsoft.Phone.Maps"
+    x:Class="MyHoard.Views.ItemDetailsView"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
-    xmlns:bab="clr-namespace:Caliburn.Micro.BindableAppBar;assembly=Caliburn.Micro.BindableAppBar"
     mc:Ignorable="d"
-    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     shell:SystemTray.IsVisible="True"
-    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro">
+    >
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="#FF333333">
-        <phone:Pivot Title="{Binding Title, Converter={StaticResource LowerUpperCaseConverter}, ConverterParameter=1}" x:Name="ContentPanel" Style="{StaticResource PivotCustomStyle}" >
-            <phone:PivotItem Header="{Binding Path=LocalizedResources.Photos, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Foreground="White" >
+        <phone:Pivot Title="{Binding Title, ConverterParameter=1, Converter={StaticResource LowerUpperCaseConverter}}" x:Name="ContentPanel" Style="{StaticResource PivotCustomStyle}" >
+            <phone:PivotItem Header="{Binding LocalizedResources.Photos, Converter={StaticResource LowerUpperCaseConverter}, Source={StaticResource LocalizedStrings}}" Foreground="White" >
                 <Grid>
-                    <ListBox Name="Pictures" Grid.Row="4" ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox x:Name="Pictures" Grid.Row="4" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+						ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <toolkit:WrapPanel  />
@@ -31,33 +32,41 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate >
                                 <Image Width="100" Height="100" Stretch="UniformToFill"
-                                   cal:Message.Attach="[Event Tap] = [Action ShowPicture]"
-                                Source="{Binding Image}" Margin="5,5" />
+									cal:Message.Attach="[Event Tap] = [Action ShowPicture]"
+									Source="{Binding Image}" Margin="5,5" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
             </phone:PivotItem>
-            <phone:PivotItem Header="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Foreground="White" >
+            <phone:PivotItem Header="{Binding LocalizedResources.Description, Converter={StaticResource LowerUpperCaseConverter}, Source={StaticResource LocalizedStrings}}" Foreground="White" >
                 <StackPanel Margin="10,0">
-                    <TextBlock Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" FontSize="20" FontFamily="Segoe WP Light" Margin="0,20,0,5" Visibility="{Binding AreTagsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    <TextBlock Name="CurrentItem_Description" FontSize="21.333" FontFamily="Segoe WP Light" TextWrapping="Wrap" />
-                    <TextBlock Text="{Binding Path=LocalizedResources.Date, Source={StaticResource LocalizedStrings}}" FontSize="20" FontFamily="Segoe WP Light" Margin="0,20,0,5" Visibility="{Binding AreTagsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    <TextBlock Text="{Binding CurrentItem.CreatedDate, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}" FontSize="21.333" FontFamily="Segoe WP Light" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" FontSize="20" FontFamily="Segoe WP Light" Margin="0,20,0,5" Visibility="{Binding AreTagsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <TextBlock x:Name="CurrentItem_Description" FontSize="21.333" FontFamily="Segoe WP Light" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding LocalizedResources.Date, Source={StaticResource LocalizedStrings}}" FontSize="20" FontFamily="Segoe WP Light" Margin="0,20,0,5" Visibility="{Binding AreTagsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <TextBlock Text="{Binding CurrentItem.CreatedDate, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" FontSize="21.333" FontFamily="Segoe WP Light" TextWrapping="Wrap" />
 
                 </StackPanel>
             </phone:PivotItem>
-            <phone:PivotItem Header="{Binding Path=LocalizedResources.Localization, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Foreground="White" >
+            <phone:PivotItem Header="{Binding LocalizedResources.Localization, Converter={StaticResource LowerUpperCaseConverter}, Source={StaticResource LocalizedStrings}}" Foreground="White" 
+                             Visibility="{Binding CurrentItem.LocationSet, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                <maps:Map HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                          ZoomLevel="12"
+                          Center="{Binding CurrentItem,Converter={StaticResource ItemToGeoCoordinateConverter}}">
+
+                </maps:Map>
+
             </phone:PivotItem>
         </phone:Pivot>
-        
+
         <bab:BindableAppBar x:Name="AppBar">
             <bab:BindableAppBarButton x:Name="Edit"
-                                      Text="{Binding Path=LocalizedResources.Edit, Source={StaticResource LocalizedStrings}}"
-                                      IconUri="Images/edit.png"/>
+				Text="{Binding LocalizedResources.Edit, Source={StaticResource LocalizedStrings}}"
+				IconUri="Images/edit.png"/>
             <bab:BindableAppBarButton x:Name="Delete"
-                                      Text="{Binding Path=LocalizedResources.Delete, Source={StaticResource LocalizedStrings}}"
-                                      IconUri="Images/delete.png" />
+				Text="{Binding LocalizedResources.Delete, Source={StaticResource LocalizedStrings}}"
+				IconUri="Images/delete.png" />
         </bab:BindableAppBar>
     </Grid>
 

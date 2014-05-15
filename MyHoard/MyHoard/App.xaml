@@ -19,6 +19,7 @@
         <myHoard:OppositeBooleanToVisibilityConverter x:Key="OppositeBooleanToVisibilityConverter" />
         <myHoard:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <myHoard:LowerUpperCaseConverter x:Key="LowerUpperCaseConverter"/>
+        <myHoard:ItemToGeoCoordinateConverter x:Key="ItemToGeoCoordinateConverter"/>
 
         <Style x:Key="PivotCustomStyle" TargetType="phone:Pivot">
             <Setter Property="Margin" Value="0"/>

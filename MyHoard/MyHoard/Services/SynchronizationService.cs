@@ -266,11 +266,13 @@ namespace MyHoard.Services
                     CollectionId = collectionId,
                     ModifiedDate = serverItem.ModifiedDate(),
                 };
-                if(serverItem.location != null)
+                localItem.LocationSet = serverItem.location != null;
+                if(localItem.LocationSet)
                 {
                     localItem.LocationLat = serverItem.location.lat;
                     localItem.LocationLng = serverItem.location.lng;
                 }
+
                 localItem.ServerId = serverItem.id;
                 localItem.IsSynced = true;
                 return itemService.AddItem(localItem);
