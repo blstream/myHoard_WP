@@ -14,8 +14,11 @@ namespace MyHoard.Models
         private string description = string.Empty;
         private int quantity;
         private int collectionId;
+        private bool locationSet;
+        private bool locationRecognitionNotInProgress;
         private float locationLat;
         private float locationLng;
+        private string locationName;
         private DateTime createdDate;
         private DateTime modifiedDate;
         private ImageSource thumbnail;
@@ -78,6 +81,30 @@ namespace MyHoard.Models
             }
         }
 
+        public bool LocationSet
+        {
+            get { return locationSet; }
+            set
+            {
+                locationSet = value;
+                ModifiedDate = DateTime.Now;
+                IsSynced = false;
+                NotifyOfPropertyChange(() => LocationSet);
+            }
+        }
+
+        public bool LocationRecognitionNotInProgress
+        {
+            get { return locationRecognitionNotInProgress; }
+            set
+            {
+                locationRecognitionNotInProgress = value;
+                ModifiedDate = DateTime.Now;
+                IsSynced = false;
+                NotifyOfPropertyChange(() => LocationRecognitionNotInProgress);
+            }
+        }
+        
         public float LocationLat
         {
             get { return locationLat; }
@@ -86,6 +113,7 @@ namespace MyHoard.Models
                 locationLat = value;
                 ModifiedDate = DateTime.Now;
                 IsSynced = false;
+                NotifyOfPropertyChange(() => LocationLat);
             }
         }
 
@@ -97,6 +125,19 @@ namespace MyHoard.Models
                 locationLng = value;
                 ModifiedDate = DateTime.Now;
                 IsSynced = false;
+                NotifyOfPropertyChange(() => LocationLng);
+            }
+        }
+
+        public string LocationName
+        {
+            get { return locationName; }
+            set
+            {
+                locationName = value;
+                ModifiedDate = DateTime.Now;
+                IsSynced = false;
+                NotifyOfPropertyChange(() => LocationName);
             }
         }
 

@@ -312,6 +312,15 @@ and make your first photo!</value>
   <data name="Photos" xml:space="preserve">
     <value>photos</value>
   </data>
+  <data name="CannotObtainLocation" xml:space="preserve">
+    <value>Cannot get location.</value>
+  </data>
+  <data name="Latitude" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="Longitude" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
   <data name="AddGeoTag" xml:space="preserve">
     <value>Add geotag</value>
   </data>

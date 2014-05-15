@@ -266,11 +266,13 @@ namespace MyHoard.Services
                     CollectionId = collectionId,
                     ModifiedDate = serverItem.ModifiedDate(),
                 };
-                if(serverItem.location != null)
+                localItem.LocationSet = serverItem.location != null;
+                if(localItem.LocationSet)
                 {
                     localItem.LocationLat = serverItem.location.lat;
                     localItem.LocationLng = serverItem.location.lng;
                 }
+
                 localItem.ServerId = serverItem.id;
                 localItem.IsSynced = true;
                 return itemService.AddItem(localItem);
@@ -279,11 +281,14 @@ namespace MyHoard.Services
             {
                 localItem.Name = serverItem.name;
                 localItem.Description = serverItem.description;
-                if (serverItem.location != null)
+
+                localItem.LocationSet = serverItem.location != null;
+                if (localItem.LocationSet)
                 {
                     localItem.LocationLat = serverItem.location.lat;
                     localItem.LocationLng = serverItem.location.lng;
                 }
+
                 localItem.ModifiedDate = serverItem.ModifiedDate();
                 localItem.IsSynced = true;
                 return itemService.ModifyItem(localItem);
@@ -472,7 +477,7 @@ namespace MyHoard.Services
             {
                 name = i.Name,
                 description = i.Description,
-                //location = new { lat = i.LocationLat, lng = i.LocationLng },
+                location = i.LocationSet ? new { lat = i.LocationLat, lng = i.LocationLng } : null,
                 media = mediaService.MediaStringList(i.Id),
                 collection = parentServerId
             });
@@ -514,7 +519,7 @@ namespace MyHoard.Services
             {
                 name = i.Name,
                 description = i.Description,
-                //location = new { lat = i.LocationLat, lng = i.LocationLng },
+                location = i.LocationSet ? new { lat = i.LocationLat, lng = i.LocationLng } : null,
                 media = mediaService.MediaStringList(i.Id),
                 collection = parentServerId
             });

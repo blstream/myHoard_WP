@@ -19,7 +19,6 @@ namespace MyHoard.ViewModels
         private ItemService itemService;
         private MediaService mediaService;
         private readonly IEventAggregator eventAggregator;
-
         private string pageTitle;
         private int collectionId;
         private int itemId;
@@ -60,6 +59,17 @@ namespace MyHoard.ViewModels
             }
         }
 
+        public void GetGeolcation()
+        {
+            if (CurrentItem.LocationSet)
+                GeolocationHelper.GetCurrentLocation(CurrentItem);
+                //    .ContinueWith(_ => GeolocationHelper.GetLocationName(CurrentItem));
+            else
+            {
+                GeolocationHelper.ClearLocation(CurrentItem);
+            }
+        }
+
         public void Trim()
         {
             if (!string.IsNullOrEmpty(CurrentItem.Name))
@@ -84,10 +94,10 @@ namespace MyHoard.ViewModels
                         picturesChanged = true;
                     }
                 }
-            IsGeoTagChecked = !IsGeoTagChecked;
 
             CanSave = !String.IsNullOrEmpty(CurrentItem.Name) && CurrentItem.Name.Length>=2 && (ItemId == 0 ||
-                !StringsEqual(editedItem.Name, CurrentItem.Name) || !StringsEqual(editedItem.Description, CurrentItem.Description) || picturesChanged);
+                !StringsEqual(editedItem.Name, CurrentItem.Name) || !StringsEqual(editedItem.Description, CurrentItem.Description) || picturesChanged ||
+                editedItem.LocationLat != CurrentItem.LocationLat || editedItem.LocationLng != CurrentItem.LocationLng || editedItem.LocationSet != CurrentItem.LocationSet);
         }
 
 
@@ -154,7 +164,6 @@ namespace MyHoard.ViewModels
             }
         }
 
-        
         protected override void OnInitialize()
         {
             NewItem = ItemId == 0;
@@ -174,6 +183,9 @@ namespace MyHoard.ViewModels
                     Description = CurrentItem.Description,
                 };
                 Pictures = new ObservableCollection<Media>(mediaService.MediaList(ItemId, true, true));
+				
+                if (CurrentItem.LocationSet)
+                    GeolocationHelper.GetLocationName(CurrentItem);
             }
 
             picturesToDelete = new List<Media>();
@@ -274,16 +286,6 @@ namespace MyHoard.ViewModels
             {
                 newItem= value;
                 NotifyOfPropertyChange(()=>NewItem);
-            }
-        }
-
-        public bool IsGeoTagChecked
-        {
-            get { return isGeoTagChecked; }
-            set
-            {
-                isGeoTagChecked = value;
-                NotifyOfPropertyChange(() => IsGeoTagChecked);
             }
         }
 

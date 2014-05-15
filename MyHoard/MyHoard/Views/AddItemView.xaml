@@ -13,9 +13,23 @@
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:toolkitPrimitives="clr-namespace:Microsoft.Phone.Controls.Primitives;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:bab="clr-namespace:Caliburn.Micro.BindableAppBar;assembly=Caliburn.Micro.BindableAppBar"
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro">
 
+    <phone:PhoneApplicationPage.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource PhoneTextNormalStyle}">
+            <Setter Property="Foreground" Value="#FFFFC002" />
+            <Setter Property="FontSize" Value="22.667" />
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="BorderThickness" Value="3,3,3,3"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="SelectionBackground" Value="#FFFFC002" />
+            <Setter Property="Background" Value="#BFFFFFFF" />
+        </Style>
+    </phone:PhoneApplicationPage.Resources>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="#FF333333">
@@ -25,22 +39,27 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Name="PageTitle" Margin="12,0" FontSize="22.667" Foreground="{StaticResource MainAccentBrush}" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Name="PageTitle"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <ScrollViewer Grid.Row="1">
-            <Grid x:Name="ContentPanel" Margin="12,0,12,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <ListBox Name="Pictures" Grid.Row="0" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+            <StackPanel x:Name="ContentPanel" Margin="12,0,12,0">
+                <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}"/>
+                <TextBox Name="CurrentItem_Name" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]"  
+                     Height="72" TextWrapping="Wrap"/>
+                <Grid>
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" 
+                               Text="{Binding Path=LocalizedResources.AddGeoTag, Source={StaticResource LocalizedStrings}}"/>
+                    <toolkitPrimitives:ToggleSwitchButton HorizontalAlignment="Right" 
+                                                          Name="CurrentItem_LocationSet"
+                                                          cal:Message.Attach="[Event Tap] = [Action GetGeolcation]"
+                                                          Background="#FFFFC002" />
+                </Grid>
+                <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}"/>
+                <toolkit:PhoneTextBox Name="CurrentItem_Description"  Grid.Row="6" Height="105" TextWrapping="Wrap"  Hint="{Binding Path=LocalizedResources.AddDescription, Source={StaticResource LocalizedStrings}}"
+                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]" AcceptsReturn="True" Margin="0,-5,0,0" Style="{StaticResource CustomTextBoxStyleTopAlignment}" />
+                <ListBox Name="Pictures" ScrollViewer.VerticalScrollBarVisibility="Disabled"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -50,23 +69,11 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate >
                             <Image Width="100" Height="100" cal:Message.Attach="[Event Tap] = [Action DeleteImage]"
-                                Source="{Binding Image}" Margin="5,5" Stretch="UniformToFill" />
+                                   Source="{Binding Image}" Margin="5,5" Stretch="UniformToFill" />
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}" 
-                       Grid.Row="1" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,10,12,0" />
-                <toolkit:PhoneTextBox Name="CurrentItem_Name" Hint="{Binding Path=LocalizedResources.AddName, Source={StaticResource LocalizedStrings}}" Height="72" TextWrapping="Wrap" BorderThickness="3" Width="460" Foreground="#FF333333"
-                              cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]"  Style="{StaticResource CustomTextBoxStyle}" Grid.Row="2" Margin="0,-5,0,0" />
-                <TextBlock Text="{Binding Path=LocalizedResources.AddGeotag, Source={StaticResource LocalizedStrings}}" 
-                       Grid.Row="3" Style="{StaticResource PhoneTextNormalStyle}" />
-                <toolkit:ToggleSwitch Grid.Row="4" Style="{StaticResource ToggleSwitchStyle}" IsChecked="{Binding IsGeoTagChecked, Mode=TwoWay}" IsEnabled="{Binding NewItem}" />
-                <TextBlock Grid.Row="5" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
-                       Style="{StaticResource PhoneTextNormalStyle}" />
-                <toolkit:PhoneTextBox Name="CurrentItem_Description"  Grid.Row="6" Height="105" TextWrapping="Wrap"  Hint="{Binding Path=LocalizedResources.AddDescription, Source={StaticResource LocalizedStrings}}"
-                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]" AcceptsReturn="True" Margin="0,-5,0,0" Style="{StaticResource CustomTextBoxStyleTopAlignment}" />
-                
-            </Grid>
+            </StackPanel>
         </ScrollViewer>
         <bab:BindableAppBar x:Name="AppBar">
             <bab:BindableAppBarButton x:Name="Save"

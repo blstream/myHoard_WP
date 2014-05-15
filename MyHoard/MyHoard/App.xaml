@@ -20,6 +20,7 @@
         <myHoard:OppositeBooleanToVisibilityConverter x:Key="OppositeBooleanToVisibilityConverter" />
         <myHoard:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <myHoard:LowerUpperCaseConverter x:Key="LowerUpperCaseConverter"/>
+        <myHoard:ItemToGeoCoordinateConverter x:Key="ItemToGeoCoordinateConverter"/>
 
         <Style x:Key="ToggleSwitchStyle" TargetType="toolkit:ToggleSwitch">
             <Setter Property="Background" Value="#FF333333"/>
