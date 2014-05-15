@@ -90,9 +90,15 @@ namespace MyHoard.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Add geotag.
         /// </summary>
+<<<<<<< HEAD
         public static string AddGeotag {
             get {
                 return ResourceManager.GetString("AddGeotag", resourceCulture);
+=======
+        public static string AddGeoTag {
+            get {
+                return ResourceManager.GetString("AddGeoTag", resourceCulture);
+>>>>>>> dev
             }
         }
         
@@ -120,6 +126,24 @@ namespace MyHoard.Resources {
         public static string AddTags {
             get {
                 return ResourceManager.GetString("AddTags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to alphabetically A-Z.
+        /// </summary>
+        public static string AlphabeticallyAZ {
+            get {
+                return ResourceManager.GetString("AlphabeticallyAZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to alphabetically Z-A.
+        /// </summary>
+        public static string AlphabeticallyZA {
+            get {
+                return ResourceManager.GetString("AlphabeticallyZA", resourceCulture);
             }
         }
         
@@ -304,6 +328,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EDIT ELEMENT.
+        /// </summary>
+        public static string EditElement {
+            get {
+                return ResourceManager.GetString("EditElement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Item.
         /// </summary>
         public static string EditItem {
@@ -475,6 +508,24 @@ namespace MyHoard.Resources {
         public static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NEW ELEMENT.
+        /// </summary>
+        public static string NewElement {
+            get {
+                return ResourceManager.GetString("NewElement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to newest at the top.
+        /// </summary>
+        public static string NewestTop {
+            get {
+                return ResourceManager.GetString("NewestTop", resourceCulture);
             }
         }
         
