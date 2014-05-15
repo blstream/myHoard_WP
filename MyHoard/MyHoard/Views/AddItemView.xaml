@@ -39,26 +39,12 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Name="PageTitle"/>
+            <TextBlock Name="PageTitle" FontSize="22.667" Foreground="#FFFFC002" />
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <ScrollViewer Grid.Row="1">
             <StackPanel x:Name="ContentPanel" Margin="12,0,12,0">
-                <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}"/>
-                <TextBox Name="CurrentItem_Name" cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]"  
-                     Height="72" TextWrapping="Wrap"/>
-                <Grid>
-                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" 
-                               Text="{Binding Path=LocalizedResources.AddGeoTag, Source={StaticResource LocalizedStrings}}"/>
-                    <toolkitPrimitives:ToggleSwitchButton HorizontalAlignment="Right" 
-                                                          Name="CurrentItem_LocationSet"
-                                                          cal:Message.Attach="[Event Tap] = [Action GetGeolcation]"
-                                                          Background="#FFFFC002" />
-                </Grid>
-                <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}"/>
-                <toolkit:PhoneTextBox Name="CurrentItem_Description"  Grid.Row="6" Height="105" TextWrapping="Wrap"  Hint="{Binding Path=LocalizedResources.AddDescription, Source={StaticResource LocalizedStrings}}"
-                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]" AcceptsReturn="True" Margin="0,-5,0,0" Style="{StaticResource CustomTextBoxStyleTopAlignment}" />
                 <ListBox Name="Pictures" ScrollViewer.VerticalScrollBarVisibility="Disabled"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemsPanel>
@@ -73,6 +59,21 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+                <TextBlock Text="{Binding Path=LocalizedResources.Name, Source={StaticResource LocalizedStrings}}"/>
+                <toolkit:PhoneTextBox Name="CurrentItem_Name" Hint="{Binding Path=LocalizedResources.AddName, Source={StaticResource LocalizedStrings}}" Height="72" TextWrapping="Wrap" BorderThickness="3" Width="460" Foreground="#FF333333"
+                              cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]" Style="{StaticResource CustomTextBoxStyle}" Grid.Row="2" Margin="0,-5,0,0" />
+                <Grid>
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" 
+                               Text="{Binding Path=LocalizedResources.AddGeoTag, Source={StaticResource LocalizedStrings}}"/>
+                    <toolkitPrimitives:ToggleSwitchButton HorizontalAlignment="Right" 
+                                                          Name="CurrentItem_LocationSet"
+                                                          cal:Message.Attach="[Event Tap] = [Action GetGeolcation]"
+                                                          Background="#FFFFC002" />
+                </Grid>
+                <TextBlock Grid.Row="2" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}"/>
+                <toolkit:PhoneTextBox Name="CurrentItem_Description"  Grid.Row="6" Height="105" TextWrapping="Wrap"  Hint="{Binding Path=LocalizedResources.AddDescription, Source={StaticResource LocalizedStrings}}"
+                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]" AcceptsReturn="True" Margin="0,-5,0,0" Style="{StaticResource CustomTextBoxStyleTopAlignment}" />
+               
             </StackPanel>
         </ScrollViewer>
         <bab:BindableAppBar x:Name="AppBar">

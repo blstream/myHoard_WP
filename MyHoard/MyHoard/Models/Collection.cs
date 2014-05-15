@@ -1,4 +1,6 @@
-﻿using MyHoard.Resources;
+﻿using Caliburn.Micro;
+using MyHoard.Resources;
+using MyHoard.Services;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,6 @@ namespace MyHoard.Models
         private string name = string.Empty;
         private string description = string.Empty;
         private string tags = string.Empty;
-        private int itemsNumber;
         private DateTime createdDate;
         private DateTime modifiedDate;
         private bool isPrivate;
@@ -83,13 +84,12 @@ namespace MyHoard.Models
         }
 
         
+        [Ignore]
         public int ItemsNumber
         {
-            get { return itemsNumber; }
-            set
+            get 
             {
-                itemsNumber = value;
-                IsSynced = false;
+                return IoC.Get<ItemService>().ItemList().Where(x => x.CollectionId == Id && !x.ToDelete).Count();
             }
         }
 

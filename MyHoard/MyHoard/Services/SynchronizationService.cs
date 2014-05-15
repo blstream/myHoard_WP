@@ -304,7 +304,6 @@ namespace MyHoard.Services
                 {
                     Name = serverCollection.name,
                     Description = serverCollection.description,
-                    ItemsNumber = serverCollection.items_number,
                     TagList = serverCollection.tags,
                     ModifiedDate = serverCollection.ModifiedDate()
                 };
@@ -315,7 +314,6 @@ namespace MyHoard.Services
             else if (DateTime.Compare(serverCollection.ModifiedDate(), localCollection.ModifiedDate) > 0)
             {
                 localCollection.Description = serverCollection.description;
-                localCollection.ItemsNumber = serverCollection.items_number;
                 localCollection.ModifiedDate = serverCollection.ModifiedDate();
                 localCollection.Name = serverCollection.name;
                 localCollection.TagList = serverCollection.tags;

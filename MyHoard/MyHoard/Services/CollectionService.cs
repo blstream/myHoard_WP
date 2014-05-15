@@ -89,7 +89,6 @@ namespace MyHoard.Services
             }
 
             return collectionList;
-            
         }
 
         public void CloseConnection()

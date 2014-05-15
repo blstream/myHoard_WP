@@ -368,7 +368,6 @@ namespace MyHoard.ViewModels
                     Description = CurrentCollection.Description,
                     CreatedDate = CurrentCollection.CreatedDate,
                     Id = CurrentCollection.Id,
-                    ItemsNumber = CurrentCollection.ItemsNumber,
                     ServerId = CurrentCollection.ServerId,
                     IsSynced = CurrentCollection.IsSynced,
                     ModifiedDate = CurrentCollection.ModifiedDate,
