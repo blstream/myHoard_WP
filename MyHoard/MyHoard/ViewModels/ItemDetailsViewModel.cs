@@ -31,14 +31,15 @@ namespace MyHoard.ViewModels
             this.itemService = itemService;
         }
 
-        protected override void OnInitialize()
+        protected override void OnActivate()
         {
             if (ItemId > 0)
             {
                 CurrentItem = itemService.GetItem(ItemId);
                 Title = CurrentItem.Name;
-                Pictures = mediaService.MediaList(ItemId,true, true);
+                Pictures = mediaService.MediaList(ItemId, true, true);
             }
+            
         }
 
 

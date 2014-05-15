@@ -27,7 +27,6 @@ namespace MyHoard.ViewModels
         private bool canSave;
         private bool staySubscribed;
         private bool newItem;
-        private bool isGeoTagChecked;
         private Media selectedPicture;
 
         private ObservableCollection<Media> pictures;
@@ -156,10 +155,7 @@ namespace MyHoard.ViewModels
                 {
                     mediaService.SavePictureList(Pictures);
                     mediaService.SavePictureList(picturesToDelete);
-                    NavigationService.UriFor<ItemDetailsViewModel>().WithParam(x => x.ItemId, ItemId).Navigate();
-                    this.NavigationService.RemoveBackEntry();
-                    this.NavigationService.RemoveBackEntry();
-
+                    NavigationService.GoBack();
                 }
             }
         }

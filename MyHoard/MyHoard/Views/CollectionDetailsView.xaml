@@ -10,13 +10,14 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True"
     xmlns:bab="clr-namespace:Caliburn.Micro.BindableAppBar;assembly=Caliburn.Micro.BindableAppBar"
     xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
-    <Grid x:Name="LayoutRoot" Background="#FF333333">
+    <Grid x:Name="Page" Background="#FF333333">
         <phone:Pivot Title="{Binding Title, Converter={StaticResource LowerUpperCaseConverter}, ConverterParameter=1}" x:Name="ContentPanel" Style="{StaticResource PivotCustomStyle}" >
             <phone:PivotItem Header="{Binding Path=LocalizedResources.Elements, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Foreground="White" >
                 <Grid>
@@ -33,8 +34,15 @@
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Border Margin="12,8" Height="100" cal:Message.Attach="[Event Tap] = [Action ItemDetails]">
-                                <Grid Background="Transparent">
+                                
+                                <Border Margin="12,8" Height="100" cal:Message.Attach="[Event Tap] = [Action ItemDetails]">
+                                    <toolkit:ContextMenuService.ContextMenu>
+                                        <toolkit:ContextMenu cal:Action.TargetWithoutContext="{Binding ElementName=Page, Path=DataContext}">
+                                            <toolkit:MenuItem Header="{Binding Path=LocalizedResources.Edit, Source={StaticResource LocalizedStrings}}" cal:Message.Attach="[Event Click] = [Action Edit($dataContext)]" />
+                                            <toolkit:MenuItem Header="{Binding Path=LocalizedResources.Delete, Source={StaticResource LocalizedStrings}}" cal:Message.Attach="[Event Click] = [Action Delete($dataContext)]" />
+                                        </toolkit:ContextMenu>
+                                    </toolkit:ContextMenuService.ContextMenu>
+                                    <Grid Background="Transparent">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />

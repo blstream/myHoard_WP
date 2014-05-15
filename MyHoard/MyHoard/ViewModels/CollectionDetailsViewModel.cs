@@ -1,11 +1,15 @@
 ﻿using Caliburn.Micro;
 using MyHoard.Models;
+using MyHoard.Resources;
 using MyHoard.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MyHoard.ViewModels
 {
@@ -15,7 +19,7 @@ namespace MyHoard.ViewModels
         private Collection currentCollection;
         private int collectionId;
         private Item selectedItem;
-        private List<Item> items;
+        private ObservableCollection<Item> items;
         private bool isPlaceholderVisible;
         private bool isTagsPlaceholderVisible;
         private bool areTagsVisible;
@@ -30,26 +34,42 @@ namespace MyHoard.ViewModels
         {
             base.OnActivate();
             CurrentCollection = CollectionService.GetCollection(CollectionId);
-            Items = itemService.ItemList(CollectionId, false, true);
+            Items = new ObservableCollection<Item>(itemService.ItemList(CollectionId, false, true));
             IsPlaceholderVisible = Items.Count == 0;
             AreTagsVisible = !string.IsNullOrWhiteSpace(CurrentCollection.Tags);
             IsTagsPlaceholderVisible = !AreTagsVisible && string.IsNullOrWhiteSpace(CurrentCollection.Description);
             Title = CurrentCollection.Name;
         }
 
+        
+        public void Edit(Item item)
+        {
+            NavigationService.UriFor<AddItemViewModel>().WithParam(x => x.ItemId, item.Id).Navigate();
+        }
+
+        public void Delete(Item item)
+        {
+            MessageBoxResult messageResult = MessageBox.Show(AppResources.DeleteDialog + " \"" + item.Name + "\"?", AppResources.Delete, MessageBoxButton.OKCancel);
+            if (messageResult == MessageBoxResult.OK)
+            {
+                Items.Remove(item);
+                itemService.DeleteItem(item);
+            }
+        }
+
         public void SortAlphabetically()
         {
-            Items = Items.OrderBy(x => x.Name).ToList();
+            Items= new ObservableCollection<Item>(Items.OrderBy(x => x.Name));
         }
 
         public void SortAlphabeticallyZA()
         {
-            Items = Items.OrderByDescending(x => x.Name).ToList();
+            Items= new ObservableCollection<Item>(Items.OrderByDescending(x => x.Name));
         }
 
         public void SortFromNewest()
         {
-            Items = Items.OrderBy(x => x.CreatedDate).ToList();
+            Items= new ObservableCollection<Item>(Items.OrderBy(x => x.CreatedDate));
         }
 
         public string Title
@@ -62,7 +82,7 @@ namespace MyHoard.ViewModels
             }
         }
 
-        public List<Item> Items
+        public ObservableCollection<Item> Items
         {
             get { return items; }
             set 
