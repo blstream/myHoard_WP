@@ -25,10 +25,10 @@ namespace MyHoard
             bool numbers =false;
             if(!string.IsNullOrEmpty(pass))
             {
-                length = pass.Length>=5;
-                special = Regex.IsMatch(pass, "^(?=.*?[^A-Za-z0-9]).{5,}");
-                bothcases = Regex.IsMatch(pass, "^(?=.*[a-z])(?=.*[A-Z]).{5,}");
-                numbers = Regex.IsMatch(pass, "^(?=.*?[0-9]).{5,}");
+                length = pass.Length>=4;
+                special = Regex.IsMatch(pass, "^(?=.*?[^A-Za-z0-9]).{4,}");
+                bothcases = Regex.IsMatch(pass, "^(?=.*[a-z])(?=.*[A-Z]).{4,}");
+                numbers = Regex.IsMatch(pass, "^(?=.*?[0-9]).{4,}");
             }
             switch(i)
             {

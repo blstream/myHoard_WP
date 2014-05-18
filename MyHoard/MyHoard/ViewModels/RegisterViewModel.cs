@@ -111,7 +111,7 @@ namespace MyHoard.ViewModels
                 Regex.IsMatch(Email, @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,24}))$") &&
                 !String.IsNullOrEmpty(passwordBox.Password) && TermsAccepted &&
-                Regex.IsMatch(passwordBox.Password, "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{5,}$"));
+                Regex.IsMatch(passwordBox.Password, "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{4,}$"));
         }
 
         public void Register()
