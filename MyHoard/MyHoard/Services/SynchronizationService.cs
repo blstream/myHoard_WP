@@ -176,6 +176,20 @@ namespace MyHoard.Services
                         }
                     }
                 }
+                foreach (Collection localCollection in collections)
+                {
+                    if(!localCollection.IsPrivate)
+                    {
+                        ServerCollection serverColection = serverColections.FirstOrDefault(i => i.id == localCollection.ServerId);
+                        if(serverColection == null)
+                        {
+                            localCollection.ServerId = null;
+                            collectionService.ModifyCollection(localCollection);
+                            collectionService.DeleteCollection(localCollection, true);
+                        }
+                    }
+                    
+                }
             }
             else 
                 return;
