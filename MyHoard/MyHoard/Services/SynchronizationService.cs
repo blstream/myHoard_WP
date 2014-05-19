@@ -437,7 +437,13 @@ namespace MyHoard.Services
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
-            request.AddBody(new { name = c.Name, description = c.Description, tags = c.TagList });
+            request.AddBody(new
+            {
+                name = c.Name,
+                description = c.Description,
+                tags = c.TagList,
+                @public = true
+            });
 
             var response = await myHoardApi.Execute(request);
             JObject parsedResponse = new JObject();
@@ -477,8 +483,9 @@ namespace MyHoard.Services
                 description = i.Description,
                 location = i.LocationSet ? new { lat = i.LocationLat, lng = i.LocationLng } : null,
                 media = mediaService.MediaStringList(i.Id),
-                collection = parentServerId
+                collection = parentServerId,
             });
+            
 
             var response = await myHoardApi.Execute(request);
             JObject parsedResponse = new JObject();

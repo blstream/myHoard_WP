@@ -113,5 +113,20 @@ namespace MyHoard.Services
             return itemList;
         }
 
+        public void UnsyncItems(int collectionID)
+        {
+            MediaService ms = IoC.Get<MediaService>();
+            foreach (Item i in ItemList(collectionID))
+            {
+                i.ServerId = string.Empty;
+                foreach(Media m in ms.MediaList(i.Id,false,false))
+                {
+                    m.ServerId = string.Empty;
+                    ms.ModifyMedia(m);
+                }
+                ModifyItem(i);
+            }
+        }
+
     }
 }

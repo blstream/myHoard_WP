@@ -283,6 +283,8 @@ namespace MyHoard.ViewModels
                             MessageBoxResult messageResult = MessageBox.Show(AppResources.DeleteFromServerDialog, AppResources.Delete, MessageBoxButton.OKCancel);
                             if (messageResult == MessageBoxResult.OK)
                             {
+                                ItemService itemservice = IoC.Get<ItemService>();
+                                itemservice.UnsyncItems(CurrentCollection.Id);
                                 await synchronizationService.SyncDatabase(tokenSource.Token);
                             }
                             else
