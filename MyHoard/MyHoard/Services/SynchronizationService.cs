@@ -623,7 +623,8 @@ namespace MyHoard.Services
                 case System.Net.HttpStatusCode.OK:
                     if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
                     {
-                        return JsonConvert.DeserializeObject<List<ServerCollection>>(response.Content);
+                        var collections = JsonConvert.DeserializeObject<List<ServerCollection>>(response.Content);
+                        return collections.Where(x => x.owner == configurationService.Configuration.ServerId).ToList();
                     }
                     else
                         return null;

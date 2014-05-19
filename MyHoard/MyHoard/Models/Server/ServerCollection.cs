@@ -16,6 +16,7 @@ namespace MyHoard.Models.Server
         public int items_number { get; set; }
         public string created_date { get; set; }
         public string modified_date { get; set; }
+        public string owner { get; set; }
 
         public DateTime CreatedDate()
         {
