@@ -110,8 +110,8 @@ namespace MyHoard.ViewModels
             CanRegister = (!String.IsNullOrEmpty(Email) &&
                 Regex.IsMatch(Email, @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,24}))$") &&
-                !String.IsNullOrEmpty(passwordBox.Password) && TermsAccepted &&
-                Regex.IsMatch(passwordBox.Password, "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{4,}$"));
+                !String.IsNullOrEmpty(passwordBox.Password) &&
+                passwordBox.Password.Length >= 4);
         }
 
         public void Register()
@@ -197,17 +197,6 @@ namespace MyHoard.ViewModels
             {
                 canRegister = value;
                 NotifyOfPropertyChange(() => CanRegister);
-            }
-        }
-
-        public bool TermsAccepted
-        {
-            get { return termsAccepted; }
-            set
-            {
-                termsAccepted = value;
-                NotifyOfPropertyChange(() => TermsAccepted);
-                DataChanged();
             }
         }
 

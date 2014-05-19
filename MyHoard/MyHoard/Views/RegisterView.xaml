@@ -52,16 +52,6 @@
                     <Border Grid.Column="2" Background="{Binding Path=Password, Converter={StaticResource Converter}, ConverterParameter=2, Mode=OneWay}" />
                     <Border Grid.Column="3" Background="{Binding Path=Password, Converter={StaticResource Converter}, ConverterParameter=3, Mode=OneWay}" />
                 </Grid>
-                <Grid Margin="14,0,24,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-                    <CheckBox  Name ="TermsAccepted" Background="#FF333333" HorizontalAlignment="Left"  VerticalAlignment="Center" FontSize="16"
-                       Content="I accept the" Grid.Column="0" Style="{StaticResource CustomCheckBoxStyle}" />
-                    <TextBlock  VerticalAlignment="Center" TextWrapping="Wrap" FontSize="16"  
-                        Text="Terms of Service" Grid.Column="1" TextDecorations="Underline" Margin="-5,0,0,0" />
-                </Grid>
                 <TextBlock Height="30" Margin="24,0,0,0" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Backend, Source={StaticResource LocalizedStrings}}"/>
                 <toolkit:ListPicker Margin="24,0,24,0" Foreground="#FF333333" 
                                 ItemsSource="{Binding Backends.Keys}"
