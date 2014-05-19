@@ -30,6 +30,7 @@ namespace MyHoard.Services
         private readonly MediaService mediaService;
         private readonly MyHoardApi myHoardApi;
         private string backend;
+        private CancellationToken token;
 
         public SynchronizationService()
         {
@@ -54,6 +55,7 @@ namespace MyHoard.Services
             //    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
             //    return;
             //}
+            token = cancellationToken;
 
             List<Collection> collections = collectionService.CollectionList(true);
 
@@ -243,6 +245,23 @@ namespace MyHoard.Services
             }
         }
 
+        private async Task<bool> refreshToken()
+        {
+            RegistrationService r = new RegistrationService();
+            bool refresh = await r.RefreshToken();
+            if (!refresh)
+            {
+                configurationService.Logout();
+                eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                return false;
+            }
+            else
+            {
+                SyncDatabase(token);
+                return true;
+            }
+        }
+
         private async Task<byte[]> GetImage(ServerMedia serverMedia)
         {
             var request = new RestRequest("/media/" + serverMedia.id + "/", Method.GET);
@@ -257,8 +276,7 @@ namespace MyHoard.Services
                     return response.RawBytes;
                 case System.Net.HttpStatusCode.Unauthorized:
                 case System.Net.HttpStatusCode.Forbidden:
-                    configurationService.Logout();
-                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                    refreshToken();
                     return null;
                 default:
                     if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
@@ -357,8 +375,7 @@ namespace MyHoard.Services
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
                 case System.Net.HttpStatusCode.Forbidden:
-                    configurationService.Logout();
-                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                    refreshToken();
                     return false;
                 default:
                     eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"]
@@ -367,7 +384,7 @@ namespace MyHoard.Services
             }
         }
 
-        public async Task<bool> DeleteCollection(Collection c, bool isPrivate=false)
+        public async Task<bool> DeleteCollection(Collection c, bool isPrivate = false)
         {
             var request = new RestRequest("/collections/" + c.ServerId + "/", Method.DELETE);
             request.RequestFormat = DataFormat.Json;
@@ -402,8 +419,7 @@ namespace MyHoard.Services
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
                 case System.Net.HttpStatusCode.Forbidden:
-                    configurationService.Logout();
-                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                    refreshToken();
                     return false;
                 default:
                     eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"]
@@ -433,8 +449,7 @@ namespace MyHoard.Services
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
                 case System.Net.HttpStatusCode.Forbidden:
-                    configurationService.Logout();
-                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                    refreshToken();
                     return false;
                 default:
                     if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
@@ -473,8 +488,7 @@ namespace MyHoard.Services
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
                 case System.Net.HttpStatusCode.Forbidden:
-                    configurationService.Logout();
-                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                    refreshToken();
                     return false;
                 default:
                     if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
@@ -515,8 +529,7 @@ namespace MyHoard.Services
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
                 case System.Net.HttpStatusCode.Forbidden:
-                    configurationService.Logout();
-                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                    refreshToken();
                     return false;
                 default:
                     if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
@@ -555,8 +568,7 @@ namespace MyHoard.Services
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
                 case System.Net.HttpStatusCode.Forbidden:
-                    configurationService.Logout();
-                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                    refreshToken();
                     return false;
                 default:
                     if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
@@ -588,8 +600,7 @@ namespace MyHoard.Services
                     return true;
                 case System.Net.HttpStatusCode.Unauthorized:
                 case System.Net.HttpStatusCode.Forbidden:
-                    configurationService.Logout();
-                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                    refreshToken();
                     return false;
                 default:
                     eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"]
@@ -619,8 +630,7 @@ namespace MyHoard.Services
                         return null;
                 case System.Net.HttpStatusCode.Unauthorized:
                 case System.Net.HttpStatusCode.Forbidden:
-                    configurationService.Logout();
-                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                    refreshToken();
                     return null;
                 default:
                     if (response.Content.StartsWith("{") || response.Content.StartsWith("["))
@@ -651,8 +661,7 @@ namespace MyHoard.Services
                         return null;
                 case System.Net.HttpStatusCode.Unauthorized:
                 case System.Net.HttpStatusCode.Forbidden:
-                    configurationService.Logout();
-                    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
+                    refreshToken();
                     return null;
                 default:
                     if (response.Content.StartsWith("{") || response.Content.StartsWith("["))

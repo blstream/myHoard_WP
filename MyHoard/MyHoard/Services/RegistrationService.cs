@@ -150,13 +150,14 @@ namespace MyHoard.Services
                 {
                     try
                     {
-                        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                        if (response.StatusCode == System.Net.HttpStatusCode.OK || response.StatusCode == System.Net.HttpStatusCode.Created)
                         {
                             JObject parsedResponse = JObject.Parse(response.Content);
                             if (String.IsNullOrWhiteSpace((string)parsedResponse["error_code"]))
                             {
                                 configurationService.Configuration.AccessToken = parsedResponse["access_token"].ToString();
                                 configurationService.Configuration.RefreshToken = parsedResponse["refresh_token"].ToString();
+                                configurationService.Configuration.ServerId = parsedResponse["user_id"].ToString();
                                 configurationService.SaveConfig();
                                 success = true;
                             }
