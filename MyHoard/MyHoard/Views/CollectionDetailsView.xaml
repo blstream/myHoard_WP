@@ -76,7 +76,7 @@
         
         
         <bab:BindableAppBar x:Name="AppBar">
-            <bab:BindableAppBarButton x:Name="Edit"
+            <bab:BindableAppBarButton x:Name="EditColection"
                                       Text="{Binding Path=LocalizedResources.Edit, Source={StaticResource LocalizedStrings}}"
                                       IconUri="Images/edit.png"/>
             <bab:BindableAppBarButton x:Name="AddItem"

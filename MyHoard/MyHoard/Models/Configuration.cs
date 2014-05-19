@@ -17,6 +17,7 @@ namespace MyHoard.Models
         public string Backend { get; set; }
         public bool IsLoggedIn { get; set; }
         public bool KeepLogged { get; set; }
+        public string ServerId { get; set; }
 
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }

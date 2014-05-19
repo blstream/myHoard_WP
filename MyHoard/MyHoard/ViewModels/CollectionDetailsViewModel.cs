@@ -153,9 +153,9 @@ namespace MyHoard.ViewModels
                 NotifyOfPropertyChange(() => CollectionId);
             }
         }
+                   
 
-        
-        public void Edit()
+        public void EditColection()
         {
             NavigationService.UriFor<AddCollectionViewModel>().WithParam(x => x.CollectionId, CurrentCollection.Id).Navigate();
         }

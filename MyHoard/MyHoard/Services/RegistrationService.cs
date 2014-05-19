@@ -91,6 +91,7 @@ namespace MyHoard.Services
                             case System.Net.HttpStatusCode.Created:
                                 configurationService.Configuration.AccessToken = parsedResponse["access_token"].ToString();
                                 configurationService.Configuration.RefreshToken = parsedResponse["refresh_token"].ToString();
+                                configurationService.Configuration.ServerId = parsedResponse["user_id"].ToString();
                                 configurationService.Configuration.Password = password;
                                 configurationService.Configuration.Email = email;
                                 configurationService.Configuration.KeepLogged = keepLogged;
