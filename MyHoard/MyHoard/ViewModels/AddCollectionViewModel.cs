@@ -206,62 +206,43 @@ namespace MyHoard.ViewModels
         public void TagsChanged(object sender, System.Windows.Input.KeyEventArgs e)
         {
             
-            var tagsField = sender as PhoneTextBox;
-            int startLength = tagsField.Text.Length;
-            var tagList = tagsField.Text.Split(new string[] { Collection.TagSeparator }, StringSplitOptions.None);
-            string temptext = "";
-            int carretPosition = tagsField.SelectionStart;
-            foreach (string t in tagList)
-            {
-                if (!string.IsNullOrWhiteSpace(t))
-                {
-                    if (t.Contains(" "))
-                    {
-                        var newtag = t.Split(' ');
-                        foreach (string t1 in newtag)
-                        {
-                            if (!string.IsNullOrWhiteSpace(t1))
-                                temptext += " #" + t1.Replace("#", "");
-                        }
-                    }
-                    else
-                        temptext += " #" + t.Replace("#","");
-                }
-            }
             if (e.Key == Key.Space || e.Key == Key.Enter)
             {
-                tagsField.Text = temptext + " ";
+                var tagsField = sender as PhoneTextBox;
+                int startLength = tagsField.Text.Length;
+                var tagList = tagsField.Text.Split(new string[] { Collection.TagSeparator, " ", "#" }, StringSplitOptions.None);
+                string temptext = "";
+                int carretPosition = tagsField.SelectionStart;
+                foreach (string t in tagList.Distinct())
+                {
+                    if (!string.IsNullOrWhiteSpace(t))
+                    {
+                        temptext += " #" + t;
+                    }
+                }
+
+                tagsField.Text= temptext + " ";
+                tagsField.SelectionStart = carretPosition + (tagsField.Text.Length - startLength);
             }
-            tagsField.SelectionStart = carretPosition + (tagsField.Text.Length - startLength);
-            
             DataChanged();
             
         }
 
         public void TagsLostFocus()
         {
-            
-            var tagList = CurrentCollection.Tags.Split(new string[] { Collection.TagSeparator }, StringSplitOptions.None);
+            int startLength = CurrentCollection.Tags.Length;
+            var tagList = CurrentCollection.Tags.Split(new string[] { Collection.TagSeparator, " ", "#" }, StringSplitOptions.None);
             string temptext = "";
-
-            foreach (string t in tagList)
+            foreach (string t in tagList.Distinct())
             {
                 if (!string.IsNullOrWhiteSpace(t))
                 {
-                    if (t.Contains(" "))
-                    {
-                        var newtag = t.Split(' ');
-                        foreach (string t1 in newtag)
-                        {
-                            if (!string.IsNullOrWhiteSpace(t1))
-                                temptext += " #" + t1.Replace("#", "");
-                        }
-                    }
-                    else
-                        temptext += " #" + t.Replace("#", "");
+                    temptext += " #" + t;
                 }
             }
-            CurrentCollection.Tags = temptext + " ";
+            
+            CurrentCollection.Tags = temptext;
+            
             DataChanged();
         }
 

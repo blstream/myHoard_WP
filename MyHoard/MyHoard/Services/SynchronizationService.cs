@@ -435,7 +435,7 @@ namespace MyHoard.Services
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Content-type", "application/json");
             request.AddHeader("Authorization", configurationService.Configuration.AccessToken);
-            request.AddBody(new { name = c.Name, description = c.Description, tags = c.TagList });
+            request.AddBody(new { name = c.Name, description = c.Description, tags = c.TagList, @public = true });
 
             var response = await myHoardApi.Execute(request);
             JObject parsedResponse = new JObject();
