@@ -127,7 +127,7 @@ namespace MyHoard.Models
         {
             List<string> tagList = new List<string>();
             if (!string.IsNullOrEmpty(Tags))
-                tagList = Tags.Trim().Split(new string[] { TagSeparator }, StringSplitOptions.None).ToList<string>();
+                tagList = Tags.Trim(new Char[] { ' ', '#' } ).Split(new string[] { TagSeparator }, StringSplitOptions.None).ToList<string>();
             return tagList.Where(t => !string.IsNullOrWhiteSpace(t)).ToList();
         }
 
