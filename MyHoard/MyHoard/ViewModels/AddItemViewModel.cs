@@ -94,7 +94,7 @@ namespace MyHoard.ViewModels
                     }
                 }
 
-            CanSave = !String.IsNullOrEmpty(CurrentItem.Name) && CurrentItem.Name.Length>=2 && (ItemId == 0 ||
+            CanSave = !String.IsNullOrEmpty(CurrentItem.Name) && CurrentItem.Name.Trim().Length >= 2 && (ItemId == 0 ||
                 !StringsEqual(editedItem.Name, CurrentItem.Name) || !StringsEqual(editedItem.Description, CurrentItem.Description) || picturesChanged ||
                 editedItem.LocationLat != CurrentItem.LocationLat || editedItem.LocationLng != CurrentItem.LocationLng || editedItem.LocationSet != CurrentItem.LocationSet);
         }
