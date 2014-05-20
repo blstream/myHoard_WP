@@ -22,6 +22,7 @@ namespace MyHoard.ViewModels
         private List<Media> pictures;
         private Media selectedPicture;
         private string title;
+        private bool isDescriptionVisible;
 
         public ItemDetailsViewModel(INavigationService navigationService, CollectionService collectionService, ItemService itemService, MediaService mediaService)
             : base(navigationService, collectionService)
@@ -38,6 +39,7 @@ namespace MyHoard.ViewModels
                 CurrentItem = itemService.GetItem(ItemId);
                 Title = CurrentItem.Name;
                 Pictures = mediaService.MediaList(ItemId, true, true);
+                IsDescriptionVisible = !string.IsNullOrWhiteSpace(CurrentItem.Description);
             }
             
         }
@@ -83,6 +85,16 @@ namespace MyHoard.ViewModels
             {
                 pictures = value;
                 NotifyOfPropertyChange(() => Pictures);
+            }
+        }
+
+        public bool IsDescriptionVisible
+        {
+            get { return isDescriptionVisible; }
+            set
+            {
+                isDescriptionVisible = value;
+                NotifyOfPropertyChange(() => IsDescriptionVisible);
             }
         }
 

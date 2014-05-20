@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -84,6 +85,12 @@ namespace MyHoard
             }
             IoC.Get<MediaService>().CleanIsolatedStorage();
             base.OnClose(sender, e);
+        }
+
+        protected override void OnUnhandledException(object sender, System.Windows.ApplicationUnhandledExceptionEventArgs e)
+        {
+            base.OnUnhandledException(sender, e);
+            MessageBox.Show(string.Format("{0}: {1}",Resources.AppResources.GeneralError,e.ToString()));
         }
 
            
