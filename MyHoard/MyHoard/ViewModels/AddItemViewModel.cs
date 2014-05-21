@@ -61,12 +61,15 @@ namespace MyHoard.ViewModels
         public void GetGeolcation()
         {
             if (CurrentItem.LocationSet)
+            {
                 GeolocationHelper.GetCurrentLocation(CurrentItem);
                 //    .ContinueWith(_ => GeolocationHelper.GetLocationName(CurrentItem));
+            }
             else
             {
                 GeolocationHelper.ClearLocation(CurrentItem);
             }
+            DataChanged();
         }
 
         public void Trim()
@@ -177,6 +180,8 @@ namespace MyHoard.ViewModels
                 {
                     Name = CurrentItem.Name,
                     Description = CurrentItem.Description,
+                    LocationLat = CurrentItem.LocationLat,
+                    LocationLng = CurrentItem.LocationLng
                 };
                 Pictures = new ObservableCollection<Media>(mediaService.MediaList(ItemId, true, true));
 				
