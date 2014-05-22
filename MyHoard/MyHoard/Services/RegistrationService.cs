@@ -35,11 +35,32 @@ namespace MyHoard.Services
                             {
                                 Login(email, password, true, backend);
                             }
-                            else
+                            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                            {
+                                string message = Resources.AppResources.GeneralError + ": " + Resources.AppResources.ServerNotFound + "\n" + Resources.AppResources.CheckConnection;
+                                eventAggregator.Publish(new ServerMessage(false, message));
+                            }
+                            else if (!String.IsNullOrWhiteSpace(response.Content))
                             {
                                 JObject parsedResponse = JObject.Parse(response.Content);
-                                string message = Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"] + "\n" + parsedResponse["errors"];
+                                string message = Resources.AppResources.GeneralError + ": " + parsedResponse["error_message"] + "\n";
+                                foreach (var jObject in parsedResponse["errors"])
+                                {
+                                    var jtoken = jObject.First;
+
+                                    while (jtoken != null)//loop through columns
+                                    {
+                                        message += jtoken.ToString() + "\n";
+
+                                        jtoken = jtoken.Next;
+                                    }
+                                }
                                 eventAggregator.Publish(new ServerMessage(false, message));
+
+                            }
+                            else
+                            {
+                                eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.GeneralError));
                             }
                         }
                         catch (Exception e)

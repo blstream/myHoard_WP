@@ -223,6 +223,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please check your internet connection and try again later.
+        /// </summary>
+        public static string CheckConnection {
+            get {
+                return ResourceManager.GetString("CheckConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Collection.
         /// </summary>
         public static string Collection {
@@ -649,6 +658,15 @@ namespace MyHoard.Resources {
         public static string SearchTitle {
             get {
                 return ResourceManager.GetString("SearchTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server not found.
+        /// </summary>
+        public static string ServerNotFound {
+            get {
+                return ResourceManager.GetString("ServerNotFound", resourceCulture);
             }
         }
         
