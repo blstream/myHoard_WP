@@ -35,6 +35,7 @@ namespace MyHoard.ViewModels
             base.OnActivate();
             CurrentCollection = CollectionService.GetCollection(CollectionId);
             Items = new ObservableCollection<Item>(itemService.ItemList(CollectionId, false, true));
+            SortAlphabetically();
             IsPlaceholderVisible = Items.Count == 0;
             AreTagsVisible = !string.IsNullOrWhiteSpace(CurrentCollection.Tags);
             IsTagsPlaceholderVisible = !AreTagsVisible && string.IsNullOrWhiteSpace(CurrentCollection.Description);
