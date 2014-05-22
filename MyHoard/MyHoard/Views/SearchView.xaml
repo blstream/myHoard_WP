@@ -50,7 +50,7 @@
 
         <TextBlock Margin="12,17,0,28" Grid.Row="0" Text="{Binding Path=LocalizedResources.SearchTitle, Source={StaticResource LocalizedStrings}}" FontSize="22.667" Foreground="#FFFFC002" />
         <toolkit:PhoneTextBox Name="SearchText" Hint="{Binding Path=LocalizedResources.Search, Source={StaticResource LocalizedStrings}}" Height="72" TextWrapping="Wrap" BorderThickness="3" Width="460" Foreground="#FF333333"
-                              cal:Message.Attach="[Event TextChanged] = [Action SearchChanged]" Style="{StaticResource CustomTextBoxStyle}" Grid.Row="1" Margin="0,-5,0,0" />
+                              cal:Message.Attach="[Event TextChanged] = [Action SearchChanged]" Style="{StaticResource CustomTextBoxStyle}" Grid.Row="1" Margin="0,-5,0,0" MaxLength="20"/>
 
         
         
