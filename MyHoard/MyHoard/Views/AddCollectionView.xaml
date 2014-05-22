@@ -49,7 +49,7 @@
                        Grid.Row="0" Style="{StaticResource PhoneTextNormalStyle}" />
 
                 <toolkit:PhoneTextBox Name="CurrentCollection_Name" Hint="{Binding Path=LocalizedResources.AddName, Source={StaticResource LocalizedStrings}}" Height="72" TextWrapping="Wrap" BorderThickness="3" Width="460" Foreground="#FF333333"
-                              cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]"  Style="{StaticResource CustomTextBoxStyle}" Grid.Row="1" Margin="0,-5,0,0" />
+                              cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]"  Style="{StaticResource CustomTextBoxStyle}" Grid.Row="1" Margin="0,-5,0,0"  MaxLength="64"/>
                 <TextBlock Text="{Binding Path=LocalizedResources.Tags, Source={StaticResource LocalizedStrings}}" 
                        Grid.Row="2" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,40,12,0" />
 
@@ -68,7 +68,7 @@
                 <TextBlock Grid.Row="4" Text="{Binding Path=LocalizedResources.Description, Source={StaticResource LocalizedStrings}}" 
                        Style="{StaticResource PhoneTextNormalStyle}" Margin="12,40,12,0" />
                 <toolkit:PhoneTextBox Name="CurrentCollection_Description"  Grid.Row="5" Height="105" TextWrapping="Wrap"  Hint="{Binding Path=LocalizedResources.AddDescription, Source={StaticResource LocalizedStrings}}"
-                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]" AcceptsReturn="True" Margin="0,-5,0,0" Style="{StaticResource CustomTextBoxStyleTopAlignment}" />
+                     cal:Message.Attach="[Event TextChanged] = [Action DataChanged]; [Event LostFocus] = [Action Trim]" AcceptsReturn="True" Margin="0,-5,0,0" Style="{StaticResource CustomTextBoxStyleTopAlignment}" MaxLength="900" />
                 
                 <CheckBox Name="CurrentCollection_IsPrivate"  Grid.Row="7" Content="{Binding Path=LocalizedResources.Offline, 
                     Source={StaticResource LocalizedStrings}}" IsEnabled="{Binding IsLoggedIn}" cal:Message.Attach="[Event Tap] = [Action DataChanged]" Style="{StaticResource CustomCheckBoxStyle}" Margin="0,40,0,0" />
