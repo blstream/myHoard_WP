@@ -69,7 +69,12 @@ namespace MyHoard.ViewModels
 
         public void SortFromNewest()
         {
-            Items= new ObservableCollection<Item>(Items.OrderBy(x => x.CreatedDate));
+            Items= new ObservableCollection<Item>(Items.OrderByDescending(x => x.CreatedDate));
+        }
+
+        public void SortFromOldest()
+        {
+            Items = new ObservableCollection<Item>(Items.OrderBy(x => x.CreatedDate));
         }
 
         public string Title

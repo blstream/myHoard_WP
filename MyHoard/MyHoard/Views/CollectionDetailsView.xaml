@@ -85,6 +85,7 @@
             <bab:BindableAppBarMenuItem cal:Message.Attach="[Event Click] = [ActionSortAlphabetically]" Text="{Binding Path=LocalizedResources.AlphabeticallyAZ, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource OppositeBooleanToVisibilityConverter}}" />
             <bab:BindableAppBarMenuItem cal:Message.Attach="[Event Click] = [SortAlphabeticallyZA]" Text="{Binding Path=LocalizedResources.AlphabeticallyZA, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource OppositeBooleanToVisibilityConverter}}" />
             <bab:BindableAppBarMenuItem cal:Message.Attach="[Event Click] = [SortFromNewest]" Text="{Binding Path=LocalizedResources.NewestTop, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource OppositeBooleanToVisibilityConverter}}" />
+            <bab:BindableAppBarMenuItem cal:Message.Attach="[Event Click] = [SortFromOldest]" Text="{Binding Path=LocalizedResources.OldestTop, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource OppositeBooleanToVisibilityConverter}}" />
         </bab:BindableAppBar>
     </Grid>
 
