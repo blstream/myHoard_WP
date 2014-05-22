@@ -198,7 +198,7 @@ namespace MyHoard.ViewModels
 
         public void DataChanged()
         {
-            CanSave = !String.IsNullOrEmpty(CurrentCollection.Name) && (CollectionId==0 || 
+            CanSave = !String.IsNullOrWhiteSpace(CurrentCollection.Name) && (CollectionId==0 || 
                 !StringsEqual(editedCollection.Name, CurrentCollection.Name) || !StringsEqual(editedCollection.Description,CurrentCollection.Description)
                 || !StringsEqual(editedCollection.Tags, CurrentCollection.Tags) || editedCollection.IsPrivate != CurrentCollection.IsPrivate);
         }
