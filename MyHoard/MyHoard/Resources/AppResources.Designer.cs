@@ -479,6 +479,17 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application can&apos;t access your current location.
+        ///
+        ///Please turn on location service at Settings: location..
+        /// </summary>
+        public static string LocationServiceOff {
+            get {
+                return ResourceManager.GetString("LocationServiceOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to login.
         /// </summary>
         public static string Login {

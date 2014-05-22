@@ -37,9 +37,9 @@ namespace MyHoard.Services
                 if ((uint)ex.HResult == 0x80004004)
                 {
                     // the application does not have the right capability or the location master switch is off
-                    MessageBox.Show(AppResources.CannotObtainLocation);
+                    MessageBox.Show(AppResources.LocationServiceOff);
                 }
-                //else
+                else
                 {
                     // something else happened acquring the location
                     MessageBox.Show(AppResources.CannotObtainLocation);

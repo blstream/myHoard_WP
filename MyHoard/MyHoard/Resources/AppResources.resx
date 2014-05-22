@@ -360,4 +360,9 @@ and make your first photo!</value>
   <data name="ServerNotFound" xml:space="preserve">
     <value>Server not found</value>
   </data>
+  <data name="LocationServiceOff" xml:space="preserve">
+    <value>Application can't access your current location.
+
+Please turn on location service at Settings: location.</value>
+  </data>
 </root>
