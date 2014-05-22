@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using DotNetApp.Utilities;
 using MyHoard.Services;
 using MyHoard.Views;
 using Newtonsoft.Json.Linq;
@@ -13,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace MyHoard.ViewModels
 {
@@ -54,7 +56,8 @@ namespace MyHoard.ViewModels
                 }
                 else
                 {
-                    asyncHandle.Abort();
+                    if(asyncHandle!=null)
+                        asyncHandle.Abort();
                 }
             }
         }
@@ -80,6 +83,7 @@ namespace MyHoard.ViewModels
         protected override void OnDeactivate(bool close)
         {
             eventAggregator.Unsubscribe(this);
+            NetworkInformationUtility.GetNetworkTypeCompleted -= GetNetworkTypeCompleted;
             base.OnDeactivate(close);
         }
 
@@ -88,6 +92,7 @@ namespace MyHoard.ViewModels
         {
             eventAggregator.Subscribe(this);
             base.OnActivate();
+            NetworkInformationUtility.GetNetworkTypeCompleted += GetNetworkTypeCompleted;
         }
 
 
@@ -117,8 +122,26 @@ namespace MyHoard.ViewModels
         public void Register()
         {
             IsFormAccessible = false;
-            RegistrationService registrationService = new RegistrationService();
-            asyncHandle = registrationService.Register(Email, passwordBox.Password, SelectedBackend);
+            NetworkInformationUtility.GetNetworkTypeAsync(3000);
+            
+        }
+
+        private void GetNetworkTypeCompleted(object sender, NetworkTypeEventArgs networkTypeEventArgs)
+        {
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+                if (networkTypeEventArgs.HasInternet)
+                {
+                    RegistrationService registrationService = new RegistrationService();
+                    asyncHandle = registrationService.Register(Email, passwordBox.Password, SelectedBackend);
+                }
+                else
+                {
+                    IsFormAccessible = true;
+                    CanRegister = true;
+                    MessageBox.Show(Resources.AppResources.InternetConnectionError);
+                }
+            });
         }
 
         public void PasswordLostFocus()

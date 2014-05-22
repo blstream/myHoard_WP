@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Microsoft.Phone;
+using Microsoft.Phone.Net.NetworkInformation;
 using MyHoard.Models;
 using MyHoard.Models.Server;
 using Newtonsoft.Json;
@@ -55,147 +56,154 @@ namespace MyHoard.Services
             //    eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.AuthenticationError));
             //    return;
             //}
-            token = cancellationToken;
-
-            List<Collection> collections = collectionService.CollectionList(true);
-
-            foreach (Collection c in collections)
+            if (NetworkInterface.NetworkInterfaceType != NetworkInterfaceType.None)
             {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    return;
-                }
-                
-                bool success;
-                if (!c.IsPrivate)
-                {
-                    if (String.IsNullOrWhiteSpace(c.ServerId) && !c.ToDelete)
-                    {
-                        success = await AddCollection(c);
-                        if (!success)
-                            return;
-                    }
-                    else if (!c.IsSynced && !c.ToDelete)
-                    {
-                        success = await modifyCollection(c);
-                        if (!success)
-                            return;
-                    }
-                    else if (c.ToDelete && !String.IsNullOrEmpty(c.ServerId))
-                    {
-                        success = await DeleteCollection(c);
-                        if (!success)
-                            return;
-                    }
+                token = cancellationToken;
 
-                    if (!c.IsPrivate && !c.ToDelete)
-                    {
-                        foreach (Item i in itemService.ItemList(c.Id, true))
-                        {
+                List<Collection> collections = collectionService.CollectionList(true);
 
-                            foreach (Media m in mediaService.MediaList(i.Id, false, false))
-                            {
-                                
-                                if (String.IsNullOrWhiteSpace(m.ServerId) && !m.ToDelete)
-                                {
-                                    success = await addMedia(m);
-                                    if (!success)
-                                        return;
-                                }
-                            }
-                           
-                            if (String.IsNullOrWhiteSpace(i.ServerId) && !i.ToDelete)
-                            {
-                                success = await addItem(i, c.ServerId);
-                                if (!success)
-                                    return;
-                            }
-                            else if (!i.IsSynced && !i.ToDelete)
-                            {
-                                success = await modifyItem(i, c.ServerId);
-                                if (!success)
-                                    return;
-                            }
-                            else if (i.ToDelete && !string.IsNullOrEmpty(i.ServerId))
-                            {
-                                success = await deleteItem(i);
-                                if (!success)
-                                    return;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if(!string.IsNullOrWhiteSpace(c.ServerId))
-                    {
-                        success = await DeleteCollection(c, true);
-                        if (!success)
-                            return;
-                    }
-                     
-                }
-            }
-
-            if (cancellationToken.IsCancellationRequested)
-            {
-                return;
-            }
-
-            List<ServerCollection> serverColections = await getCollections();
-            if (serverColections != null)
-            {
-                foreach (ServerCollection serverCollection in serverColections)
+                foreach (Collection c in collections)
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
                         return;
                     }
 
-                    Collection localCollection = collections.FirstOrDefault(c => c.ServerId == serverCollection.id);
-                    localCollection = syncCollectionFromServer(localCollection, serverCollection);
-
-                    List<Item> items = itemService.ItemList(localCollection.Id);
-
-                    List<ServerItem> serverItems = await getItems(serverCollection);
-                    if (serverItems != null)
-                        foreach (ServerItem serverItem in serverItems)
+                    bool success;
+                    if (!c.IsPrivate)
+                    {
+                        if (String.IsNullOrWhiteSpace(c.ServerId) && !c.ToDelete)
                         {
-                            Item localItem = items.FirstOrDefault(i => i.ServerId == serverItem.id);
-                            localItem = syncItemFromServer(localItem, serverItem, localCollection.Id);
-                            await syncMedia(localItem, serverItem);
+                            success = await AddCollection(c);
+                            if (!success)
+                                return;
                         }
+                        else if (!c.IsSynced && !c.ToDelete)
+                        {
+                            success = await modifyCollection(c);
+                            if (!success)
+                                return;
+                        }
+                        else if (c.ToDelete && !String.IsNullOrEmpty(c.ServerId))
+                        {
+                            success = await DeleteCollection(c);
+                            if (!success)
+                                return;
+                        }
+
+                        if (!c.IsPrivate && !c.ToDelete)
+                        {
+                            foreach (Item i in itemService.ItemList(c.Id, true))
+                            {
+
+                                foreach (Media m in mediaService.MediaList(i.Id, false, false))
+                                {
+
+                                    if (String.IsNullOrWhiteSpace(m.ServerId) && !m.ToDelete)
+                                    {
+                                        success = await addMedia(m);
+                                        if (!success)
+                                            return;
+                                    }
+                                }
+
+                                if (String.IsNullOrWhiteSpace(i.ServerId) && !i.ToDelete)
+                                {
+                                    success = await addItem(i, c.ServerId);
+                                    if (!success)
+                                        return;
+                                }
+                                else if (!i.IsSynced && !i.ToDelete)
+                                {
+                                    success = await modifyItem(i, c.ServerId);
+                                    if (!success)
+                                        return;
+                                }
+                                else if (i.ToDelete && !string.IsNullOrEmpty(i.ServerId))
+                                {
+                                    success = await deleteItem(i);
+                                    if (!success)
+                                        return;
+                                }
+                            }
+                        }
+                    }
                     else
-                        return;
-                    foreach (Item localItem in items)
                     {
-                        ServerItem serverItem = serverItems.FirstOrDefault(i => i.id == localItem.ServerId);
-                        if (serverItem == null)
+                        if (!string.IsNullOrWhiteSpace(c.ServerId))
                         {
-                            localItem.ServerId=null;
-                            itemService.ModifyItem(localItem);
-                            itemService.DeleteItem(localItem);
+                            success = await DeleteCollection(c, true);
+                            if (!success)
+                                return;
                         }
+
                     }
                 }
-                foreach (Collection localCollection in collections)
+
+                if (cancellationToken.IsCancellationRequested)
                 {
-                    if(!localCollection.IsPrivate)
+                    return;
+                }
+
+                List<ServerCollection> serverColections = await getCollections();
+                if (serverColections != null)
+                {
+                    foreach (ServerCollection serverCollection in serverColections)
                     {
-                        ServerCollection serverColection = serverColections.FirstOrDefault(i => i.id == localCollection.ServerId);
-                        if(serverColection == null)
+                        if (cancellationToken.IsCancellationRequested)
                         {
-                            localCollection.ServerId = null;
-                            collectionService.ModifyCollection(localCollection);
-                            collectionService.DeleteCollection(localCollection, true);
+                            return;
+                        }
+
+                        Collection localCollection = collections.FirstOrDefault(c => c.ServerId == serverCollection.id);
+                        localCollection = syncCollectionFromServer(localCollection, serverCollection);
+
+                        List<Item> items = itemService.ItemList(localCollection.Id);
+
+                        List<ServerItem> serverItems = await getItems(serverCollection);
+                        if (serverItems != null)
+                            foreach (ServerItem serverItem in serverItems)
+                            {
+                                Item localItem = items.FirstOrDefault(i => i.ServerId == serverItem.id);
+                                localItem = syncItemFromServer(localItem, serverItem, localCollection.Id);
+                                await syncMedia(localItem, serverItem);
+                            }
+                        else
+                            return;
+                        foreach (Item localItem in items)
+                        {
+                            ServerItem serverItem = serverItems.FirstOrDefault(i => i.id == localItem.ServerId);
+                            if (serverItem == null)
+                            {
+                                localItem.ServerId = null;
+                                itemService.ModifyItem(localItem);
+                                itemService.DeleteItem(localItem);
+                            }
                         }
                     }
-                    
+                    foreach (Collection localCollection in collections)
+                    {
+                        if (!localCollection.IsPrivate)
+                        {
+                            ServerCollection serverColection = serverColections.FirstOrDefault(i => i.id == localCollection.ServerId);
+                            if (serverColection == null)
+                            {
+                                localCollection.ServerId = null;
+                                collectionService.ModifyCollection(localCollection);
+                                collectionService.DeleteCollection(localCollection, true);
+                            }
+                        }
+
+                    }
                 }
+                else
+                    return;
+                eventAggregator.Publish(new ServerMessage(true, Resources.AppResources.Synchronized));
             }
-            else 
-                return;
-            eventAggregator.Publish(new ServerMessage(true, Resources.AppResources.Synchronized));
+            else
+            {
+                eventAggregator.Publish(new ServerMessage(false, Resources.AppResources.InternetConnectionError));
+            }
         }
 
         private void savePicture(byte[] image, int localItemId, string serverMediaId)
@@ -223,7 +231,7 @@ namespace MyHoard.Services
                     byte[] image = await GetImage(serverMedia);
                     if (image != null)
                     {
-                        
+
                         Deployment.Current.Dispatcher.BeginInvoke(() =>
                         {
                             savePicture(image, localItem.Id, serverMedia.id);
@@ -299,7 +307,7 @@ namespace MyHoard.Services
                     ModifiedDate = serverItem.ModifiedDate(),
                 };
                 localItem.LocationSet = serverItem.location != null;
-                if(localItem.LocationSet)
+                if (localItem.LocationSet)
                 {
                     localItem.LocationLat = serverItem.location.lat;
                     localItem.LocationLng = serverItem.location.lng;
@@ -401,13 +409,13 @@ namespace MyHoard.Services
                 case System.Net.HttpStatusCode.NotFound:
                     c.ServerId = null;
                     collectionService.ModifyCollection(c);
-                    if(isPrivate)
+                    if (isPrivate)
                     {
-                        foreach(Item i in itemService.ItemList(c.Id))
+                        foreach (Item i in itemService.ItemList(c.Id))
                         {
                             i.ServerId = null;
                             itemService.ModifyItem(i);
-                            foreach(Media m in mediaService.MediaList(i.Id,false))
+                            foreach (Media m in mediaService.MediaList(i.Id, false))
                             {
                                 m.ServerId = null;
                                 mediaService.ModifyMedia(m);
@@ -513,7 +521,7 @@ namespace MyHoard.Services
                 media = mediaService.MediaStringList(i.Id),
                 collection = parentServerId,
             });
-            
+
 
             var response = await myHoardApi.Execute(request);
             JObject parsedResponse = new JObject();
@@ -562,7 +570,7 @@ namespace MyHoard.Services
             {
                 case System.Net.HttpStatusCode.OK:
                     ServerItem si = JsonConvert.DeserializeObject<ServerItem>(response.Content);
-                    i.IsSynced=true;
+                    i.IsSynced = true;
                     i.ModifiedDate = si.ModifiedDate();
                     itemService.ModifyItem(i);
                     return true;

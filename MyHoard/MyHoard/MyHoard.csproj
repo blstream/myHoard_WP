@@ -114,6 +114,7 @@
     <Compile Include="Services\GeolocationHelper.cs" />
     <Compile Include="Services\MediaService.cs" />
     <Compile Include="Services\MyHoardApi.cs" />
+    <Compile Include="Services\NetworkInformationUtility.cs" />
     <Compile Include="Services\RegistrationService.cs" />
     <Compile Include="Services\ServerMessage.cs" />
     <Compile Include="Services\ServiceErrorMessage.cs" />

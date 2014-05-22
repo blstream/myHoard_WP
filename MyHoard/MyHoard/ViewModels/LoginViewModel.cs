@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using DotNetApp.Utilities;
 using MyHoard.Services;
 using MyHoard.Views;
 using Newtonsoft.Json.Linq;
@@ -61,7 +62,8 @@ namespace MyHoard.ViewModels
                 }
                 else
                 {
-                    asyncHandle.Abort();
+                    if (asyncHandle != null)
+                        asyncHandle.Abort();
                 }
             }
         }
@@ -88,10 +90,39 @@ namespace MyHoard.ViewModels
             }
         }
 
+        private void GetNetworkTypeCompleted(object sender, NetworkTypeEventArgs networkTypeEventArgs)
+        {
+            Deployment.Current.Dispatcher.BeginInvoke(() =>
+            {
+                if (networkTypeEventArgs.HasInternet)
+                {
+                    if (configurationService.Configuration.Email != Email)
+                        changeUser = true;
+                    if (string.IsNullOrWhiteSpace(configurationService.Configuration.Email))
+                        copyDefault = true;
+                    RegistrationService registrationService = new RegistrationService();
+                    asyncHandle = registrationService.Login(Email, passwordBox.Password, KeepLogged, SelectedBackend);
+                }
+                else
+                {
+                    IsFormAccessible = true;
+                    CanLogin = true;
+                    MessageBox.Show(Resources.AppResources.InternetConnectionError);
+                }
+            });
+        }
+
+        public void Login()
+        {
+            IsFormAccessible = false;
+            NetworkInformationUtility.GetNetworkTypeAsync(3000);
+        }
+
 
         protected override void OnDeactivate(bool close)
         {
             eventAggregator.Unsubscribe(this);
+            NetworkInformationUtility.GetNetworkTypeCompleted -= GetNetworkTypeCompleted;
             base.OnDeactivate(close);
         }
 
@@ -100,6 +131,7 @@ namespace MyHoard.ViewModels
         {
             eventAggregator.Subscribe(this);
             base.OnActivate();
+            NetworkInformationUtility.GetNetworkTypeCompleted += GetNetworkTypeCompleted;
         }
 
 
@@ -143,17 +175,6 @@ namespace MyHoard.ViewModels
         }
 
 
-
-        public void Login()
-        {
-            if (configurationService.Configuration.Email != Email)
-                changeUser = true;
-            if (string.IsNullOrWhiteSpace(configurationService.Configuration.Email))
-                copyDefault = true;
-            IsFormAccessible = false;
-            RegistrationService registrationService = new RegistrationService();
-            asyncHandle = registrationService.Login(Email, passwordBox.Password, KeepLogged, SelectedBackend);
-        }
 
         public string Email
         {
