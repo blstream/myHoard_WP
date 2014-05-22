@@ -80,9 +80,6 @@
             <bab:BindableAppBarButton x:Name="Save"
                                       Text="{Binding Path=LocalizedResources.Save, Source={StaticResource LocalizedStrings}}"
                                       IconUri="Images/check.png"/>
-            <bab:BindableAppBarButton x:Name="Delete"
-                                      Text="{Binding Path=LocalizedResources.Delete, Source={StaticResource LocalizedStrings}}"
-                                      IconUri="Images/delete.png" Visibility="{Binding IsDeleteVisible}"/>
         </bab:BindableAppBar>
     </Grid>
 

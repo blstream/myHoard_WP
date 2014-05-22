@@ -82,6 +82,9 @@
             <bab:BindableAppBarButton x:Name="AddItem"
                                       Text="{Binding Path=LocalizedResources.AddItem, Source={StaticResource LocalizedStrings}}"
                                       IconUri="Images/add.png"/>
+            <bab:BindableAppBarButton x:Name="DeleteCollection"
+                                      Text="{Binding Path=LocalizedResources.Delete, Source={StaticResource LocalizedStrings}}"
+                                      IconUri="Images/delete.png" Visibility="{Binding IsDeleteVisible}"/>
             <bab:BindableAppBarMenuItem cal:Message.Attach="[Event Click] = [ActionSortAlphabetically]" Text="{Binding Path=LocalizedResources.AlphabeticallyAZ, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource OppositeBooleanToVisibilityConverter}}" />
             <bab:BindableAppBarMenuItem cal:Message.Attach="[Event Click] = [SortAlphabeticallyZA]" Text="{Binding Path=LocalizedResources.AlphabeticallyZA, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource OppositeBooleanToVisibilityConverter}}" />
             <bab:BindableAppBarMenuItem cal:Message.Attach="[Event Click] = [SortFromNewest]" Text="{Binding Path=LocalizedResources.NewestTop, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource OppositeBooleanToVisibilityConverter}}" />
