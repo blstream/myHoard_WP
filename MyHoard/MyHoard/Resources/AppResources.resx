@@ -204,7 +204,7 @@
     <value>An authentication error occurred</value>
   </data>
   <data name="InternetConnectionError" xml:space="preserve">
-    <value>Unablke to perfrom operation. Check your internet connection.</value>
+    <value>Unable to perform operation. Check your Internet connection.</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>

@@ -452,7 +452,7 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unablke to perfrom operation. Check your internet connection..
+        ///   Looks up a localized string similar to Unable to perform operation. Check your Internet connection..
         /// </summary>
         public static string InternetConnectionError {
             get {

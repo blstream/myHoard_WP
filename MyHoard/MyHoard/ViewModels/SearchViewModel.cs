@@ -15,9 +15,9 @@ namespace MyHoard.ViewModels
         private ItemService itemService;
         private List<Item> items;
         private string searchText;
-        private ObservableCollection<Item> allItems;
-        private ObservableCollection<Item> titleItems;
-        private ObservableCollection<Item> descriptionItems;
+        private ObservableCollection<Item> allItems = new ObservableCollection<Item>();
+        private ObservableCollection<Item> titleItems = new ObservableCollection<Item>();
+        private ObservableCollection<Item> descriptionItems = new ObservableCollection<Item>();
         private Item selectedItem;
 
         public SearchViewModel(INavigationService navigationService, CollectionService collectionService, ItemService itemService)
@@ -90,6 +90,12 @@ namespace MyHoard.ViewModels
                 AllItems = new ObservableCollection<Item>(items.Where(x => Contains(x.Description, SearchText, StringComparison.OrdinalIgnoreCase) || Contains(x.Name, SearchText, StringComparison.OrdinalIgnoreCase)));
                 TitleItems = new ObservableCollection<Item>(items.Where(x => Contains(x.Name, SearchText, StringComparison.OrdinalIgnoreCase)));
                 DescriptionItems = new ObservableCollection<Item>(items.Where(x => Contains(x.Description, SearchText, StringComparison.OrdinalIgnoreCase)));
+            }
+            else
+            {
+                AllItems.Clear();
+                TitleItems.Clear();
+                DescriptionItems.Clear();
             }
         }
 
