@@ -29,7 +29,7 @@
                 <TextBlock Height="30" Margin="24,10,0,0" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Password, Source={StaticResource LocalizedStrings}}"/>
                 <Grid>
                     <toolkit:PhoneTextBox Name="PasswordWatermark" Hint="{Binding Path=LocalizedResources.InsertPassword, Source={StaticResource LocalizedStrings}}" Height="80" Margin="12,-10,8,0"  BorderThickness="3" Width="460" 
-                     IsHitTestVisible="False" Foreground="#FF333333" Opacity="{Binding WatermarkOpacity;}" />
+                     IsHitTestVisible="False" Foreground="#FF333333" Opacity="{Binding WatermarkOpacity;}" Style="{StaticResource CustomTextBoxStyle}" />
                     <PasswordBox Name="Password" Height="80" Margin="12,-10,8,0" Opacity="{Binding PasswordBoxOpacity;}" BorderThickness="3" Width="460" Foreground="#FF333333" 
                          cal:Message.Attach="[Event LostFocus] = [Action PasswordLostFocus]; [Event GotFocus] = [Action PasswordGotFocus]" Style="{StaticResource CustomPasswordBoxStyle}"/>
                 </Grid>

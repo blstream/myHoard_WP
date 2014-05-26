@@ -228,7 +228,7 @@
     <value>User Name</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>login</value>
+    <value>Log in</value>
   </data>
   <data name="LoginSuccess" xml:space="preserve">
     <value>You have successfully logged in</value>

@@ -490,7 +490,7 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to login.
+        ///   Looks up a localized string similar to Log in.
         /// </summary>
         public static string Login {
             get {
