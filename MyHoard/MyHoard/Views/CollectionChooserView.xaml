@@ -1,0 +1,29 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="MyHoard.Views.CollectionChooserView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True"
+    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro">
+
+
+    <Grid x:Name="LayoutRoot" Background="#FF333333" >
+        <StackPanel Margin="12">
+            <TextBlock Text="{Binding Path=LocalizedResources.ChooseCollection, Source={StaticResource LocalizedStrings}}" Margin="12" FontSize="22.667" Foreground="{StaticResource MainAccentBrush}" Style="{StaticResource PhoneTextNormalStyle}"/>
+        
+            <Grid x:Name="ContentPanel" Grid.Row="0" Margin="12,30,12,0">
+                <ListBox  Name="Collections" ItemsSource="{Binding Collections, Mode=OneWay}" Margin="0,5,0,10" cal:Message.Attach="[Event Tap] = [Action CollectionChosen]"
+                   DisplayMemberPath="Name" SelectedItem="{Binding SelectedCollection, Mode=TwoWay}" FontFamily="Segoe WP Light" FontSize="37.333"  />
+            </Grid>
+        </StackPanel>
+    </Grid>
+
+</phone:PhoneApplicationPage>

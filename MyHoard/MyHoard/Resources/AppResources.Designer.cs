@@ -232,6 +232,15 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CHOOSE COLLECTION.
+        /// </summary>
+        public static string ChooseCollection {
+            get {
+                return ResourceManager.GetString("ChooseCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Collection.
         /// </summary>
         public static string Collection {

@@ -365,4 +365,7 @@ and make your first photo!</value>
 
 Please turn on location service at Settings: location.</value>
   </data>
+  <data name="ChooseCollection" xml:space="preserve">
+    <value>CHOOSE COLLECTION</value>
+  </data>
 </root>

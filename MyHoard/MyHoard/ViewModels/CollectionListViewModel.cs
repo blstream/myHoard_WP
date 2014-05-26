@@ -22,6 +22,9 @@ namespace MyHoard.ViewModels
         private readonly IEventAggregator eventAggregator;
         private bool isFormAccessible;
         private bool isPlaceholderVisible;
+        private Visibility isRegisterVisible;
+        private Visibility isLogoutVisible;
+
 
         private Visibility isProgressBarVisible;
         private CancellationTokenSource tokenSource;
@@ -110,6 +113,11 @@ namespace MyHoard.ViewModels
             NavigationService.UriFor<SearchViewModel>().Navigate();
         }
 
+        public void TakePicture()
+        {
+            NavigationService.UriFor<CollectionChooserViewModel>().WithParam(x => x.GoToCamera, true).Navigate();
+        }
+
         protected override void OnActivate()
         {
             base.OnActivate();
@@ -121,6 +129,52 @@ namespace MyHoard.ViewModels
             else
                 IsSyncVisible = Visibility.Collapsed;
             IsFormAccessible = true;
+            if (configurationService.Configuration.IsLoggedIn)
+            {
+                IsLogoutVisible = Visibility.Visible;
+                IsRegisterVisible = Visibility.Collapsed;
+            }
+            else
+            {
+                IsRegisterVisible = Visibility.Visible;
+                IsLogoutVisible = Visibility.Collapsed;
+            }
+        }
+
+        public void Register()
+        {
+            NavigationService.UriFor<RegisterViewModel>().Navigate();
+        }
+
+        public void Login()
+        {
+            NavigationService.UriFor<LoginViewModel>().Navigate();
+        }
+
+        public void Logout()
+        {
+            configurationService.Logout(true);
+            OnActivate();
+        }
+
+        public Visibility IsRegisterVisible
+        {
+            get { return isRegisterVisible; }
+            set
+            {
+                isRegisterVisible = value;
+                NotifyOfPropertyChange(() => IsRegisterVisible);
+            }
+        }
+
+        public Visibility IsLogoutVisible
+        {
+            get { return isLogoutVisible; }
+            set
+            {
+                isLogoutVisible = value;
+                NotifyOfPropertyChange(() => IsLogoutVisible);
+            }
         }
 
         protected override void OnDeactivate(bool close)

@@ -135,7 +135,17 @@ namespace MyHoard.ViewModels
             }
         }
 
-        
+        private bool invertedFlow;
+        public bool InvertedFlow
+        {
+            get { return invertedFlow; }
+            set 
+            {
+                invertedFlow = value;
+                NotifyOfPropertyChange(() => InvertedFlow);
+            }
+        }
+                
         public void Save()
         {
             Trim();
@@ -160,6 +170,10 @@ namespace MyHoard.ViewModels
                     mediaService.SavePictureList(picturesToDelete);
                     NavigationService.GoBack();
                 }
+            }
+            if(InvertedFlow)
+            {
+                this.NavigationService.RemoveBackEntry();
             }
         }
 
@@ -301,6 +315,7 @@ namespace MyHoard.ViewModels
         {
             if(!staySubscribed)
                 eventAggregator.Subscribe(this);
+            eventAggregator.Publish(new ViewModelLoadedMessage());
             base.OnActivate();
             staySubscribed = false;
         }

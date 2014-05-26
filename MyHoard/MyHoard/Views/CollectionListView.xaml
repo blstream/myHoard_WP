@@ -26,73 +26,88 @@
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
             <Image Source="/Images/logo_login.png" Height="88" Margin="-3,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="297"/>
-            <TextBlock Text="{Binding Path=LocalizedResources.Collections, Source={StaticResource LocalizedStrings}}"  Margin="24,-5,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
-        <!--ContentPanel - place additional content here-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <StackPanel VerticalAlignment="Top" Grid.Row="0" Orientation="Horizontal" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource BooleanToVisibilityConverter}}" cal:Message.Attach="[Event Tap] = [Action AddCollection]">
-                <Image Source="/Images/plus.png" Margin="12" Width="100" Height="100"/>
-                <TextBlock Text="{Binding Path=LocalizedResources.EmptyCollectionListString, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap" Height="96" Width="349" FontSize="17.333" FontFamily="Segoe WP Light" Margin="10" />
-            </StackPanel>
-            <ListBox Grid.Row="0" Name="Collections" ItemsSource="{Binding Collections, Mode=OneWay}" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource OppositeBooleanToVisibilityConverter}}"
+        <phone:Pivot Grid.Row="1" Style="{StaticResource PivotCustomStyle}" >
+            <phone:PivotItem Header="{Binding Path=LocalizedResources.Collections, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Foreground="White" >
+                <Grid Margin="12,0,12,0">
+                    <StackPanel VerticalAlignment="Top" Grid.Row="0" Orientation="Horizontal" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource BooleanToVisibilityConverter}}" cal:Message.Attach="[Event Tap] = [Action AddCollection]">
+                        <Image Source="/Images/plus.png" Margin="12" Width="100" Height="100"/>
+                        <TextBlock Text="{Binding Path=LocalizedResources.EmptyCollectionListString, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap" Height="96" Width="349" FontSize="17.333" FontFamily="Segoe WP Light" Margin="10" />
+                    </StackPanel>
+                    <ListBox Grid.Row="0" Name="Collections" ItemsSource="{Binding Collections, Mode=OneWay}" Visibility="{Binding IsPlaceholderVisible, Converter={StaticResource OppositeBooleanToVisibilityConverter}}"
                      SelectedItem="{Binding SelectedCollection, Mode=TwoWay}" IsEnabled="{Binding IsFormAccessible}">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border Margin="12,8" Height="100" cal:Message.Attach="[Event Tap] = [Action CollectionDetails]">
-                            <Grid>
-                                <Grid.Resources>
-                                    <Style TargetType="TextBlock">
-                                        <!--<Setter Property="Margin" Value="0,0,4,0" />-->
-                                    </Style>
-                                </Grid.Resources>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="12,8" Height="100" cal:Message.Attach="[Event Tap] = [Action CollectionDetails]">
+                                    <Grid>
+                                        <Grid.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <!--<Setter Property="Margin" Value="0,0,4,0" />-->
+                                            </Style>
+                                        </Grid.Resources>
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Image Width="100" Height="100" Stretch="UniformToFill" Grid.Column="0"
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Width="100" Height="100" Stretch="UniformToFill" Grid.Column="0"
                                     Source="{Binding Thumbnail}" />
-                                <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Top" >
-                                    <TextBlock Text="{Binding Name}" Margin="0,-4,0,0" Style="{StaticResource PhoneTextLargeStyle}"  FontSize="24" FontFamily="Segoe WP" 
+                                        <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Top" >
+                                            <TextBlock Text="{Binding Name}" Margin="0,-4,0,0" Style="{StaticResource PhoneTextLargeStyle}"  FontSize="24" FontFamily="Segoe WP" 
                                            VerticalAlignment="Center" Foreground="{StaticResource MainAccentBrush}"
                                            TextWrapping="Wrap" />
-                                    <TextBlock Text="{Binding Elements}" Style="{StaticResource PhoneTextLargeStyle}"  FontFamily="Segoe WP Light" FontSize="18.667"
+                                            <TextBlock Text="{Binding Elements}" Style="{StaticResource PhoneTextLargeStyle}"  FontFamily="Segoe WP Light" FontSize="18.667"
                                            VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,-4,0,0" />
-                                    <TextBlock Text="{Binding Tags}" Style="{StaticResource PhoneTextLargeStyle}"  FontFamily="Segoe WP Light" FontSize="18.667"
+                                            <TextBlock Text="{Binding Tags}" Style="{StaticResource PhoneTextLargeStyle}"  FontFamily="Segoe WP Light" FontSize="18.667"
                                            VerticalAlignment="Center" Height="54" TextWrapping="Wrap" Margin="0,-4,0,0" />
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </Grid>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <bab:BindableAppBar x:Name="AppBar" IsEnabled="{Binding IsFormAccessible}" >
+                        <bab:BindableAppBarButton x:Name="AddCollection"
+                                  Text="{Binding Path=LocalizedResources.Add, Source={StaticResource LocalizedStrings}}"
+                                  IconUri="Images/add.png"/>
+                        <!--<bab:BindableAppBarButton x:Name="Settings"
+                                  Text="{Binding Path=LocalizedResources.Settings, Source={StaticResource LocalizedStrings}}"
+                                  IconUri="Images/settings.png"/>-->
+                        <bab:BindableAppBarButton x:Name="Search"
+                                  Text="{Binding Path=LocalizedResources.Search, Source={StaticResource LocalizedStrings}}"
+                                  IconUri="Images/search.png"/>
+                        <bab:BindableAppBarButton x:Name="TakePicture"
+                                  Text="{Binding Path=LocalizedResources.Camera, Source={StaticResource LocalizedStrings}}"
+                                  IconUri="Images/camera.png"/>
+                        <bab:BindableAppBarButton x:Name="Sync"
+                                  Text="{Binding Path=LocalizedResources.Sync, Source={StaticResource LocalizedStrings}}"
+                                  IconUri="Images/sync.png"    Visibility="{Binding IsSyncVisible}"/>
+
+                    </bab:BindableAppBar>
+                </Grid>
+            </phone:PivotItem>
+            <phone:PivotItem Header="{Binding Path=LocalizedResources.Settings, Source={StaticResource LocalizedStrings},Converter={StaticResource LowerUpperCaseConverter}}" Foreground="White" >
+                <StackPanel>
+                    <Button Grid.Row="1" Name="Register" Visibility="{Binding IsRegisterVisible}" 
+                    Content="{Binding Path=LocalizedResources.Register, Source={StaticResource LocalizedStrings}}" />
+                    <Button Grid.Row="0" Name="Login" Visibility="{Binding IsRegisterVisible}" 
+                    Content="{Binding Path=LocalizedResources.Login, Source={StaticResource LocalizedStrings}}" />
+                    <Button Grid.Row="0" Name="Logout" Visibility="{Binding IsLogoutVisible}" 
+                    Content="{Binding Path=LocalizedResources.Logout, Source={StaticResource LocalizedStrings}}" />
+                </StackPanel>
+            </phone:PivotItem>
+        </phone:Pivot>
+        
+        
         <ProgressBar Margin="5" Foreground="{StaticResource MainAccentBrush}" IsIndeterminate="True" Visibility="{Binding IsProgressBarVisible;}" VerticalAlignment="Top" />
 
-        <bab:BindableAppBar x:Name="AppBar" IsEnabled="{Binding IsFormAccessible}" >
-            <bab:BindableAppBarButton x:Name="AddCollection"
-                                  Text="{Binding Path=LocalizedResources.Add, Source={StaticResource LocalizedStrings}}"
-                                  IconUri="Images/add.png"                                
-                                  />
-            <bab:BindableAppBarButton x:Name="Settings"
-                                  Text="{Binding Path=LocalizedResources.Settings, Source={StaticResource LocalizedStrings}}"
-                                  IconUri="Images/settings.png"                                
-                                  />
-            <bab:BindableAppBarButton x:Name="Search"
-                                  Text="{Binding Path=LocalizedResources.Search, Source={StaticResource LocalizedStrings}}"
-                                  IconUri="Images/search.png"                                
-                                  />
-            <bab:BindableAppBarButton x:Name="Sync"
-                                  Text="{Binding Path=LocalizedResources.Sync, Source={StaticResource LocalizedStrings}}"
-                                  IconUri="Images/sync.png"    Visibility="{Binding IsSyncVisible}"                             
-                                  />
-        </bab:BindableAppBar>
+        
 
     </Grid>
 
