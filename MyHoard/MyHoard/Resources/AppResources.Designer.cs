@@ -97,7 +97,7 @@ namespace MyHoard.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add New Item.
+        ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string AddItem {
             get {

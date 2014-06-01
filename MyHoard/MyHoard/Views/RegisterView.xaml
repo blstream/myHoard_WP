@@ -52,7 +52,7 @@
                     <Border Grid.Column="2" Background="{Binding Path=Password, Converter={StaticResource Converter}, ConverterParameter=2, Mode=OneWay}" />
                     <Border Grid.Column="3" Background="{Binding Path=Password, Converter={StaticResource Converter}, ConverterParameter=3, Mode=OneWay}" />
                 </Grid>
-                <TextBlock Height="30" Margin="24,0,0,0" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Backend, Source={StaticResource LocalizedStrings}}"/>
+                <TextBlock Height="30" Margin="24,10,0,0" TextWrapping="Wrap" Text="{Binding Path=LocalizedResources.Backend, Source={StaticResource LocalizedStrings}}"/>
                 <toolkit:ListPicker Margin="24,0,24,0" Foreground="#FF333333" 
                                 ItemsSource="{Binding Backends.Keys}"
                                 

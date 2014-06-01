@@ -24,7 +24,7 @@
         </Grid.RowDefinitions>
 
         <!--TitlePanel contains the name of the application and page title-->
-        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+        <StackPanel Grid.Row="0" Margin="12,17,0,0">
             <Image Source="/Images/logo_login.png" Height="88" Margin="-3,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="297"/>
         </StackPanel>
 
